@@ -7,8 +7,6 @@ import { createPageUrl } from "@/utils";
 
 const navLinks = [
   { name: "Features", href: "#features" },
-  { name: "Opportunities", href: "/Opportunities" },
-  { name: "Partnerships", href: "/Partnerships" },
   { name: "Pricing", href: "#pricing" },
   { name: "About", href: "#about" },
   { name: "Contact", href: "#contact" },

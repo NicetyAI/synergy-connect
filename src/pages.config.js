@@ -1,6 +1,7 @@
 import Home from './pages/Home';
 import Partnerships from './pages/Partnerships';
 import Opportunities from './pages/Opportunities';
+import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
@@ -12,4 +13,5 @@ export const PAGES = {
 export const pagesConfig = {
     mainPage: "Home",
     Pages: PAGES,
+    Layout: __Layout,
 };
