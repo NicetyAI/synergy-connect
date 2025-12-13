@@ -7,11 +7,13 @@ import CategoryCard from "@/components/forum/CategoryCard";
 import PostCard from "@/components/forum/PostCard";
 import CreatePostDialog from "@/components/forum/CreatePostDialog";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Plus, Search } from "lucide-react";
 
 export default function Forum() {
   const [user, setUser] = useState(null);
   const [showCreatePost, setShowCreatePost] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -59,6 +61,15 @@ export default function Forum() {
   };
 
   const totalViews = posts.reduce((sum, post) => sum + (post.views || 0), 0);
+
+  const filteredPosts = posts.filter(post => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      post.title.toLowerCase().includes(query) ||
+      post.content.toLowerCase().includes(query)
+    );
+  });
 
   return (
     <div className="flex">
@@ -113,15 +124,22 @@ export default function Forum() {
 
           {/* Recent Discussions */}
           <div>
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
               <h2 className="text-2xl font-bold" style={{ color: '#E5EDFF' }}>Recent Discussions</h2>
-              <p className="text-sm" style={{ color: '#7A8BA6' }}>
-                Latest activity from the community
-              </p>
+              <div className="relative w-full md:w-96">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: '#7A8BA6' }} />
+                <Input
+                  placeholder="Search posts..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-11 glass-input rounded-xl"
+                  style={{ color: '#E5EDFF' }}
+                />
+              </div>
             </div>
             <div className="space-y-4">
-              {posts.length > 0 ? (
-                posts.map((post) => (
+              {filteredPosts.length > 0 ? (
+                filteredPosts.map((post) => (
                   <PostCard
                     key={post.id}
                     post={post}
@@ -135,7 +153,7 @@ export default function Forum() {
               ) : (
                 <div className="text-center py-12 glass-card">
                   <p className="text-lg" style={{ color: '#7A8BA6' }}>
-                    No posts yet. Be the first to start a discussion!
+                    {searchQuery ? 'No posts found matching your search.' : 'No posts yet. Be the first to start a discussion!'}
                   </p>
                 </div>
               )}
