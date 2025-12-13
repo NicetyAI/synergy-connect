@@ -8,6 +8,7 @@ import Forum from './pages/Forum';
 import PostDetail from './pages/PostDetail';
 import News from './pages/News';
 import Profile from './pages/Profile';
+import Settings from './pages/Settings';
 import __Layout from './Layout.jsx';
 
 
@@ -22,6 +23,7 @@ export const PAGES = {
     "PostDetail": PostDetail,
     "News": News,
     "Profile": Profile,
+    "Settings": Settings,
 }
 
 export const pagesConfig = {

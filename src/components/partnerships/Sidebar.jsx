@@ -130,14 +130,22 @@ export default function Sidebar() {
           </motion.div>
         </Link>
 
-        <motion.button
-          whileHover={{ x: 4 }}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all"
-          style={{ color: '#B6C4E0' }}
-        >
-          <Settings className="w-5 h-5" />
-          <span className="font-medium">Settings</span>
-        </motion.button>
+        <Link to={createPageUrl('Settings')}>
+          <motion.button
+            whileHover={{ x: 4 }}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all"
+            style={currentPath.includes('Settings') ? {
+              background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(31, 58, 138, 0.2) 100%)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              color: '#E5EDFF'
+            } : {
+              color: '#B6C4E0'
+            }}
+          >
+            <Settings className="w-5 h-5" />
+            <span className="font-medium">Settings</span>
+          </motion.button>
+        </Link>
 
         {currentUser?.role === 'admin' && (
           <motion.button

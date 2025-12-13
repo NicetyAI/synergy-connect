@@ -1,0 +1,366 @@
+import React, { useState, useEffect } from "react";
+import Sidebar from "@/components/partnerships/Sidebar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { base44 } from "@/api/base44Client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Eye, EyeOff } from "lucide-react";
+
+export default function Settings() {
+  const queryClient = useQueryClient();
+  const [currentUser, setCurrentUser] = useState(null);
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    additional_name: "",
+    username: "",
+    occupation: "",
+    marital_status: "",
+    phone_number: "",
+    address: "",
+    state: "",
+    country: "",
+    business_name: "",
+    overview: ""
+  });
+
+  const [passwordData, setPasswordData] = useState({
+    current: "",
+    new: "",
+    confirm: ""
+  });
+
+  const [showPassword, setShowPassword] = useState({
+    current: false,
+    new: false,
+    confirm: false
+  });
+
+  useEffect(() => {
+    base44.auth.me().then(user => {
+      setCurrentUser(user);
+      setFormData({
+        first_name: user.first_name || "",
+        last_name: user.last_name || "",
+        additional_name: user.additional_name || "",
+        username: user.username || "",
+        occupation: user.occupation || "",
+        marital_status: user.marital_status || "",
+        phone_number: user.phone_number || "",
+        address: user.address || "",
+        state: user.state || "",
+        country: user.country || "",
+        business_name: user.business_name || "",
+        overview: user.overview || ""
+      });
+    });
+  }, []);
+
+  const updateSettingsMutation = useMutation({
+    mutationFn: (data) => base44.auth.updateMe(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+      alert('Settings saved successfully!');
+    },
+  });
+
+  const handleSaveChanges = () => {
+    updateSettingsMutation.mutate(formData);
+  };
+
+  const handlePasswordUpdate = () => {
+    if (passwordData.new !== passwordData.confirm) {
+      alert("New passwords don't match!");
+      return;
+    }
+    // Password update logic would go here
+    alert("Password update functionality coming soon!");
+  };
+
+  const characterLimit = 300;
+  const remainingChars = characterLimit - (formData.overview?.length || 0);
+
+  return (
+    <div className="flex min-h-screen bg-gradient-main">
+      <Sidebar />
+      <div className="flex-1 overflow-y-auto p-8">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-3xl font-bold mb-8" style={{ color: '#E5EDFF' }}>
+            Settings
+          </h1>
+
+          {/* Account Settings */}
+          <div className="glass-card p-6 mb-6">
+            <h2 className="text-xl font-bold mb-6" style={{ color: '#E5EDFF' }}>
+              Account Settings
+            </h2>
+
+            <div className="grid md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                  First name
+                </label>
+                <Input
+                  value={formData.first_name}
+                  onChange={(e) => setFormData({...formData, first_name: e.target.value})}
+                  className="glass-input"
+                  style={{ color: '#E5EDFF' }}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                  Last name
+                </label>
+                <Input
+                  value={formData.last_name}
+                  onChange={(e) => setFormData({...formData, last_name: e.target.value})}
+                  className="glass-input"
+                  style={{ color: '#E5EDFF' }}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                  Additional name
+                </label>
+                <Input
+                  value={formData.additional_name}
+                  onChange={(e) => setFormData({...formData, additional_name: e.target.value})}
+                  className="glass-input"
+                  style={{ color: '#E5EDFF' }}
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                  User name
+                </label>
+                <Input
+                  value={formData.username}
+                  onChange={(e) => setFormData({...formData, username: e.target.value})}
+                  className="glass-input"
+                  style={{ color: '#E5EDFF' }}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                  Occupation
+                </label>
+                <Input
+                  value={formData.occupation}
+                  onChange={(e) => setFormData({...formData, occupation: e.target.value})}
+                  className="glass-input"
+                  style={{ color: '#E5EDFF' }}
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                  Marital Status
+                </label>
+                <Select value={formData.marital_status} onValueChange={(value) => setFormData({...formData, marital_status: value})}>
+                  <SelectTrigger className="glass-input" style={{ color: '#E5EDFF' }}>
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Single">Single</SelectItem>
+                    <SelectItem value="Married">Married</SelectItem>
+                    <SelectItem value="Divorced">Divorced</SelectItem>
+                    <SelectItem value="Widowed">Widowed</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                  Phone number
+                </label>
+                <Input
+                  value={formData.phone_number}
+                  onChange={(e) => setFormData({...formData, phone_number: e.target.value})}
+                  className="glass-input"
+                  style={{ color: '#E5EDFF' }}
+                />
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                Email
+              </label>
+              <Input
+                value={currentUser?.email || ""}
+                disabled
+                className="glass-input opacity-60"
+                style={{ color: '#7A8BA6' }}
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                Address
+              </label>
+              <Input
+                value={formData.address}
+                onChange={(e) => setFormData({...formData, address: e.target.value})}
+                className="glass-input"
+                style={{ color: '#E5EDFF' }}
+              />
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                  State
+                </label>
+                <Input
+                  value={formData.state}
+                  onChange={(e) => setFormData({...formData, state: e.target.value})}
+                  className="glass-input"
+                  style={{ color: '#E5EDFF' }}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                  Country
+                </label>
+                <Input
+                  value={formData.country}
+                  onChange={(e) => setFormData({...formData, country: e.target.value})}
+                  className="glass-input"
+                  style={{ color: '#E5EDFF' }}
+                />
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                Business Name
+              </label>
+              <Input
+                value={formData.business_name}
+                onChange={(e) => setFormData({...formData, business_name: e.target.value})}
+                className="glass-input"
+                style={{ color: '#E5EDFF' }}
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                Overview
+              </label>
+              <Textarea
+                value={formData.overview}
+                onChange={(e) => setFormData({...formData, overview: e.target.value})}
+                className="glass-input h-32"
+                style={{ color: '#E5EDFF' }}
+                maxLength={characterLimit}
+              />
+              <p className="text-sm mt-1" style={{ color: remainingChars < 50 ? '#F59E0B' : '#7A8BA6' }}>
+                Character limit: {remainingChars}
+              </p>
+            </div>
+
+            <div className="flex justify-end">
+              <Button
+                onClick={handleSaveChanges}
+                disabled={updateSettingsMutation.isPending}
+                className="px-6"
+                style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}
+              >
+                {updateSettingsMutation.isPending ? 'Saving...' : 'Save changes'}
+              </Button>
+            </div>
+          </div>
+
+          {/* Change Password */}
+          <div className="glass-card p-6">
+            <h2 className="text-xl font-bold mb-6" style={{ color: '#E5EDFF' }}>
+              Change your password
+            </h2>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                Current password
+              </label>
+              <div className="relative">
+                <Input
+                  type={showPassword.current ? "text" : "password"}
+                  value={passwordData.current}
+                  onChange={(e) => setPasswordData({...passwordData, current: e.target.value})}
+                  className="glass-input pr-10"
+                  style={{ color: '#E5EDFF' }}
+                />
+                <button
+                  onClick={() => setShowPassword({...showPassword, current: !showPassword.current})}
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                  style={{ color: '#7A8BA6' }}
+                >
+                  {showPassword.current ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                New password
+              </label>
+              <div className="relative">
+                <Input
+                  type={showPassword.new ? "text" : "password"}
+                  value={passwordData.new}
+                  onChange={(e) => setPasswordData({...passwordData, new: e.target.value})}
+                  className="glass-input pr-10"
+                  style={{ color: '#E5EDFF' }}
+                />
+                <button
+                  onClick={() => setShowPassword({...showPassword, new: !showPassword.new})}
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                  style={{ color: '#7A8BA6' }}
+                >
+                  {showPassword.new ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+                Confirm password
+              </label>
+              <div className="relative">
+                <Input
+                  type={showPassword.confirm ? "text" : "password"}
+                  value={passwordData.confirm}
+                  onChange={(e) => setPasswordData({...passwordData, confirm: e.target.value})}
+                  className="glass-input pr-10"
+                  style={{ color: '#E5EDFF' }}
+                />
+                <button
+                  onClick={() => setShowPassword({...showPassword, confirm: !showPassword.confirm})}
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                  style={{ color: '#7A8BA6' }}
+                >
+                  {showPassword.confirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex justify-end">
+              <Button
+                onClick={handlePasswordUpdate}
+                className="px-6"
+                style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}
+              >
+                Update password
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
