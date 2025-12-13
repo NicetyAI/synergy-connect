@@ -23,6 +23,7 @@ const mainMenuItems = [
   { icon: Briefcase, label: "Opportunities", href: "Opportunities" },
   { icon: Handshake, label: "Partnerships", href: "Partnerships" },
   { icon: Store, label: "Vendors", href: "Vendors" },
+  { icon: MessageSquare, label: "Forum", href: "Forum" },
 ];
 
 const menuItems = [
