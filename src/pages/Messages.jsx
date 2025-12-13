@@ -4,12 +4,17 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Sidebar from "@/components/partnerships/Sidebar";
 import ConversationList from "@/components/messages/ConversationList";
 import ChatArea from "@/components/messages/ChatArea";
+import GroupChatArea from "@/components/messages/GroupChatArea";
 import SearchMembers from "@/components/messages/SearchMembers";
+import CreateGroupDialog from "@/components/messages/CreateGroupDialog";
 
 export default function Messages() {
   const [user, setUser] = useState(null);
   const [selectedConversation, setSelectedConversation] = useState(null);
+  const [selectedGroup, setSelectedGroup] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
+  const [showCreateGroup, setShowCreateGroup] = useState(false);
+  const [chatType, setChatType] = useState('direct'); // 'direct' or 'group'
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -43,10 +48,68 @@ export default function Messages() {
     refetchInterval: 3000,
   });
 
+  const { data: groups = [] } = useQuery({
+    queryKey: ['group-chats', user?.email],
+    queryFn: async () => {
+      if (!user) return [];
+      const allGroups = await base44.entities.GroupChat.list();
+      return allGroups.filter(g => g.members.includes(user.email));
+    },
+    enabled: !!user,
+    refetchInterval: 3000,
+  });
+
+  const { data: groupMessages = [] } = useQuery({
+    queryKey: ['group-messages'],
+    queryFn: () => base44.entities.GroupMessage.list(),
+    enabled: !!user,
+    refetchInterval: 3000,
+  });
+
   const sendMessageMutation = useMutation({
-    mutationFn: (messageData) => base44.entities.Message.create(messageData),
+    mutationFn: async (messageData) => {
+      await base44.entities.Message.create(messageData);
+      // Create notification for recipient
+      await base44.entities.Notification.create({
+        recipient_email: messageData.recipient_email,
+        type: 'new_message',
+        title: 'New Message',
+        message: `${user.full_name} sent you a message`,
+        sender_email: user.email,
+        sender_name: user.full_name,
+        link: '/Messages',
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['messages'] });
+    },
+  });
+
+  const sendGroupMessageMutation = useMutation({
+    mutationFn: async ({ groupId, content }) => {
+      const group = groups.find(g => g.id === groupId);
+      await base44.entities.GroupMessage.create({
+        group_id: groupId,
+        sender_email: user.email,
+        sender_name: user.full_name,
+        content,
+      });
+      // Create notifications for all group members except sender
+      const otherMembers = group.members.filter(m => m !== user.email);
+      for (const memberEmail of otherMembers) {
+        await base44.entities.Notification.create({
+          recipient_email: memberEmail,
+          type: 'new_message',
+          title: `New message in ${group.name}`,
+          message: `${user.full_name}: ${content.substring(0, 50)}${content.length > 50 ? '...' : ''}`,
+          sender_email: user.email,
+          sender_name: user.full_name,
+          link: '/Messages',
+        });
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['group-messages'] });
     },
   });
 
@@ -96,6 +159,22 @@ export default function Messages() {
     });
   };
 
+  const handleSendGroupMessage = (content, groupId) => {
+    sendGroupMessageMutation.mutate({ groupId, content });
+  };
+
+  const handleSelectConversation = (conversationId) => {
+    setChatType('direct');
+    setSelectedConversation(conversationId);
+    setSelectedGroup(null);
+  };
+
+  const handleSelectGroup = (groupId) => {
+    setChatType('group');
+    setSelectedGroup(groupId);
+    setSelectedConversation(null);
+  };
+
   if (!user) {
     return (
       <div className="flex">
@@ -115,10 +194,15 @@ export default function Messages() {
       <main className="flex-1 flex" style={{ height: 'calc(100vh - 73px)' }}>
         <ConversationList
           conversations={conversations}
+          groups={groups}
           selectedConversation={selectedConversation}
-          onSelectConversation={setSelectedConversation}
+          selectedGroup={selectedGroup}
+          onSelectConversation={handleSelectConversation}
+          onSelectGroup={handleSelectGroup}
           onShowSearch={() => setShowSearch(true)}
+          onShowCreateGroup={() => setShowCreateGroup(true)}
           currentUserEmail={user.email}
+          groupMessages={groupMessages}
         />
         
         {showSearch ? (
@@ -126,11 +210,18 @@ export default function Messages() {
             connections={connections}
             onSelectMember={(email) => {
               const conversationId = [user.email, email].sort().join('_');
-              setSelectedConversation(conversationId);
+              handleSelectConversation(conversationId);
               setShowSearch(false);
             }}
             onClose={() => setShowSearch(false)}
             currentUserEmail={user.email}
+          />
+        ) : chatType === 'group' && selectedGroup ? (
+          <GroupChatArea
+            group={groups.find(g => g.id === selectedGroup)}
+            messages={groupMessages.filter(m => m.group_id === selectedGroup)}
+            onSendMessage={handleSendGroupMessage}
+            currentUser={user}
           />
         ) : selectedConversation ? (
           <ChatArea
@@ -146,12 +237,19 @@ export default function Messages() {
                 Select a conversation to start messaging
               </p>
               <p className="text-sm" style={{ color: '#7A8BA6' }}>
-                Or search for connected members to chat with
+                Or create a group chat for collaborative discussions
               </p>
             </div>
           </div>
         )}
       </main>
+
+      <CreateGroupDialog
+        open={showCreateGroup}
+        onOpenChange={setShowCreateGroup}
+        currentUser={user}
+        connections={connections}
+      />
     </div>
   );
 }
