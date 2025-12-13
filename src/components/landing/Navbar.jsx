@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Handshake, Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 
 const navLinks = [
   { name: "Features", href: "#features" },
+  { name: "Partnerships", href: "/Partnerships" },
   { name: "Pricing", href: "#pricing" },
   { name: "About", href: "#about" },
   { name: "Contact", href: "#contact" },
@@ -46,13 +49,23 @@ export default function Navbar() {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
               {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="text-white/70 hover:text-white transition-colors duration-300 text-sm font-medium"
-                >
-                  {link.name}
-                </a>
+                link.href.startsWith("#") ? (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className="text-white/70 hover:text-white transition-colors duration-300 text-sm font-medium"
+                  >
+                    {link.name}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.name}
+                    to={createPageUrl(link.href.replace("/", ""))}
+                    className="text-white/70 hover:text-white transition-colors duration-300 text-sm font-medium"
+                  >
+                    {link.name}
+                  </Link>
+                )
               ))}
             </div>
 
@@ -90,14 +103,25 @@ export default function Navbar() {
             <div className="relative pt-24 px-6">
               <div className="space-y-4">
                 {navLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block text-white text-lg font-medium py-3 border-b border-white/10"
-                  >
-                    {link.name}
-                  </a>
+                  link.href.startsWith("#") ? (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block text-white text-lg font-medium py-3 border-b border-white/10"
+                    >
+                      {link.name}
+                    </a>
+                  ) : (
+                    <Link
+                      key={link.name}
+                      to={createPageUrl(link.href.replace("/", ""))}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block text-white text-lg font-medium py-3 border-b border-white/10"
+                    >
+                      {link.name}
+                    </Link>
+                  )
                 ))}
                 <div className="pt-4 space-y-3">
                   <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">

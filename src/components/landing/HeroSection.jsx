@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Users, Building2, Handshake, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 
 export default function HeroSection() {
   return (
@@ -65,10 +67,12 @@ export default function HeroSection() {
                     className="w-full pl-12 pr-4 py-4 bg-transparent border-0 text-white placeholder:text-white/40 focus-visible:ring-0 text-lg"
                   />
                 </div>
-                <Button className="bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25">
-                  Get Started
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
+                <Link to={createPageUrl("Partnerships")}>
+                  <Button className="bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25">
+                    Get Started
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </Link>
               </div>
             </div>
 
