@@ -26,10 +26,10 @@ const mainMenuItems = [
 ];
 
 const menuItems = [
-  { icon: Bookmark, label: "Saved", count: 12 },
-  { icon: MessageSquare, label: "Messages", count: 5 },
-  { icon: TrendingUp, label: "Trending" },
-  { icon: Users, label: "My Network" },
+  { icon: Bookmark, label: "Saved", count: 12, href: null },
+  { icon: MessageSquare, label: "Messages", count: 5, href: "Messages" },
+  { icon: TrendingUp, label: "Trending", href: null },
+  { icon: Users, label: "My Network", href: null },
 ];
 
 const categories = [
@@ -100,24 +100,39 @@ export default function Sidebar() {
       {/* Secondary Menu Items */}
       <div className="space-y-2 mb-8">
         <p className="text-xs uppercase tracking-wider mb-3" style={{ color: '#7A8BA6' }}>More</p>
-        {menuItems.map((item) => (
-          <motion.button
-            key={item.label}
-            whileHover={{ x: 4 }}
-            className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all"
-            style={{ color: '#B6C4E0' }}
-          >
-            <div className="flex items-center gap-3">
-              <item.icon className="w-5 h-5" />
-              <span className="font-medium">{item.label}</span>
-            </div>
-            {item.count && (
-              <span className="text-xs px-2 py-1 rounded-full" style={{ background: 'rgba(255, 255, 255, 0.1)' }}>
-                {item.count}
-              </span>
-            )}
-          </motion.button>
-        ))}
+        {menuItems.map((item) => {
+          const MenuItem = item.href ? Link : 'button';
+          const isActive = item.href && currentPath.includes(item.href);
+
+          return (
+            <MenuItem
+              key={item.label}
+              {...(item.href ? { to: createPageUrl(item.href) } : {})}
+            >
+              <motion.div
+                whileHover={{ x: 4 }}
+                className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all"
+                style={isActive ? {
+                  background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(31, 58, 138, 0.2) 100%)',
+                  border: '1px solid rgba(59, 130, 246, 0.3)',
+                  color: '#E5EDFF'
+                } : {
+                  color: '#B6C4E0'
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <item.icon className="w-5 h-5" />
+                  <span className="font-medium">{item.label}</span>
+                </div>
+                {item.count && (
+                  <span className="text-xs px-2 py-1 rounded-full" style={{ background: 'rgba(255, 255, 255, 0.1)' }}>
+                    {item.count}
+                  </span>
+                )}
+              </motion.div>
+            </MenuItem>
+          );
+        })}
       </div>
 
       {/* Categories */}
