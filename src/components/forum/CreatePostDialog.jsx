@@ -7,21 +7,48 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Upload, X, FileText, Link as LinkIcon } from "lucide-react";
 
 export default function CreatePostDialog({ open, onOpenChange, categories, currentUser }) {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
     category_id: "",
+    link_url: "",
   });
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [uploading, setUploading] = useState(false);
   const queryClient = useQueryClient();
+
+  const handleFileChange = async (e) => {
+    const files = Array.from(e.target.files || []);
+    setUploading(true);
+    
+    try {
+      const uploadPromises = files.map(async (file) => {
+        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        return { name: file.name, url: file_url };
+      });
+      
+      const uploadedFilesData = await Promise.all(uploadPromises);
+      setUploadedFiles([...uploadedFiles, ...uploadedFilesData]);
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveFile = (index) => {
+    setUploadedFiles(uploadedFiles.filter((_, i) => i !== index));
+  };
 
   const createPostMutation = useMutation({
     mutationFn: (postData) => base44.entities.ForumPost.create(postData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['forumPosts'] });
-      setFormData({ title: "", content: "", category_id: "" });
+      setFormData({ title: "", content: "", category_id: "", link_url: "" });
+      setUploadedFiles([]);
       onOpenChange(false);
     },
   });
@@ -33,7 +60,9 @@ export default function CreatePostDialog({ open, onOpenChange, categories, curre
     createPostMutation.mutate({
       ...formData,
       author_email: currentUser.email,
+      author_name: currentUser.full_name || currentUser.email.split('@')[0],
       views: 0,
+      file_urls: uploadedFiles.map(f => f.url),
     });
   };
 
@@ -92,6 +121,80 @@ export default function CreatePostDialog({ open, onOpenChange, categories, curre
               style={{ color: '#E5EDFF' }}
               placeholder="Share your thoughts, insights, or questions..."
             />
+          </div>
+
+          <div>
+            <Label htmlFor="link_url" style={{ color: '#B6C4E0' }}>Share a Link (Optional)</Label>
+            <div className="relative">
+              <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#7A8BA6' }} />
+              <Input
+                id="link_url"
+                type="url"
+                value={formData.link_url}
+                onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
+                className="glass-input mt-1 pl-10"
+                style={{ color: '#E5EDFF' }}
+                placeholder="https://example.com"
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label style={{ color: '#B6C4E0' }}>Attach Files (Optional)</Label>
+            <p className="text-xs mb-2" style={{ color: '#7A8BA6' }}>
+              Upload documents, images, or PDFs (Max 5MB per file)
+            </p>
+            
+            <label
+              htmlFor="files"
+              className="flex flex-col items-center justify-center w-full h-24 rounded-xl border-2 border-dashed cursor-pointer transition-all hover:border-opacity-50 mb-3"
+              style={{ borderColor: 'rgba(255, 255, 255, 0.18)', background: 'rgba(255, 255, 255, 0.03)' }}
+            >
+              <div className="flex flex-col items-center justify-center">
+                <Upload className="w-6 h-6 mb-1" style={{ color: '#7C3AED' }} />
+                <p className="text-sm" style={{ color: '#B6C4E0' }}>
+                  {uploading ? 'Uploading...' : 'Click to upload files'}
+                </p>
+              </div>
+              <input
+                id="files"
+                type="file"
+                className="hidden"
+                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                multiple
+                onChange={handleFileChange}
+                disabled={uploading}
+              />
+            </label>
+
+            {uploadedFiles.length > 0 && (
+              <div className="space-y-2">
+                {uploadedFiles.map((file, index) => (
+                  <div 
+                    key={index}
+                    className="flex items-center justify-between p-3 rounded-xl"
+                    style={{ background: 'rgba(124, 58, 237, 0.15)', border: '1px solid rgba(124, 58, 237, 0.3)' }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#7C3AED' }}>
+                        <FileText className="w-4 h-4" style={{ color: '#fff' }} />
+                      </div>
+                      <p className="text-sm font-medium" style={{ color: '#E5EDFF' }}>
+                        {file.name}
+                      </p>
+                    </div>
+                    <Button
+                      type="button"
+                      onClick={() => handleRemoveFile(index)}
+                      className="rounded-lg p-1"
+                      style={{ background: 'rgba(239, 68, 68, 0.15)', color: '#EF4444' }}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex gap-3 pt-4">

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { ThumbsUp, MessageSquare, User } from "lucide-react";
+import { ThumbsUp, MessageSquare, User, FileText, ExternalLink } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 
 export default function PostCard({ post, category, likes, comments, hasLiked, currentUser }) {
@@ -67,7 +67,7 @@ export default function PostCard({ post, category, likes, comments, hasLiked, cu
                 {post.title}
               </h3>
               <div className="flex items-center gap-2 text-sm" style={{ color: '#7A8BA6' }}>
-                <span>{post.author_email.split('@')[0]}</span>
+                <span className="font-medium">{post.author_name || post.author_email.split('@')[0]}</span>
                 <span>in</span>
                 <span style={{ color: '#7C3AED' }}>{category?.name || 'General'}</span>
               </div>
@@ -77,9 +77,42 @@ export default function PostCard({ post, category, likes, comments, hasLiked, cu
             </span>
           </div>
 
-          <p className="mb-4 line-clamp-2" style={{ color: '#B6C4E0' }}>
+          <p className="mb-3 line-clamp-2" style={{ color: '#B6C4E0' }}>
             {post.content}
           </p>
+
+          {post.link_url && (
+            <a
+              href={post.link_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center gap-2 mb-3 px-3 py-2 rounded-lg transition-all hover:opacity-80"
+              style={{ background: 'rgba(59, 130, 246, 0.15)', border: '1px solid rgba(59, 130, 246, 0.3)', color: '#3B82F6' }}
+            >
+              <ExternalLink className="w-4 h-4" />
+              <span className="text-sm font-medium truncate max-w-xs">{post.link_url}</span>
+            </a>
+          )}
+
+          {post.file_urls && post.file_urls.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-3">
+              {post.file_urls.map((url, idx) => (
+                <a
+                  key={idx}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="inline-flex items-center gap-2 px-3 py-2 rounded-lg transition-all hover:opacity-80"
+                  style={{ background: 'rgba(124, 58, 237, 0.15)', border: '1px solid rgba(124, 58, 237, 0.3)', color: '#7C3AED' }}
+                >
+                  <FileText className="w-4 h-4" />
+                  <span className="text-sm">Attachment {idx + 1}</span>
+                </a>
+              ))}
+            </div>
+          )}
 
           <div className="flex items-center gap-4">
             <Button
