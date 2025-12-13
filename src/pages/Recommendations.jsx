@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "@/components/partnerships/Sidebar";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Users, Briefcase } from "lucide-react";
+import { Sparkles, Users, Briefcase, Store } from "lucide-react";
 import ConnectionCard from "@/components/recommendations/ConnectionCard";
 import OpportunityRecommendationCard from "@/components/recommendations/OpportunityRecommendationCard";
+import { base44 } from "@/api/base44Client";
+import { useQuery } from "@tanstack/react-query";
 
 const connectionsData = [
   {
@@ -202,6 +204,25 @@ export default function Recommendations() {
             </p>
           </div>
 
+          {/* AI Insights */}
+          {aiRecommendations?.success && aiRecommendations.recommendations.forumTopics?.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              {aiRecommendations.recommendations.forumTopics.slice(0, 2).map((topic, idx) => (
+                <div key={idx} className="glass-card p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%)' }}>
+                      <Sparkles className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1" style={{ color: '#E5EDFF' }}>{topic.topic}</h3>
+                      <p className="text-sm" style={{ color: '#7A8BA6' }}>{topic.reason}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
           {/* Tabs */}
           <div className="flex gap-3 mb-8">
             <Button
@@ -242,11 +263,35 @@ export default function Recommendations() {
               ))}
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {opportunitiesData.map((opportunity, index) => (
-                <OpportunityRecommendationCard key={opportunity.id} opportunity={opportunity} index={index} />
-              ))}
-            </div>
+            <>
+              {loadingAI ? (
+                <div className="text-center py-12">
+                  <p style={{ color: '#7A8BA6' }}>Loading AI recommendations...</p>
+                </div>
+              ) : aiRecommendations?.success && aiRecommendations.recommendations.opportunities?.length > 0 && (
+                <div className="space-y-4 mb-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Sparkles className="w-5 h-5" style={{ color: '#7C3AED' }} />
+                    <h3 className="text-lg font-bold" style={{ color: '#E5EDFF' }}>AI-Recommended for You</h3>
+                  </div>
+                  {aiRecommendations.recommendations.opportunities.map((opp, idx) => (
+                    <div key={idx} className="glass-card glass-card-hover p-6">
+                      <h3 className="text-xl font-bold mb-2" style={{ color: '#E5EDFF' }}>{opp.title}</h3>
+                      <p className="mb-3" style={{ color: '#B6C4E0' }}>{opp.description}</p>
+                      <div className="flex items-start gap-2 p-3 rounded-lg" style={{ background: 'rgba(124, 58, 237, 0.1)' }}>
+                        <Sparkles className="w-4 h-4 mt-0.5" style={{ color: '#7C3AED' }} />
+                        <p className="text-sm" style={{ color: '#B6C4E0' }}>{opp.relevanceReason}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {opportunitiesData.map((opportunity, index) => (
+                  <OpportunityRecommendationCard key={opportunity.id} opportunity={opportunity} index={index} />
+                ))}
+              </div>
+            </>
           )}
         </div>
       </main>
