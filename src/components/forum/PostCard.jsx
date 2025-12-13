@@ -48,36 +48,40 @@ export default function PostCard({ post, category, likes, comments, hasLiked, cu
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -2, scale: 1.005 }}
       onClick={handleCardClick}
       className="glass-card glass-card-hover p-6 cursor-pointer"
     >
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-5">
         <div 
-          className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
+          className="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg"
           style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)' }}
         >
-          <User className="w-6 h-6" style={{ color: '#E5EDFF' }} />
+          <User className="w-7 h-7" style={{ color: '#E5EDFF' }} />
         </div>
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between mb-2">
+          <div className="flex items-start justify-between mb-3">
             <div className="flex-1">
-              <h3 className="text-lg font-semibold mb-1" style={{ color: '#E5EDFF' }}>
+              <h3 className="text-xl font-bold mb-2 hover:opacity-80 transition-opacity" style={{ color: '#E5EDFF' }}>
                 {post.title}
               </h3>
-              <div className="flex items-center gap-2 text-sm" style={{ color: '#7A8BA6' }}>
-                <span className="font-medium">{post.author_name || post.author_email.split('@')[0]}</span>
-                <span>in</span>
-                <span style={{ color: '#7C3AED' }}>{category?.name || 'General'}</span>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-semibold text-sm px-3 py-1 rounded-full" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#3B82F6' }}>
+                  {post.author_name || post.author_email.split('@')[0]}
+                </span>
+                <span className="text-sm" style={{ color: '#7A8BA6' }}>in</span>
+                <span className="text-sm font-medium px-3 py-1 rounded-full" style={{ background: 'rgba(124, 58, 237, 0.15)', color: '#7C3AED' }}>
+                  {category?.name || 'General'}
+                </span>
               </div>
             </div>
-            <span className="text-sm" style={{ color: '#7A8BA6' }}>
+            <span className="text-sm px-3 py-1 rounded-full" style={{ background: 'rgba(255, 255, 255, 0.05)', color: '#7A8BA6' }}>
               {formatDistanceToNow(new Date(post.created_date), { addSuffix: true })}
             </span>
           </div>
 
-          <p className="mb-3 line-clamp-2" style={{ color: '#B6C4E0' }}>
+          <p className="mb-4 line-clamp-3 leading-relaxed" style={{ color: '#B6C4E0' }}>
             {post.content}
           </p>
 
@@ -114,28 +118,34 @@ export default function PostCard({ post, category, likes, comments, hasLiked, cu
             </div>
           )}
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 pt-3" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
             <Button
               onClick={(e) => {
                 e.stopPropagation();
                 likeMutation.mutate();
               }}
-              variant="ghost"
-              className="text-sm gap-2 px-3 py-1 h-auto"
-              style={{ color: hasLiked ? '#3B82F6' : '#7A8BA6' }}
+              className="gap-2 px-4 py-2 rounded-lg transition-all hover:scale-105"
+              style={{ 
+                background: hasLiked ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255, 255, 255, 0.05)', 
+                color: hasLiked ? '#3B82F6' : '#B6C4E0',
+                border: hasLiked ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid rgba(255, 255, 255, 0.1)'
+              }}
             >
               <ThumbsUp className="w-4 h-4" fill={hasLiked ? '#3B82F6' : 'none'} />
-              Like ({likes})
+              <span className="font-medium">{likes}</span>
             </Button>
 
             <Button
-              variant="ghost"
-              className="text-sm gap-2 px-3 py-1 h-auto"
-              style={{ color: '#7A8BA6' }}
+              className="gap-2 px-4 py-2 rounded-lg transition-all hover:scale-105"
+              style={{ 
+                background: 'rgba(255, 255, 255, 0.05)', 
+                color: '#B6C4E0',
+                border: '1px solid rgba(255, 255, 255, 0.1)'
+              }}
               onClick={(e) => e.stopPropagation()}
             >
               <MessageSquare className="w-4 h-4" />
-              Comments ({comments})
+              <span className="font-medium">{comments}</span>
             </Button>
           </div>
         </div>
