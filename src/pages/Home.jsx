@@ -11,9 +11,9 @@ import Footer from "@/components/landing/Footer";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-950 overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden" style={{ background: 'linear-gradient(135deg, #0A1628 0%, #1E3A5F 100%)' }}>
       {/* Base gradient background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-gray-950 via-purple-950/20 to-gray-950 -z-10" />
+      <div className="fixed inset-0 bg-gradient-to-br from-[#0A1628] via-[#1F3A8A]/20 to-[#1E3A5F] -z-10" />
       
       {/* Grid pattern overlay */}
       <div 

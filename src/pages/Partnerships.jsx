@@ -143,9 +143,9 @@ export default function Partnerships() {
   const [viewMode, setViewMode] = useState("grid");
 
   return (
-    <div className="flex min-h-screen bg-gray-950">
+    <div className="flex min-h-screen" style={{ background: 'linear-gradient(135deg, #0A1628 0%, #1E3A5F 100%)' }}>
       {/* Background effects */}
-      <div className="fixed inset-0 bg-gradient-to-br from-gray-950 via-purple-950/20 to-gray-950 -z-10" />
+      <div className="fixed inset-0 bg-gradient-to-br from-[#0A1628] via-[#1F3A8A]/20 to-[#1E3A5F] -z-10" />
       <div 
         className="fixed inset-0 -z-10 opacity-[0.03]"
         style={{
@@ -155,8 +155,8 @@ export default function Partnerships() {
       
       {/* Animated background orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-20 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-40 left-20 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-20 right-20 w-96 h-96 bg-[#3B82F6]/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-40 left-20 w-80 h-80 bg-[#7C3AED]/10 rounded-full blur-3xl" />
       </div>
 
       {/* Sidebar */}

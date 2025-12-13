@@ -17,7 +17,7 @@ export default function HeroSection() {
             y: [0, -50, 0],
           }}
           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-20 left-10 w-72 h-72 bg-purple-500/30 rounded-full blur-3xl"
+          className="absolute top-20 left-10 w-72 h-72 bg-[#7C3AED]/30 rounded-full blur-3xl"
         />
         <motion.div
           animate={{
@@ -25,7 +25,7 @@ export default function HeroSection() {
             y: [0, 60, 0],
           }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-40 right-20 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"
+          className="absolute top-40 right-20 w-96 h-96 bg-[#3B82F6]/20 rounded-full blur-3xl"
         />
         <motion.div
           animate={{
@@ -33,7 +33,7 @@ export default function HeroSection() {
             y: [0, -30, 0],
           }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-20 left-1/3 w-80 h-80 bg-cyan-500/20 rounded-full blur-3xl"
+          className="absolute bottom-20 left-1/3 w-80 h-80 bg-[#1F3A8A]/20 rounded-full blur-3xl"
         />
       </div>
 
@@ -45,30 +45,31 @@ export default function HeroSection() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6" style={{ color: '#E5EDFF' }}>
               Connect with{" "}
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#3B82F6] via-[#7C3AED] to-[#1F3A8A] bg-clip-text text-transparent">
                 Like-Minded
               </span>{" "}
               Business Partners
             </h1>
-            <p className="text-lg text-white/70 mb-8 max-w-xl">
+            <p className="text-lg mb-8 max-w-xl" style={{ color: '#B6C4E0' }}>
               Join our exclusive platform for professionals, founders, and dealmakers. 
               Find partners for acquisitions, deals, JV's, and more.
             </p>
 
             {/* Search input - glassmorphism */}
             <div className="relative mb-8">
-              <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-2 flex gap-2">
+              <div className="glass-card p-2 flex gap-2">
                 <div className="flex-1 relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: '#7A8BA6' }} />
                   <Input
                     placeholder="Enter your email to get started"
-                    className="w-full pl-12 pr-4 py-4 bg-transparent border-0 text-white placeholder:text-white/40 focus-visible:ring-0 text-lg"
+                    className="w-full pl-12 pr-4 py-4 bg-transparent border-0 focus-visible:ring-0 text-lg"
+                    style={{ color: '#E5EDFF' }}
                   />
                 </div>
                 <Link to={createPageUrl("Partnerships")}>
-                  <Button className="bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25">
+                  <Button className="px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 shadow-lg" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}>
                     Get Started
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
@@ -90,12 +91,12 @@ export default function HeroSection() {
                   transition={{ delay: 0.5 + index * 0.1 }}
                   className="flex items-center gap-3"
                 >
-                  <div className="w-12 h-12 rounded-xl backdrop-blur-xl bg-white/10 border border-white/20 flex items-center justify-center">
-                    <stat.icon className="w-6 h-6 text-cyan-400" />
+                  <div className="glass-card w-12 h-12 rounded-xl flex items-center justify-center">
+                    <stat.icon className="w-6 h-6" style={{ color: '#3B82F6' }} />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-white">{stat.value}</p>
-                    <p className="text-sm text-white/60">{stat.label}</p>
+                    <p className="text-2xl font-bold" style={{ color: '#E5EDFF' }}>{stat.value}</p>
+                    <p className="text-sm" style={{ color: '#7A8BA6' }}>{stat.label}</p>
                   </div>
                 </motion.div>
               ))}
@@ -110,14 +111,14 @@ export default function HeroSection() {
             className="hidden lg:block"
           >
             <div className="relative">
-              <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl p-8 shadow-2xl">
+              <div className="glass-card p-8 shadow-2xl">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
-                    <Users className="w-7 h-7 text-white" />
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)' }}>
+                    <Users className="w-7 h-7" style={{ color: '#E5EDFF' }} />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white">Partner Match</h3>
-                    <p className="text-white/60">Find your perfect match</p>
+                    <h3 className="text-xl font-semibold" style={{ color: '#E5EDFF' }}>Partner Match</h3>
+                    <p style={{ color: '#7A8BA6' }}>Find your perfect match</p>
                   </div>
                 </div>
 
@@ -132,20 +133,20 @@ export default function HeroSection() {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.6 + index * 0.15 }}
-                    className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-4 mb-3 hover:bg-white/10 transition-all duration-300 cursor-pointer"
+                    className="glass-card glass-card-hover p-4 mb-3 cursor-pointer"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white font-semibold">
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center font-semibold" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #7C3AED 100%)', color: '#E5EDFF' }}>
                           {partner.name[0]}
                         </div>
                         <div>
-                          <p className="text-white font-medium">{partner.name}</p>
-                          <p className="text-white/50 text-sm">{partner.role}</p>
+                          <p className="font-medium" style={{ color: '#E5EDFF' }}>{partner.name}</p>
+                          <p className="text-sm" style={{ color: '#7A8BA6' }}>{partner.role}</p>
                         </div>
                       </div>
-                      <div className="px-3 py-1 rounded-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30">
-                        <span className="text-green-400 text-sm font-medium">{partner.match}</span>
+                      <div className="px-3 py-1 rounded-full" style={{ background: 'rgba(34, 197, 94, 0.2)', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
+                        <span className="text-sm font-medium" style={{ color: '#22C55E' }}>{partner.match}</span>
                       </div>
                     </div>
                   </motion.div>
@@ -156,9 +157,10 @@ export default function HeroSection() {
               <motion.div
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity }}
-                className="absolute -top-6 -right-6 w-20 h-20 backdrop-blur-xl bg-gradient-to-br from-purple-500/40 to-cyan-500/40 rounded-2xl border border-white/20 flex items-center justify-center"
+                className="absolute -top-6 -right-6 w-20 h-20 glass-card flex items-center justify-center"
+                style={{ background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.4) 0%, rgba(31, 58, 138, 0.4) 100%)' }}
               >
-                <Handshake className="w-10 h-10 text-white" />
+                <Handshake className="w-10 h-10" style={{ color: '#E5EDFF' }} />
               </motion.div>
             </div>
           </motion.div>

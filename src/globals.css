@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Primary Colors */
+    --primary: #1F3A8A;
+    --primary-light: #3B82F6;
+    --primary-dark: #0B1F3B;
+    
+    /* Secondary Colors */
+    --accent: #7C3AED;
+    --success: #22C55E;
+    --warning: #FACC15;
+    --error: #EF4444;
+    
+    /* Text Colors */
+    --text-primary: #E5EDFF;
+    --text-secondary: #B6C4E0;
+    --text-muted: #7A8BA6;
+    
+    /* Backgrounds */
+    --bg-start: #0A1628;
+    --bg-end: #1E3A5F;
+    
+    /* Glass Surface */
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-bg-hover: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.18);
+    --glass-border-hover: rgba(255, 255, 255, 0.28);
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+  }
+  
+  .glass-card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .glass-card-hover:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    transform: translateY(-2px);
+  }
+  
+  .bg-gradient-main {
+    background: linear-gradient(135deg, #0A1628 0%, #1E3A5F 100%);
+  }
+  
+  .text-primary {
+    color: #E5EDFF;
+  }
+  
+  .text-secondary {
+    color: #B6C4E0;
+  }
+  
+  .text-muted {
+    color: #7A8BA6;
+  }
+}
