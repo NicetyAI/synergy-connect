@@ -36,6 +36,7 @@ const mainMenuItems = [
   { icon: MessageSquare, label: "Forum", href: "Forum" },
   { icon: Newspaper, label: "News", href: "News" },
   { icon: Calendar, label: "Events", href: "Events" },
+  { icon: LayoutGrid, label: "Ad Campaigns", href: "AdCampaigns" },
 ];
 
 const menuItems = [

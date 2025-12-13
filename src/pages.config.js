@@ -12,6 +12,7 @@ import Settings from './pages/Settings';
 import ActivityFeed from './pages/ActivityFeed';
 import Events from './pages/Events';
 import EventDetail from './pages/EventDetail';
+import AdCampaigns from './pages/AdCampaigns';
 import __Layout from './Layout.jsx';
 
 
@@ -30,6 +31,7 @@ export const PAGES = {
     "ActivityFeed": ActivityFeed,
     "Events": Events,
     "EventDetail": EventDetail,
+    "AdCampaigns": AdCampaigns,
 }
 
 export const pagesConfig = {
