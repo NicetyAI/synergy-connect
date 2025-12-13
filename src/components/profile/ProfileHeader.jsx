@@ -47,64 +47,98 @@ export default function ProfileHeader({ user, isOwnProfile, currentUser }) {
 
   return (
     <>
-      <div className="relative">
-        {/* Cover Image */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="relative"
+      >
+        {/* Cover Image with Gradient Overlay */}
         <div 
-          className="h-64 w-full relative overflow-hidden"
+          className="h-80 w-full relative overflow-hidden"
           style={{ 
             background: user.cover_image_url 
               ? `url(${user.cover_image_url})` 
-              : 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)',
+              : 'linear-gradient(135deg, #667EEA 0%, #764BA2 50%, #F093FB 100%)',
             backgroundSize: 'cover',
             backgroundPosition: 'center'
           }}
         >
-          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(10, 22, 40, 0.8) 100%)' }} />
+          
+          {/* Decorative Elements */}
+          <div className="absolute top-10 right-10 w-32 h-32 rounded-full opacity-20" 
+            style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%)' }} />
+          <div className="absolute bottom-20 left-20 w-24 h-24 rounded-full opacity-20" 
+            style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%)' }} />
         </div>
 
         {/* Profile Content */}
         <div className="max-w-6xl mx-auto px-8 relative">
-          <div className="flex items-end gap-6 -mt-20">
+          <div className="flex flex-col md:flex-row md:items-end gap-6 -mt-24">
             {/* Avatar */}
-            <div className="relative">
+            <motion.div 
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="relative"
+            >
               <div 
-                className="w-40 h-40 rounded-full flex items-center justify-center border-4 overflow-hidden"
+                className="w-48 h-48 rounded-3xl flex items-center justify-center border-4 overflow-hidden shadow-2xl"
                 style={{ 
-                  background: user.avatar_url ? 'transparent' : 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)',
-                  borderColor: 'rgba(255, 255, 255, 0.18)'
+                  background: user.avatar_url ? 'transparent' : 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)',
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                  boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)'
                 }}
               >
                 {user.avatar_url ? (
                   <img src={user.avatar_url} alt={user.full_name} className="w-full h-full object-cover" />
                 ) : (
-                  <User className="w-20 h-20" style={{ color: '#E5EDFF' }} />
+                  <User className="w-24 h-24" style={{ color: '#E5EDFF' }} />
                 )}
               </div>
-            </div>
+              
+              {/* Status Badge */}
+              <div className="absolute -bottom-2 -right-2 px-3 py-1 rounded-full text-xs font-semibold"
+                style={{ background: 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)', color: '#fff', boxShadow: '0 4px 12px rgba(34, 197, 94, 0.4)' }}>
+                Active
+              </div>
+            </motion.div>
 
             {/* User Info */}
-            <div className="flex-1 pb-6">
-              <div className="flex items-start justify-between">
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="flex-1 pb-6"
+            >
+              <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                 <div>
-                  <h1 className="text-3xl font-bold mb-2" style={{ color: '#E5EDFF' }}>
-                    {user.full_name}
+                  <h1 className="text-4xl font-bold mb-3" style={{ color: '#E5EDFF', textShadow: '0 2px 10px rgba(0, 0, 0, 0.3)' }}>
+                    {user.full_name || user.email.split('@')[0]}
                   </h1>
-                  <div className="flex items-center gap-4 flex-wrap text-sm" style={{ color: '#B6C4E0' }}>
+                  
+                  {user.bio && (
+                    <p className="text-lg mb-4 max-w-2xl" style={{ color: '#B6C4E0' }}>
+                      {user.bio}
+                    </p>
+                  )}
+                  
+                  <div className="flex items-center gap-4 flex-wrap">
                     {user.title && (
-                      <div className="flex items-center gap-2">
-                        <Briefcase className="w-4 h-4" />
-                        <span>{user.title}</span>
+                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ background: 'rgba(102, 126, 234, 0.15)', border: '1px solid rgba(102, 126, 234, 0.3)' }}>
+                        <Briefcase className="w-4 h-4" style={{ color: '#667EEA' }} />
+                        <span className="text-sm font-medium" style={{ color: '#E5EDFF' }}>{user.title}</span>
                       </div>
                     )}
                     {user.location && (
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4" />
-                        <span>{user.location}</span>
+                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ background: 'rgba(124, 58, 237, 0.15)', border: '1px solid rgba(124, 58, 237, 0.3)' }}>
+                        <MapPin className="w-4 h-4" style={{ color: '#7C3AED' }} />
+                        <span className="text-sm font-medium" style={{ color: '#E5EDFF' }}>{user.location}</span>
                       </div>
                     )}
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
-                      <span>Joined {formatDistanceToNow(new Date(user.created_date), { addSuffix: true })}</span>
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ background: 'rgba(59, 130, 246, 0.15)', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
+                      <Calendar className="w-4 h-4" style={{ color: '#3B82F6' }} />
+                      <span className="text-sm font-medium" style={{ color: '#E5EDFF' }}>Joined {formatDistanceToNow(new Date(user.created_date), { addSuffix: true })}</span>
                     </div>
                   </div>
                 </div>
@@ -112,18 +146,18 @@ export default function ProfileHeader({ user, isOwnProfile, currentUser }) {
                 {isOwnProfile && (
                   <Button
                     onClick={() => setShowEditDialog(true)}
-                    className="gap-2"
-                    style={{ background: '#3B82F6', color: '#fff' }}
+                    className="gap-2 px-6 py-2 rounded-xl shadow-lg hover:shadow-xl transition-all"
+                    style={{ background: 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)', color: '#fff' }}
                   >
                     <Camera className="w-4 h-4" />
                     Edit Media
                   </Button>
                 )}
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Edit Media Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>

@@ -33,140 +33,163 @@ export default function AboutTab({ user, isOwnProfile }) {
 
   return (
     <>
-      <div className="glass-card p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold" style={{ color: '#E5EDFF' }}>Overview</h2>
+      <div className="glass-card p-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-3xl font-bold mb-2" style={{ color: '#E5EDFF' }}>Overview</h2>
+            <p className="text-sm" style={{ color: '#7A8BA6' }}>Personal and professional information</p>
+          </div>
           {isOwnProfile && (
             <Button
               onClick={() => setShowEditDialog(true)}
-              variant="ghost"
-              size="icon"
-              style={{ color: '#3B82F6' }}
+              className="gap-2 px-4 py-2 rounded-xl"
+              style={{ background: 'rgba(102, 126, 234, 0.15)', color: '#667EEA', border: '1px solid rgba(102, 126, 234, 0.3)' }}
             >
               <Edit className="w-4 h-4" />
+              Edit
             </Button>
           )}
         </div>
 
         {user.bio && (
-          <div className="mb-6">
-            <p className="text-lg" style={{ color: '#B6C4E0' }}>{user.bio}</p>
+          <div className="mb-8 p-6 rounded-2xl" style={{ background: 'rgba(102, 126, 234, 0.1)', border: '1px solid rgba(102, 126, 234, 0.2)' }}>
+            <p className="text-lg leading-relaxed" style={{ color: '#E5EDFF' }}>{user.bio}</p>
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {user.title && (
-            <div className="glass-card p-4">
-              <div className="flex items-center gap-3">
-                <Briefcase className="w-5 h-5" style={{ color: '#3B82F6' }} />
+            <div className="glass-card glass-card-hover p-6 rounded-2xl">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)' }}>
+                  <Briefcase className="w-6 h-6" style={{ color: '#E5EDFF' }} />
+                </div>
                 <div>
-                  <p className="text-sm" style={{ color: '#7A8BA6' }}>Title</p>
-                  <p className="font-medium" style={{ color: '#E5EDFF' }}>{user.title}</p>
+                  <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Title</p>
+                  <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{user.title}</p>
                 </div>
               </div>
             </div>
           )}
 
           {user.birth_date && (
-            <div className="glass-card p-4">
-              <div className="flex items-center gap-3">
-                <Calendar className="w-5 h-5" style={{ color: '#3B82F6' }} />
+            <div className="glass-card glass-card-hover p-6 rounded-2xl">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #F093FB 0%, #F5576C 100%)' }}>
+                  <Calendar className="w-6 h-6" style={{ color: '#E5EDFF' }} />
+                </div>
                 <div>
-                  <p className="text-sm" style={{ color: '#7A8BA6' }}>Born</p>
-                  <p className="font-medium" style={{ color: '#E5EDFF' }}>{new Date(user.birth_date).toLocaleDateString()}</p>
+                  <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Birth Date</p>
+                  <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{new Date(user.birth_date).toLocaleDateString()}</p>
                 </div>
               </div>
             </div>
           )}
 
           {user.status && (
-            <div className="glass-card p-4">
-              <div className="flex items-center gap-3">
-                <Heart className="w-5 h-5" style={{ color: '#3B82F6' }} />
+            <div className="glass-card glass-card-hover p-6 rounded-2xl">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #FA709A 0%, #FEE140 100%)' }}>
+                  <Heart className="w-6 h-6" style={{ color: '#E5EDFF' }} />
+                </div>
                 <div>
-                  <p className="text-sm" style={{ color: '#7A8BA6' }}>Status</p>
-                  <p className="font-medium" style={{ color: '#E5EDFF' }}>{user.status}</p>
+                  <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Status</p>
+                  <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{user.status}</p>
                 </div>
               </div>
             </div>
           )}
 
           {user.location && (
-            <div className="glass-card p-4">
-              <div className="flex items-center gap-3">
-                <MapPin className="w-5 h-5" style={{ color: '#3B82F6' }} />
+            <div className="glass-card glass-card-hover p-6 rounded-2xl">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%)' }}>
+                  <MapPin className="w-6 h-6" style={{ color: '#E5EDFF' }} />
+                </div>
                 <div>
-                  <p className="text-sm" style={{ color: '#7A8BA6' }}>Lives in</p>
-                  <p className="font-medium" style={{ color: '#E5EDFF' }}>{user.location}</p>
+                  <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Location</p>
+                  <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{user.location}</p>
                 </div>
               </div>
             </div>
           )}
 
           {user.occupation && (
-            <div className="glass-card p-4">
-              <div className="flex items-center gap-3">
-                <Briefcase className="w-5 h-5" style={{ color: '#3B82F6' }} />
+            <div className="glass-card glass-card-hover p-6 rounded-2xl">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #43E97B 0%, #38F9D7 100%)' }}>
+                  <Briefcase className="w-6 h-6" style={{ color: '#E5EDFF' }} />
+                </div>
                 <div>
-                  <p className="text-sm" style={{ color: '#7A8BA6' }}>Occupation</p>
-                  <p className="font-medium" style={{ color: '#E5EDFF' }}>{user.occupation}</p>
+                  <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Occupation</p>
+                  <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{user.occupation}</p>
                 </div>
               </div>
             </div>
           )}
 
           {user.business_name && (
-            <div className="glass-card p-4">
-              <div className="flex items-center gap-3">
-                <Briefcase className="w-5 h-5" style={{ color: '#3B82F6' }} />
+            <div className="glass-card glass-card-hover p-6 rounded-2xl">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 90%)' }}>
+                  <Briefcase className="w-6 h-6" style={{ color: '#E5EDFF' }} />
+                </div>
                 <div>
-                  <p className="text-sm" style={{ color: '#7A8BA6' }}>Business</p>
-                  <p className="font-medium" style={{ color: '#E5EDFF' }}>{user.business_name}</p>
+                  <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Business</p>
+                  <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{user.business_name}</p>
                 </div>
               </div>
             </div>
           )}
 
           {user.phone_number && (
-            <div className="glass-card p-4">
-              <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5" style={{ color: '#3B82F6' }} />
+            <div className="glass-card glass-card-hover p-6 rounded-2xl">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #A8EDEA 0%, #FED6E3 100%)' }}>
+                  <Mail className="w-6 h-6" style={{ color: '#0A1628' }} />
+                </div>
                 <div>
-                  <p className="text-sm" style={{ color: '#7A8BA6' }}>Phone</p>
-                  <p className="font-medium" style={{ color: '#E5EDFF' }}>{user.phone_number}</p>
+                  <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Phone</p>
+                  <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{user.phone_number}</p>
                 </div>
               </div>
             </div>
           )}
 
           {user.marital_status && (
-            <div className="glass-card p-4">
-              <div className="flex items-center gap-3">
-                <Heart className="w-5 h-5" style={{ color: '#3B82F6' }} />
+            <div className="glass-card glass-card-hover p-6 rounded-2xl">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #FFA8A8 0%, #FCFF00 100%)' }}>
+                  <Heart className="w-6 h-6" style={{ color: '#0A1628' }} />
+                </div>
                 <div>
-                  <p className="text-sm" style={{ color: '#7A8BA6' }}>Marital Status</p>
-                  <p className="font-medium" style={{ color: '#E5EDFF' }}>{user.marital_status}</p>
+                  <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Marital Status</p>
+                  <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{user.marital_status}</p>
                 </div>
               </div>
             </div>
           )}
 
-          <div className="glass-card p-4">
-            <div className="flex items-center gap-3">
-              <Calendar className="w-5 h-5" style={{ color: '#3B82F6' }} />
+          <div className="glass-card glass-card-hover p-6 rounded-2xl">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #FCCB90 0%, #D57EEB 100%)' }}>
+                <Calendar className="w-6 h-6" style={{ color: '#E5EDFF' }} />
+              </div>
               <div>
-                <p className="text-sm" style={{ color: '#7A8BA6' }}>Joined on</p>
-                <p className="font-medium" style={{ color: '#E5EDFF' }}>{new Date(user.created_date).toLocaleDateString()}</p>
+                <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Member Since</p>
+                <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{new Date(user.created_date).toLocaleDateString()}</p>
               </div>
             </div>
           </div>
 
-          <div className="glass-card p-4">
-            <div className="flex items-center gap-3">
-              <Mail className="w-5 h-5" style={{ color: '#3B82F6' }} />
+          <div className="glass-card glass-card-hover p-6 rounded-2xl">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)' }}>
+                <Mail className="w-6 h-6" style={{ color: '#E5EDFF' }} />
+              </div>
               <div>
-                <p className="text-sm" style={{ color: '#7A8BA6' }}>Email</p>
-                <p className="font-medium" style={{ color: '#E5EDFF' }}>{user.email}</p>
+                <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Email</p>
+                <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{user.email}</p>
               </div>
             </div>
           </div>

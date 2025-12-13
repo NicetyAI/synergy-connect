@@ -62,12 +62,45 @@ export default function Profile() {
 
         <div className="max-w-6xl mx-auto px-8 py-8">
           <Tabs defaultValue="about" className="w-full">
-            <TabsList className="glass-card mb-6 p-1" style={{ background: 'rgba(255, 255, 255, 0.08)' }}>
-              <TabsTrigger value="about" className="data-[state=active]:bg-[#3B82F6] data-[state=active]:text-white">About</TabsTrigger>
-              <TabsTrigger value="interest" className="data-[state=active]:bg-[#3B82F6] data-[state=active]:text-white">Interest</TabsTrigger>
-              <TabsTrigger value="connection" className="data-[state=active]:bg-[#3B82F6] data-[state=active]:text-white">Connection</TabsTrigger>
-              <TabsTrigger value="opportunity" className="data-[state=active]:bg-[#3B82F6] data-[state=active]:text-white">Opportunity</TabsTrigger>
-              <TabsTrigger value="activity" className="data-[state=active]:bg-[#3B82F6] data-[state=active]:text-white">Activity</TabsTrigger>
+            <TabsList className="glass-card mb-8 p-2 rounded-2xl" style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+              <TabsTrigger 
+                value="about" 
+                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:shadow-lg" 
+                style={{ 
+                  color: '#B6C4E0'
+                }}
+                data-state-active-style={{ background: 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)', color: '#fff' }}
+              >
+                About
+              </TabsTrigger>
+              <TabsTrigger 
+                value="interest" 
+                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:shadow-lg"
+                style={{ color: '#B6C4E0' }}
+              >
+                Interest
+              </TabsTrigger>
+              <TabsTrigger 
+                value="connection" 
+                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:shadow-lg"
+                style={{ color: '#B6C4E0' }}
+              >
+                Connection
+              </TabsTrigger>
+              <TabsTrigger 
+                value="opportunity" 
+                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:shadow-lg"
+                style={{ color: '#B6C4E0' }}
+              >
+                Opportunity
+              </TabsTrigger>
+              <TabsTrigger 
+                value="activity" 
+                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:shadow-lg"
+                style={{ color: '#B6C4E0' }}
+              >
+                Activity
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="about">
