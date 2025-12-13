@@ -13,7 +13,8 @@ import {
   Handshake,
   Sparkles,
   Store,
-  Newspaper
+  Newspaper,
+  User
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Link, useLocation } from "react-router-dom";
@@ -139,7 +140,7 @@ export default function Sidebar() {
       </div>
 
       {/* Categories */}
-      <div className="space-y-2">
+      <div className="space-y-2 mb-8">
         <p className="text-xs uppercase tracking-wider mb-3" style={{ color: '#7A8BA6' }}>Categories</p>
         {categories.map((category) => (
           <motion.button
@@ -156,6 +157,26 @@ export default function Sidebar() {
           </motion.button>
         ))}
       </div>
+
+      {/* User Profile */}
+      <Link to={createPageUrl('Profile')}>
+        <motion.div
+          whileHover={{ x: 4 }}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all cursor-pointer"
+          style={currentPath.includes('Profile') ? {
+            background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(31, 58, 138, 0.2) 100%)',
+            border: '1px solid rgba(59, 130, 246, 0.3)',
+            color: '#E5EDFF'
+          } : {
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+            color: '#B6C4E0'
+          }}
+        >
+          <User className="w-5 h-5" />
+          <span className="font-medium">My Profile</span>
+        </motion.div>
+      </Link>
     </aside>
   );
 }
