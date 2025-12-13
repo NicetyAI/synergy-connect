@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React, { useState, useEffect } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,8 @@ import ExperienceSection from "./ExperienceSection";
 import EducationSection from "./EducationSection";
 import CertificationsSection from "./CertificationsSection";
 import PortfolioSection from "./PortfolioSection";
+import VendorStatusSection from "./VendorStatusSection";
+import AdCampaignsSection from "./AdCampaignsSection";
 
 export default function AboutTab({ user, isOwnProfile }) {
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -24,6 +26,26 @@ export default function AboutTab({ user, isOwnProfile }) {
     birth_date: user.birth_date || '',
   });
   const queryClient = useQueryClient();
+
+  // Fetch vendor application
+  const { data: vendorApps = [] } = useQuery({
+    queryKey: ['vendor-apps', user.email],
+    queryFn: () => base44.entities.VendorApplication.filter({ user_email: user.email }),
+  });
+
+  // Fetch ad campaigns
+  const { data: adCampaigns = [] } = useQuery({
+    queryKey: ['user-ad-campaigns', user.email],
+    queryFn: async () => {
+      const vendorApp = vendorApps.find(v => v.status === 'approved');
+      if (!vendorApp) return [];
+      return base44.entities.AdvertiseApplication.filter({ user_email: user.email });
+    },
+    enabled: vendorApps.length > 0,
+  });
+
+  const vendorApp = vendorApps.length > 0 ? vendorApps[0] : null;
+  const pendingAdApps = adCampaigns.filter(c => c.status === 'pending').length;
 
   const updateProfileMutation = useMutation({
     mutationFn: (data) => base44.auth.updateMe(data),
@@ -39,6 +61,18 @@ export default function AboutTab({ user, isOwnProfile }) {
 
   return (
     <>
+      {/* Vendor Status Section */}
+      <VendorStatusSection vendorApp={vendorApp} isOwnProfile={isOwnProfile} />
+
+      {/* Ad Campaigns Section */}
+      {vendorApp?.status === 'approved' && (
+        <AdCampaignsSection 
+          campaigns={adCampaigns} 
+          pendingAdApps={pendingAdApps}
+          isOwnProfile={isOwnProfile} 
+        />
+      )}
+
       <div className="glass-card p-8">
         <div className="flex items-center justify-between mb-8">
           <div>
