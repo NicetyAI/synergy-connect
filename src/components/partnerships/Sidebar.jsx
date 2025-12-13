@@ -29,43 +29,47 @@ const categories = [
 
 export default function Sidebar() {
   return (
-    <aside className="w-64 h-screen sticky top-0 backdrop-blur-xl bg-white/5 border-r border-white/10 p-6 overflow-y-auto">
+    <aside className="w-64 h-screen sticky top-0 glass-card p-6 overflow-y-auto" style={{ borderRadius: 0, borderTop: 0, borderLeft: 0, borderBottom: 0 }}>
       {/* Logo */}
       <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
-          <Building2 className="w-5 h-5 text-white" />
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)' }}>
+          <Building2 className="w-5 h-5" style={{ color: '#E5EDFF' }} />
         </div>
-        <span className="text-xl font-bold text-white">BuyersAlike</span>
+        <span className="text-xl font-bold" style={{ color: '#E5EDFF' }}>BuyersAlike</span>
       </div>
 
       {/* Search */}
       <div className="relative mb-8">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#7A8BA6' }} />
         <Input
           placeholder="Search..."
-          className="w-full pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-purple-500/50 rounded-xl"
+          className="w-full pl-10 glass-card rounded-xl focus:border-[#3B82F6]/50"
+          style={{ color: '#E5EDFF', background: 'rgba(255, 255, 255, 0.05)', borderColor: 'rgba(255, 255, 255, 0.18)' }}
         />
       </div>
 
       {/* Menu Items */}
       <div className="space-y-2 mb-8">
-        <p className="text-xs text-white/40 uppercase tracking-wider mb-3">Menu</p>
+        <p className="text-xs uppercase tracking-wider mb-3" style={{ color: '#7A8BA6' }}>Menu</p>
         {menuItems.map((item) => (
           <motion.button
             key={item.label}
             whileHover={{ x: 4 }}
-            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${
-              item.active
-                ? "bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30 text-white"
-                : "text-white/60 hover:text-white hover:bg-white/5"
-            }`}
+            className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all"
+            style={item.active ? {
+              background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(31, 58, 138, 0.2) 100%)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              color: '#E5EDFF'
+            } : {
+              color: '#B6C4E0'
+            }}
           >
             <div className="flex items-center gap-3">
               <item.icon className="w-5 h-5" />
               <span className="font-medium">{item.label}</span>
             </div>
             {item.count && (
-              <span className="text-xs bg-white/10 px-2 py-1 rounded-full">
+              <span className="text-xs px-2 py-1 rounded-full" style={{ background: 'rgba(255, 255, 255, 0.1)' }}>
                 {item.count}
               </span>
             )}
@@ -75,18 +79,19 @@ export default function Sidebar() {
 
       {/* Categories */}
       <div className="space-y-2">
-        <p className="text-xs text-white/40 uppercase tracking-wider mb-3">Categories</p>
+        <p className="text-xs uppercase tracking-wider mb-3" style={{ color: '#7A8BA6' }}>Categories</p>
         {categories.map((category) => (
           <motion.button
             key={category.label}
             whileHover={{ x: 4 }}
-            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all"
+            className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all hover:bg-white/5"
+            style={{ color: '#B6C4E0' }}
           >
             <div className="flex items-center gap-3">
               <category.icon className="w-4 h-4" />
               <span className="text-sm">{category.label}</span>
             </div>
-            <span className="text-xs text-white/40">{category.count}</span>
+            <span className="text-xs" style={{ color: '#7A8BA6' }}>{category.count}</span>
           </motion.button>
         ))}
       </div>

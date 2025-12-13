@@ -20,21 +20,21 @@ export default function PartnershipCard({ partnership, index }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className="group backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+      className="group glass-card glass-card-hover p-6"
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-purple-400 transition-colors">
+          <h3 className="text-lg font-semibold mb-1 transition-colors" style={{ color: '#E5EDFF' }}>
             {partnership.title}
           </h3>
-          <p className="text-sm text-white/60 line-clamp-2">{partnership.description}</p>
+          <p className="text-sm line-clamp-2" style={{ color: '#B6C4E0' }}>{partnership.description}</p>
         </div>
         <div className="flex gap-2 ml-4">
-          <button className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white transition-all">
+          <button className="w-8 h-8 rounded-lg glass-card flex items-center justify-center transition-all" style={{ color: '#7A8BA6' }}>
             <Bookmark className="w-4 h-4" />
           </button>
-          <button className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white/60 hover:text-white transition-all">
+          <button className="w-8 h-8 rounded-lg glass-card flex items-center justify-center transition-all" style={{ color: '#7A8BA6' }}>
             <Share2 className="w-4 h-4" />
           </button>
         </div>
@@ -43,29 +43,30 @@ export default function PartnershipCard({ partnership, index }) {
       {/* Rating */}
       <div className="flex items-center gap-1 mb-4">
         {Array(5).fill(0).map((_, i) => (
-          <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
+          <Star key={i} className="w-4 h-4 fill-current" style={{ color: '#FACC15' }} />
         ))}
-        <span className="text-xs text-white/60 ml-1">(4.9)</span>
+        <span className="text-xs ml-1" style={{ color: '#7A8BA6' }}>(4.9)</span>
       </div>
 
       {/* Match Score */}
       <div className="mb-5">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-white/70">Match Score</span>
-          <span className="text-sm font-semibold text-white">{matchPercentage}%</span>
+          <span className="text-sm" style={{ color: '#B6C4E0' }}>Match Score</span>
+          <span className="text-sm font-semibold" style={{ color: '#E5EDFF' }}>{matchPercentage}%</span>
         </div>
-        <div className="relative h-2 bg-white/5 rounded-full overflow-hidden">
+        <div className="relative h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${matchPercentage}%` }}
             transition={{ duration: 1, delay: 0.2 }}
-            className={`h-full rounded-full ${
-              matchPercentage >= 90 
-                ? "bg-gradient-to-r from-green-500 to-emerald-500" 
+            className="h-full rounded-full"
+            style={{
+              background: matchPercentage >= 90 
+                ? 'linear-gradient(90deg, #22C55E 0%, #22C55E 100%)' 
                 : matchPercentage >= 75
-                ? "bg-gradient-to-r from-orange-500 to-red-500"
-                : "bg-gradient-to-r from-yellow-500 to-orange-500"
-            }`}
+                ? 'linear-gradient(90deg, #FACC15 0%, #EF4444 100%)'
+                : 'linear-gradient(90deg, #FACC15 0%, #FACC15 100%)'
+            }}
           />
         </div>
       </div>
@@ -73,30 +74,30 @@ export default function PartnershipCard({ partnership, index }) {
       {/* Details Grid */}
       <div className="grid grid-cols-2 gap-3 mb-5">
         <div className="flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-cyan-400" />
-          <span className="text-sm text-white/70">{partnership.location}</span>
+          <MapPin className="w-4 h-4" style={{ color: '#3B82F6' }} />
+          <span className="text-sm" style={{ color: '#B6C4E0' }}>{partnership.location}</span>
         </div>
         <div className="flex items-center gap-2">
-          <Building2 className="w-4 h-4 text-purple-400" />
-          <span className="text-sm text-white/70">{partnership.industry}</span>
+          <Building2 className="w-4 h-4" style={{ color: '#7C3AED' }} />
+          <span className="text-sm" style={{ color: '#B6C4E0' }}>{partnership.industry}</span>
         </div>
         <div className="flex items-center gap-2">
-          <DollarSign className="w-4 h-4 text-green-400" />
-          <span className="text-sm text-white/70">{partnership.dealSize}</span>
+          <DollarSign className="w-4 h-4" style={{ color: '#22C55E' }} />
+          <span className="text-sm" style={{ color: '#B6C4E0' }}>{partnership.dealSize}</span>
         </div>
         <div className="flex items-center gap-2">
-          <Users className="w-4 h-4 text-pink-400" />
-          <span className="text-sm text-white/70">{partnership.companySize}</span>
+          <Users className="w-4 h-4" style={{ color: '#3B82F6' }} />
+          <span className="text-sm" style={{ color: '#B6C4E0' }}>{partnership.companySize}</span>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-4 border-t border-white/10">
-        <div className="flex items-center gap-2 text-white/50 text-xs">
+      <div className="flex items-center justify-between pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.18)' }}>
+        <div className="flex items-center gap-2 text-xs" style={{ color: '#7A8BA6' }}>
           <Calendar className="w-3 h-3" />
           <span>Posted {partnership.postedDate}</span>
         </div>
-        <Button className="bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 text-white rounded-lg px-4 py-2 text-sm font-medium transition-all duration-300 hover:scale-105">
+        <Button className="rounded-lg px-4 py-2 text-sm font-medium transition-all duration-300 hover:scale-105" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}>
           View Full Details
         </Button>
       </div>

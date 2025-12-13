@@ -18,16 +18,17 @@ import {
 
 export default function FilterBar({ viewMode, setViewMode, totalResults }) {
   return (
-    <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-4 mb-6">
+    <div className="glass-card p-4 mb-6">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         {/* Left - Results count */}
         <div className="flex items-center gap-4">
-          <p className="text-white/70">
-            Showing <span className="text-white font-semibold">{totalResults}</span> partnerships
+          <p style={{ color: '#B6C4E0' }}>
+            Showing <span className="font-semibold" style={{ color: '#E5EDFF' }}>{totalResults}</span> partnerships
           </p>
           <Button
             variant="outline"
-            className="bg-white/5 border-white/10 text-white/70 hover:text-white hover:bg-white/10 rounded-xl"
+            className="glass-card hover:bg-white/10 rounded-xl"
+            style={{ color: '#B6C4E0', borderColor: 'rgba(255, 255, 255, 0.18)' }}
           >
             <Filter className="w-4 h-4 mr-2" />
             Filters
@@ -38,11 +39,11 @@ export default function FilterBar({ viewMode, setViewMode, totalResults }) {
         <div className="flex items-center gap-3">
           {/* Sort */}
           <Select defaultValue="match">
-            <SelectTrigger className="w-40 bg-white/5 border-white/10 text-white rounded-xl">
+            <SelectTrigger className="w-40 glass-card rounded-xl" style={{ color: '#E5EDFF' }}>
               <ArrowUpDown className="w-4 h-4 mr-2" />
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-gray-900 border-white/10 text-white">
+            <SelectContent style={{ background: '#0B1F3B', borderColor: 'rgba(255, 255, 255, 0.18)', color: '#E5EDFF' }}>
               <SelectItem value="match">Best Match</SelectItem>
               <SelectItem value="newest">Newest First</SelectItem>
               <SelectItem value="oldest">Oldest First</SelectItem>
@@ -51,24 +52,28 @@ export default function FilterBar({ viewMode, setViewMode, totalResults }) {
           </Select>
 
           {/* View toggle */}
-          <div className="flex items-center gap-1 bg-white/5 border border-white/10 rounded-xl p-1">
+          <div className="flex items-center gap-1 glass-card rounded-xl p-1">
             <button
               onClick={() => setViewMode("grid")}
-              className={`p-2 rounded-lg transition-all ${
-                viewMode === "grid"
-                  ? "bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-white"
-                  : "text-white/50 hover:text-white"
-              }`}
+              className="p-2 rounded-lg transition-all"
+              style={viewMode === "grid" ? {
+                background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(31, 58, 138, 0.2) 100%)',
+                color: '#E5EDFF'
+              } : {
+                color: '#7A8BA6'
+              }}
             >
               <Grid3x3 className="w-4 h-4" />
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`p-2 rounded-lg transition-all ${
-                viewMode === "list"
-                  ? "bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-white"
-                  : "text-white/50 hover:text-white"
-              }`}
+              className="p-2 rounded-lg transition-all"
+              style={viewMode === "list" ? {
+                background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(31, 58, 138, 0.2) 100%)',
+                color: '#E5EDFF'
+              } : {
+                color: '#7A8BA6'
+              }}
             >
               <List className="w-4 h-4" />
             </button>

@@ -167,10 +167,10 @@ export default function Partnerships() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold mb-2" style={{ color: '#E5EDFF' }}>
               Partnership Opportunities
             </h1>
-            <p className="text-white/60">
+            <p style={{ color: '#B6C4E0' }}>
               Discover and connect with verified business partners for your next venture
             </p>
           </div>
