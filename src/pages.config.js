@@ -2,6 +2,7 @@ import Home from './pages/Home';
 import Partnerships from './pages/Partnerships';
 import Opportunities from './pages/Opportunities';
 import Recommendations from './pages/Recommendations';
+import Vendors from './pages/Vendors';
 import __Layout from './Layout.jsx';
 
 
@@ -10,6 +11,7 @@ export const PAGES = {
     "Partnerships": Partnerships,
     "Opportunities": Opportunities,
     "Recommendations": Recommendations,
+    "Vendors": Vendors,
 }
 
 export const pagesConfig = {
