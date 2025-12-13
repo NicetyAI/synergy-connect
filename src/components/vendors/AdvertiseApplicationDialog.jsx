@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Megaphone, Upload, X } from "lucide-react";
+import { Megaphone, Upload, X, AlertCircle } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const advertisingPackages = [
   "Featured Listing - $299/month",
@@ -15,47 +17,119 @@ const advertisingPackages = [
 ];
 
 export default function AdvertiseApplicationDialog({ open, onOpenChange }) {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [userVendorApp, setUserVendorApp] = useState(null);
+  const [isVendor, setIsVendor] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const queryClient = useQueryClient();
+
   const [formData, setFormData] = useState({
     businessName: "",
     contactName: "",
     email: "",
     phone: "",
-    currentVendorId: "",
     package: "",
+    durationMonths: 1,
     objectives: "",
     budget: "",
     additionalInfo: "",
   });
   const [uploadedFile, setUploadedFile] = useState(null);
+  const [flyerUrl, setFlyerUrl] = useState("");
 
-  const handleFileChange = (e) => {
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const user = await base44.auth.me();
+      setCurrentUser(user);
+      
+      // Check if user has an approved vendor application
+      const vendorApps = await base44.entities.VendorApplication.filter({ 
+        user_email: user.email,
+        status: "approved"
+      });
+      
+      if (vendorApps.length > 0) {
+        const vendorApp = vendorApps[0];
+        setUserVendorApp(vendorApp);
+        setIsVendor(true);
+        setFormData(prev => ({
+          ...prev,
+          businessName: vendorApp.business_name || "",
+          email: user.email
+        }));
+      }
+    };
+    
+    if (open) {
+      fetchUserData();
+    }
+  }, [open]);
+
+  const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
       setUploadedFile(file);
+      setUploading(true);
+      try {
+        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        setFlyerUrl(file_url);
+      } catch (error) {
+        console.error('Upload failed:', error);
+      } finally {
+        setUploading(false);
+      }
     }
   };
 
   const handleRemoveFile = () => {
     setUploadedFile(null);
+    setFlyerUrl("");
   };
+
+  const submitApplicationMutation = useMutation({
+    mutationFn: (data) => base44.entities.AdvertiseApplication.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['advertise-applications'] });
+      setFormData({
+        businessName: "",
+        contactName: "",
+        email: "",
+        phone: "",
+        package: "",
+        durationMonths: 1,
+        objectives: "",
+        budget: "",
+        additionalInfo: "",
+      });
+      setUploadedFile(null);
+      setFlyerUrl("");
+      onOpenChange(false);
+    },
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Advertising application:", formData);
-    console.log("Uploaded flyer:", uploadedFile);
-    setFormData({
-      businessName: "",
-      contactName: "",
-      email: "",
-      phone: "",
-      currentVendorId: "",
-      package: "",
-      objectives: "",
-      budget: "",
-      additionalInfo: "",
+    
+    if (!isVendor) {
+      alert("You must be an approved vendor to advertise. Please apply to become a vendor first.");
+      return;
+    }
+
+    submitApplicationMutation.mutate({
+      business_name: formData.businessName,
+      user_email: currentUser.email,
+      vendor_id: userVendorApp.vendor_id,
+      contact_name: formData.contactName,
+      email: formData.email,
+      phone: formData.phone,
+      package: formData.package,
+      duration_months: parseInt(formData.durationMonths),
+      budget: formData.budget,
+      objectives: formData.objectives,
+      additional_info: formData.additionalInfo,
+      flyer_url: flyerUrl,
+      status: "pending"
     });
-    setUploadedFile(null);
-    onOpenChange(false);
   };
 
   return (
@@ -71,6 +145,19 @@ export default function AdvertiseApplicationDialog({ open, onOpenChange }) {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+          {/* Vendor Status Alert */}
+          {!isVendor && (
+            <div className="p-4 rounded-xl flex items-start gap-3" style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#EF4444' }} />
+              <div>
+                <p className="font-semibold mb-1" style={{ color: '#EF4444' }}>Vendor Status Required</p>
+                <p className="text-sm" style={{ color: '#FCA5A5' }}>
+                  You must be an approved vendor to advertise. Please apply to become a vendor first.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Business Information */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>Business Information</h3>
@@ -89,14 +176,13 @@ export default function AdvertiseApplicationDialog({ open, onOpenChange }) {
               </div>
 
               <div>
-                <Label htmlFor="currentVendorId" style={{ color: '#B6C4E0' }}>Current Vendor ID (if applicable)</Label>
+                <Label htmlFor="vendorId" style={{ color: '#B6C4E0' }}>Vendor ID *</Label>
                 <Input
-                  id="currentVendorId"
-                  value={formData.currentVendorId}
-                  onChange={(e) => setFormData({ ...formData, currentVendorId: e.target.value })}
-                  className="glass-input mt-1"
-                  style={{ color: '#E5EDFF' }}
-                  placeholder="V-12345"
+                  id="vendorId"
+                  value={userVendorApp?.vendor_id || "Not available - Apply as vendor first"}
+                  disabled
+                  className="glass-input mt-1 opacity-70"
+                  style={{ color: isVendor ? '#22C55E' : '#7A8BA6' }}
                 />
               </div>
             </div>
@@ -177,6 +263,23 @@ export default function AdvertiseApplicationDialog({ open, onOpenChange }) {
                   placeholder="$500"
                 />
               </div>
+            </div>
+
+            <div>
+              <Label htmlFor="duration" style={{ color: '#B6C4E0' }}>Ad Duration (months) *</Label>
+              <Input
+                id="duration"
+                type="number"
+                min="1"
+                required
+                value={formData.durationMonths}
+                onChange={(e) => setFormData({ ...formData, durationMonths: e.target.value })}
+                className="glass-input mt-1"
+                style={{ color: '#E5EDFF' }}
+              />
+              <p className="text-xs mt-1" style={{ color: '#7A8BA6' }}>
+                Minimum 1 month. Timer starts when your ad is approved.
+              </p>
             </div>
 
             <div>
@@ -273,10 +376,11 @@ export default function AdvertiseApplicationDialog({ open, onOpenChange }) {
             </Button>
             <Button
               type="submit"
+              disabled={!isVendor || submitApplicationMutation.isPending || uploading}
               className="flex-1 rounded-lg"
-              style={{ background: '#6366F1', color: '#fff' }}
+              style={{ background: '#6366F1', color: '#fff', opacity: !isVendor ? 0.5 : 1 }}
             >
-              Submit Application
+              {submitApplicationMutation.isPending ? 'Submitting...' : 'Submit Application'}
             </Button>
           </div>
         </form>
