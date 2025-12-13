@@ -17,7 +17,8 @@ import {
   User,
   Shield,
   LogOut,
-  Calendar
+  Calendar,
+  Mail
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Link, useLocation } from "react-router-dom";
@@ -31,6 +32,7 @@ const mainMenuItems = [
   { icon: Briefcase, label: "Opportunities", href: "Opportunities" },
   { icon: Handshake, label: "Partnerships", href: "Partnerships" },
   { icon: Store, label: "Vendors", href: "Vendors" },
+  { icon: Mail, label: "Messages", href: "Messages" },
   { icon: MessageSquare, label: "Forum", href: "Forum" },
   { icon: Newspaper, label: "News", href: "News" },
   { icon: Calendar, label: "Events", href: "Events" },
