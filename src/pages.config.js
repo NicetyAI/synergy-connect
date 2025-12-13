@@ -9,6 +9,7 @@ import PostDetail from './pages/PostDetail';
 import News from './pages/News';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import ActivityFeed from './pages/ActivityFeed';
 import __Layout from './Layout.jsx';
 
 
@@ -24,6 +25,7 @@ export const PAGES = {
     "News": News,
     "Profile": Profile,
     "Settings": Settings,
+    "ActivityFeed": ActivityFeed,
 }
 
 export const pagesConfig = {

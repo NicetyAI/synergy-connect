@@ -26,6 +26,7 @@ import NotificationBell from "@/components/notifications/NotificationBell";
 
 const mainMenuItems = [
   { icon: Sparkles, label: "Recommendations", href: "Recommendations" },
+  { icon: TrendingUp, label: "Activity Feed", href: "ActivityFeed" },
   { icon: Briefcase, label: "Opportunities", href: "Opportunities" },
   { icon: Handshake, label: "Partnerships", href: "Partnerships" },
   { icon: Store, label: "Vendors", href: "Vendors" },
