@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Handshake, Menu, X } from "lucide-react";
+import { Handshake, Menu, X, User, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { base44 } from "@/api/base44Client";
 
 const navLinks = [
   { name: "Features", href: "#features" },
@@ -15,9 +16,24 @@ const navLinks = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   const [lastScrollY, setLastScrollY] = useState(0);
   const [hidden, setHidden] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const user = await base44.auth.me();
+        setCurrentUser(user);
+      } catch (error) {
+        setCurrentUser(null);
+      } finally {
+        setIsAuthChecking(false);
+      }
+    };
+    checkAuth();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -112,23 +128,48 @@ export default function Navbar() {
 
             {/* Enhanced CTA Buttons */}
             <div className="hidden md:flex items-center gap-4">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button variant="ghost" className="hover:bg-white/10 rounded-xl px-5" style={{ color: '#B6C4E0' }}>
-                  Sign In
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button className="rounded-xl px-6 py-5 font-semibold shadow-lg relative overflow-hidden group" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}>
-                  <motion.div
-                    animate={{
-                      x: ['-100%', '100%'],
-                    }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                  />
-                  <span className="relative z-10">Get Started Free</span>
-                </Button>
-              </motion.div>
+              {!isAuthChecking && (
+                currentUser ? (
+                  <Link to={createPageUrl('Recommendations')}>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button className="rounded-xl px-6 py-5 font-semibold shadow-lg flex items-center gap-2" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}>
+                        <User className="w-4 h-4" />
+                        <span>Go to Dashboard</span>
+                      </Button>
+                    </motion.div>
+                  </Link>
+                ) : (
+                  <>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button 
+                        variant="ghost" 
+                        className="hover:bg-white/10 rounded-xl px-5 flex items-center gap-2" 
+                        style={{ color: '#B6C4E0' }}
+                        onClick={() => base44.auth.redirectToLogin()}
+                      >
+                        <LogIn className="w-4 h-4" />
+                        Sign In
+                      </Button>
+                    </motion.div>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button 
+                        className="rounded-xl px-6 py-5 font-semibold shadow-lg relative overflow-hidden group" 
+                        style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}
+                        onClick={() => base44.auth.redirectToLogin()}
+                      >
+                        <motion.div
+                          animate={{
+                            x: ['-100%', '100%'],
+                          }}
+                          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                        />
+                        <span className="relative z-10">Register Free</span>
+                      </Button>
+                    </motion.div>
+                  </>
+                )
+              )}
             </div>
 
             {/* Mobile menu button */}
@@ -179,12 +220,45 @@ export default function Navbar() {
                   )
                 ))}
                 <div className="pt-4 space-y-3">
-                  <Button variant="outline" className="w-full hover:bg-white/10" style={{ borderColor: 'rgba(255, 255, 255, 0.18)', color: '#E5EDFF' }}>
-                    Sign In
-                  </Button>
-                  <Button className="w-full" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}>
-                    Get Started
-                  </Button>
+                  {!isAuthChecking && (
+                    currentUser ? (
+                      <Link to={createPageUrl('Recommendations')}>
+                        <Button 
+                          className="w-full flex items-center justify-center gap-2" 
+                          style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          <User className="w-4 h-4" />
+                          Go to Dashboard
+                        </Button>
+                      </Link>
+                    ) : (
+                      <>
+                        <Button 
+                          variant="outline" 
+                          className="w-full hover:bg-white/10 flex items-center justify-center gap-2" 
+                          style={{ borderColor: 'rgba(255, 255, 255, 0.18)', color: '#E5EDFF' }}
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            base44.auth.redirectToLogin();
+                          }}
+                        >
+                          <LogIn className="w-4 h-4" />
+                          Sign In
+                        </Button>
+                        <Button 
+                          className="w-full" 
+                          style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            base44.auth.redirectToLogin();
+                          }}
+                        >
+                          Register Free
+                        </Button>
+                      </>
+                    )
+                  )}
                 </div>
               </div>
             </div>
