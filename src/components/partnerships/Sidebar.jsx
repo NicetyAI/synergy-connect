@@ -158,14 +158,22 @@ export default function Sidebar() {
         </Link>
 
         {currentUser?.role === 'admin' && (
-          <motion.button
-            whileHover={{ x: 4 }}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all"
-            style={{ color: '#3B82F6' }}
-          >
-            <Shield className="w-5 h-5" />
-            <span className="font-medium">Admin</span>
-          </motion.button>
+          <Link to={createPageUrl('Admin')}>
+            <motion.button
+              whileHover={{ x: 4 }}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all"
+              style={currentPath.includes('Admin') ? {
+                background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%)',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                color: '#EF4444'
+              } : {
+                color: '#EF4444'
+              }}
+            >
+              <Shield className="w-5 h-5" />
+              <span className="font-medium">Admin</span>
+            </motion.button>
+          </Link>
         )}
 
         <motion.button
