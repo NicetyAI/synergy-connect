@@ -20,7 +20,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 py-20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 pt-20 pb-10">
       {/* Enhanced animated background with depth layers */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Large gradient orbs */}
