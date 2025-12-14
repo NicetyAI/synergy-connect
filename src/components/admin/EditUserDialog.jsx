@@ -10,33 +10,21 @@ import { Shield, Edit, Eye, User as UserIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const ROLE_CONFIG = {
-  Admin: {
+  admin: {
     icon: Shield,
     color: '#EF4444',
     bgColor: 'rgba(239, 68, 68, 0.15)',
     borderColor: 'rgba(239, 68, 68, 0.3)',
-    description: 'Full access to all platform features'
+    description: 'Full access to all platform features',
+    label: 'Admin'
   },
-  Editor: {
-    icon: Edit,
-    color: '#F59E0B',
-    bgColor: 'rgba(245, 158, 11, 0.15)',
-    borderColor: 'rgba(245, 158, 11, 0.3)',
-    description: 'Can create and edit content'
-  },
-  Viewer: {
-    icon: Eye,
-    color: '#3B82F6',
-    bgColor: 'rgba(59, 130, 246, 0.15)',
-    borderColor: 'rgba(59, 130, 246, 0.3)',
-    description: 'Read-only access'
-  },
-  User: {
+  user: {
     icon: UserIcon,
     color: '#10B981',
     bgColor: 'rgba(16, 185, 129, 0.15)',
     borderColor: 'rgba(16, 185, 129, 0.3)',
-    description: 'Standard user access'
+    description: 'Standard user access',
+    label: 'User'
   }
 };
 
@@ -49,7 +37,6 @@ export default function EditUserDialog({ user, open, onOpenChange }) {
     phone_number: '',
     country: '',
     state: '',
-    platform_role: 'User',
     role: 'user'
   });
 
@@ -62,7 +49,6 @@ export default function EditUserDialog({ user, open, onOpenChange }) {
         phone_number: user.phone_number || '',
         country: user.country || '',
         state: user.state || '',
-        platform_role: user.platform_role || 'User',
         role: user.role || 'user'
       });
     }
@@ -78,20 +64,13 @@ export default function EditUserDialog({ user, open, onOpenChange }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Update built-in role field based on platform_role
-    const updatedData = {
-      ...formData,
-      role: formData.platform_role === 'Admin' ? 'admin' : 'user'
-    };
-    
-    updateUserMutation.mutate(updatedData);
+    updateUserMutation.mutate(formData);
   };
 
   if (!user) return null;
 
-  const RoleIcon = ROLE_CONFIG[formData.platform_role]?.icon || UserIcon;
-  const roleConfig = ROLE_CONFIG[formData.platform_role];
+  const RoleIcon = ROLE_CONFIG[formData.role]?.icon || UserIcon;
+  const roleConfig = ROLE_CONFIG[formData.role];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -122,19 +101,22 @@ export default function EditUserDialog({ user, open, onOpenChange }) {
             <Label className="text-sm font-semibold mb-3 block" style={{ color: '#B6C4E0' }}>
               Platform Role
             </Label>
-            <Select value={formData.platform_role} onValueChange={(value) => setFormData({...formData, platform_role: value})}>
+            <Select value={formData.role} onValueChange={(value) => setFormData({...formData, role: value})}>
               <SelectTrigger className="glass-input h-14" style={{ color: '#E5EDFF' }}>
                 <div className="flex items-center gap-3">
                   <div 
                     className="w-10 h-10 rounded-lg flex items-center justify-center"
                     style={{ 
-                      background: roleConfig.bgColor,
-                      border: `1px solid ${roleConfig.borderColor}`
+                      background: roleConfig?.bgColor || 'rgba(16, 185, 129, 0.15)',
+                      border: `1px solid ${roleConfig?.borderColor || 'rgba(16, 185, 129, 0.3)'}`
                     }}
                   >
-                    <RoleIcon className="w-5 h-5" style={{ color: roleConfig.color }} />
+                    <RoleIcon className="w-5 h-5" style={{ color: roleConfig?.color || '#10B981' }} />
                   </div>
-                  <SelectValue />
+                  <div>
+                    <p className="font-semibold text-left">{roleConfig?.label || formData.role}</p>
+                    <p className="text-xs text-left" style={{ color: '#7A8BA6' }}>{roleConfig?.description}</p>
+                  </div>
                 </div>
               </SelectTrigger>
               <SelectContent style={{ background: '#0F2744', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
@@ -153,7 +135,7 @@ export default function EditUserDialog({ user, open, onOpenChange }) {
                           <Icon className="w-4 h-4" style={{ color: config.color }} />
                         </div>
                         <div>
-                          <p className="font-semibold" style={{ color: '#E5EDFF' }}>{role}</p>
+                          <p className="font-semibold" style={{ color: '#E5EDFF' }}>{config.label}</p>
                           <p className="text-xs" style={{ color: '#7A8BA6' }}>{config.description}</p>
                         </div>
                       </div>
