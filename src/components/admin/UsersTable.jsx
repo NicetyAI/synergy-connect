@@ -210,22 +210,22 @@ export default function UsersTable({ users }) {
               size="sm"
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(currentPage - 1)}
-              className="glass-input"
-              style={{ color: '#E5EDFF' }}
+              className="glass-input font-medium"
+              style={{ color: '#E5EDFF', borderColor: 'rgba(255, 255, 255, 0.2)' }}
             >
-              <ChevronLeft className="w-4 h-4 mr-1" />
-              Previous
+              <ChevronLeft className="w-4 h-4 mr-1" style={{ color: '#E5EDFF' }} />
+              <span style={{ color: '#E5EDFF' }}>Previous</span>
             </Button>
             <Button
               variant="outline"
               size="sm"
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage(currentPage + 1)}
-              className="glass-input"
-              style={{ color: '#E5EDFF' }}
+              className="glass-input font-medium"
+              style={{ color: '#E5EDFF', borderColor: 'rgba(255, 255, 255, 0.2)' }}
             >
-              Next
-              <ChevronRight className="w-4 h-4 ml-1" />
+              <span style={{ color: '#E5EDFF' }}>Next</span>
+              <ChevronRight className="w-4 h-4 ml-1" style={{ color: '#E5EDFF' }} />
             </Button>
           </div>
         </div>
