@@ -14,6 +14,8 @@ import OpportunityDistributionChart from "@/components/admin/OpportunityDistribu
 import ActivityChart from "@/components/admin/ActivityChart";
 import InterestTrendsChart from "@/components/admin/InterestTrendsChart";
 import UsersTable from "@/components/admin/UsersTable";
+import VendorApplicationsTable from "@/components/admin/VendorApplicationsTable";
+import AdvertiseApplicationsTable from "@/components/admin/AdvertiseApplicationsTable";
 
 export default function Admin() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -276,10 +278,9 @@ export default function Admin() {
               </div>
             </TabsContent>
 
-            <TabsContent value="vendor">
-              <div className="glass-card p-8 rounded-2xl text-center">
-                <p style={{ color: '#7A8BA6' }}>Vendor management coming soon...</p>
-              </div>
+            <TabsContent value="vendor" className="space-y-6">
+              <VendorApplicationsTable />
+              <AdvertiseApplicationsTable />
             </TabsContent>
 
             <TabsContent value="category">
