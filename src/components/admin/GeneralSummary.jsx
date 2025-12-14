@@ -8,7 +8,7 @@ export default function GeneralSummary({ metrics }) {
       <h2 className="text-xl font-bold mb-6" style={{ color: '#E5EDFF' }}>
         General Summary
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <MetricCard
           icon={Users}
           title="Total Users"
