@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
 import FeaturesSection from "@/components/landing/FeaturesSection";
-import PartnerSearchSection from "@/components/landing/PartnerSearchSection";
+import VendorAdsSection from "@/components/landing/VendorAdsSection";
 import AboutSection from "@/components/landing/AboutSection";
 import JourneySection from "@/components/landing/JourneySection";
 import PricingSection from "@/components/landing/PricingSection";
