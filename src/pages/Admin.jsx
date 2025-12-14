@@ -13,6 +13,7 @@ import UserGrowthChart from "@/components/admin/UserGrowthChart";
 import OpportunityDistributionChart from "@/components/admin/OpportunityDistributionChart";
 import ActivityChart from "@/components/admin/ActivityChart";
 import InterestTrendsChart from "@/components/admin/InterestTrendsChart";
+import UsersTable from "@/components/admin/UsersTable";
 
 export default function Admin() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -254,9 +255,7 @@ export default function Admin() {
             </TabsContent>
 
             <TabsContent value="users">
-              <div className="glass-card p-8 rounded-2xl text-center">
-                <p style={{ color: '#7A8BA6' }}>Users management coming soon...</p>
-              </div>
+              <UsersTable users={users} />
             </TabsContent>
 
             <TabsContent value="partner">
