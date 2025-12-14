@@ -40,7 +40,7 @@ export default function Home() {
         <div id="features">
           <FeaturesSection />
         </div>
-        <PartnerSearchSection />
+        <VendorAdsSection />
         <div id="about">
           <AboutSection />
         </div>
