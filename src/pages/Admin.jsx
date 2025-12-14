@@ -20,6 +20,7 @@ import VendorApplicationsTable from "@/components/admin/VendorApplicationsTable"
 import AdvertiseApplicationsTable from "@/components/admin/AdvertiseApplicationsTable";
 import AdCampaignsSummary from "@/components/admin/AdCampaignsSummary";
 import AdCampaignChart from "@/components/admin/AdCampaignChart";
+import CategoryManagementTab from "@/components/admin/CategoryManagementTab";
 
 export default function Admin() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -336,9 +337,7 @@ export default function Admin() {
             </TabsContent>
 
             <TabsContent value="category">
-              <div className="glass-card p-8 rounded-2xl text-center">
-                <p style={{ color: '#7A8BA6' }}>Category management coming soon...</p>
-              </div>
+              <CategoryManagementTab />
             </TabsContent>
 
             <TabsContent value="forum">
