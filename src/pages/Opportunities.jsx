@@ -7,6 +7,8 @@ import Sidebar from "@/components/partnerships/Sidebar";
 import { Search, Sparkles, TrendingUp } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
+import SEO from "@/components/seo/SEO";
+import { pageMetadata } from "@/components/seo/seoMetadata";
 
 const opportunitiesData = [
   {
@@ -132,6 +134,7 @@ const opportunitiesData = [
 ];
 
 export default function Opportunities() {
+  const metadata = pageMetadata.Opportunities;
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [currentUser, setCurrentUser] = useState(null);
@@ -163,6 +166,11 @@ export default function Opportunities() {
 
   return (
     <div className="flex">
+      <SEO 
+        title={metadata.title}
+        description={metadata.description}
+        keywords={metadata.keywords}
+      />
       {/* Sidebar */}
       <Sidebar />
 
