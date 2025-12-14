@@ -104,86 +104,82 @@ export default function FeaturesSection() {
           </p>
         </motion.div>
 
-        {/* Bento grid layout - Fortune 500 style */}
+        {/* 3-column, 2-row grid layout */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {features.map((feature, index) => {
-            // Make first card span 2 columns on large screens
-            const isLarge = index === 0;
-            return (
+          {features.map((feature, index) => (
+            <motion.div
+              key={feature.title}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.08 }}
+              className="group"
+            >
               <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.08 }}
-                className={`group ${isLarge ? 'lg:col-span-2' : ''}`}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="h-full glass-card p-8 lg:p-10 rounded-3xl relative overflow-hidden"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  backdropFilter: 'blur(20px) saturate(180%)',
+                  border: '1px solid rgba(255, 255, 255, 0.18)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                }}
               >
+                {/* Animated gradient on hover */}
                 <motion.div
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className="h-full glass-card p-8 lg:p-10 rounded-3xl relative overflow-hidden"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    backdropFilter: 'blur(20px) saturate(180%)',
-                    border: '1px solid rgba(255, 255, 255, 0.18)',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-                  }}
-                >
-                  {/* Animated gradient on hover */}
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 0.1 }}
+                  className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} transition-opacity duration-500`}
+                />
+                
+                <div className="relative z-10">
+                  {/* Icon with enhanced styling */}
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 0.1 }}
-                    className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} transition-opacity duration-500`}
-                  />
+                    whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
+                    transition={{ duration: 0.5 }}
+                    className={`w-16 h-16 lg:w-20 lg:h-20 rounded-2xl lg:rounded-3xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-2xl`}
+                    style={{
+                      boxShadow: '0 10px 40px rgba(59, 130, 246, 0.3)',
+                    }}
+                  >
+                    <feature.icon className="w-8 h-8 lg:w-10 lg:h-10" style={{ color: '#fff' }} />
+                  </motion.div>
                   
-                  <div className="relative z-10">
-                    {/* Icon with enhanced styling */}
+                  <h3 className="text-2xl lg:text-3xl font-bold mb-4" style={{ color: '#E5EDFF' }}>
+                    {feature.title}
+                  </h3>
+                  <p className="leading-relaxed text-base lg:text-lg" style={{ color: '#B6C4E0' }}>
+                    {feature.description}
+                  </p>
+
+                  {/* Premium indicator */}
+                  {index < 3 && (
                     <motion.div
-                      whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
-                      transition={{ duration: 0.5 }}
-                      className={`w-16 h-16 lg:w-20 lg:h-20 rounded-2xl lg:rounded-3xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-2xl`}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      className="mt-6 inline-flex items-center gap-2 px-3 py-1 rounded-full"
                       style={{
-                        boxShadow: '0 10px 40px rgba(59, 130, 246, 0.3)',
+                        background: 'rgba(250, 204, 21, 0.1)',
+                        border: '1px solid rgba(250, 204, 21, 0.3)',
                       }}
                     >
-                      <feature.icon className="w-8 h-8 lg:w-10 lg:h-10" style={{ color: '#fff' }} />
+                      <Zap className="w-3 h-3" style={{ color: '#FACC15' }} />
+                      <span className="text-xs font-bold" style={{ color: '#FACC15' }}>PREMIUM</span>
                     </motion.div>
-                    
-                    <h3 className="text-2xl lg:text-3xl font-bold mb-4" style={{ color: '#E5EDFF' }}>
-                      {feature.title}
-                    </h3>
-                    <p className="leading-relaxed text-base lg:text-lg" style={{ color: '#B6C4E0' }}>
-                      {feature.description}
-                    </p>
+                  )}
+                </div>
 
-                    {/* Premium indicator */}
-                    {index < 3 && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        className="mt-6 inline-flex items-center gap-2 px-3 py-1 rounded-full"
-                        style={{
-                          background: 'rgba(250, 204, 21, 0.1)',
-                          border: '1px solid rgba(250, 204, 21, 0.3)',
-                        }}
-                      >
-                        <Zap className="w-3 h-3" style={{ color: '#FACC15' }} />
-                        <span className="text-xs font-bold" style={{ color: '#FACC15' }}>PREMIUM</span>
-                      </motion.div>
-                    )}
-                  </div>
-
-                  {/* Corner accent */}
-                  <div className="absolute top-0 right-0 w-32 h-32 opacity-20">
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                      className={`w-full h-full bg-gradient-to-br ${feature.gradient} blur-2xl rounded-full`}
-                    />
-                  </div>
-                </motion.div>
+                {/* Corner accent */}
+                <div className="absolute top-0 right-0 w-32 h-32 opacity-20">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    className={`w-full h-full bg-gradient-to-br ${feature.gradient} blur-2xl rounded-full`}
+                  />
+                </div>
               </motion.div>
-            );
-          })}
+            </motion.div>
+          ))}
         </div>
 
         {/* Feature highlight CTA */}
