@@ -8,7 +8,7 @@ export default function NeonOrbsHero() {
   }, []);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0A1628 0%, #1E3A5F 100%)' }}>
+    <div className="relative w-full h-screen overflow-hidden flex items-center justify-center" style={{ background: '#0d0d0d' }}>
       {/* Top-left orb */}
       <div 
         className={`absolute transition-all duration-1000 ease-out ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"}`} 
@@ -137,17 +137,17 @@ export default function NeonOrbsHero() {
             border-radius: 2px;
             transform: translateY(-50%);
             transition: all 0.5s;
-            background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.5) 30%, rgba(59, 130, 246, 0.9) 70%, rgb(59, 130, 246) 100%);
-            box-shadow: 0 0 20px 4px rgba(59, 130, 246, 0.6), 0 0 40px 8px rgba(59, 130, 246, 0.3);
+            background: linear-gradient(90deg, transparent 0%, rgba(220, 38, 38, 0.5) 30%, rgba(220, 38, 38, 0.9) 70%, rgb(220, 38, 38) 100%);
+            box-shadow: 0 0 20px 4px rgba(220, 38, 38, 0.6), 0 0 40px 8px rgba(220, 38, 38, 0.3);
           }
           
           .orb-light {
-            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 50%, transparent 100%);
+            background: radial-gradient(circle at 50% 50%, rgba(139, 26, 49, 0.3) 0%, rgba(139, 26, 49, 0.15) 40%, transparent 100%);
             box-shadow: 
-              0 0 60px 2px rgba(59, 130, 246, 0.3),
-              0 0 100px 5px rgba(59, 130, 246, 0.15),
-              inset 0 0 60px 2px rgba(59, 130, 246, 0.08);
-            border: 1px solid rgba(59, 130, 246, 0.4);
+              0 0 100px 10px rgba(220, 38, 38, 0.4),
+              0 0 150px 20px rgba(220, 38, 38, 0.2),
+              inset 0 0 80px 5px rgba(220, 38, 38, 0.1);
+            border: 2px solid rgba(220, 38, 38, 0.3);
           }
           
           .beam-spin-6 {
