@@ -22,6 +22,7 @@ import AdCampaignsSummary from "@/components/admin/AdCampaignsSummary";
 import AdCampaignChart from "@/components/admin/AdCampaignChart";
 import CategoryManagementTab from "@/components/admin/CategoryManagementTab";
 import SystemActivityFeed from "@/components/admin/SystemActivityFeed";
+import ForumCategoriesManagementTab from "@/components/admin/ForumCategoriesManagementTab";
 
 export default function Admin() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -342,9 +343,7 @@ export default function Admin() {
             </TabsContent>
 
             <TabsContent value="forum">
-              <div className="glass-card p-8 rounded-2xl text-center">
-                <p style={{ color: '#7A8BA6' }}>Forum management coming soon...</p>
-              </div>
+              <ForumCategoriesManagementTab />
             </TabsContent>
 
             <TabsContent value="profession">
