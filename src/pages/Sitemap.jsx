@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Download, FileText, Link as LinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { generateSitemap, downloadSitemap, getRobotsTxt } from "@/utils/sitemap";
+import { generateSitemap, downloadSitemap, getRobotsTxt } from "@/components/seo/sitemap";
 import SEO from "@/components/seo/SEO";
 
 export default function Sitemap() {
