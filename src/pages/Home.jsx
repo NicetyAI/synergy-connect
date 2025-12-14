@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "@/components/landing/Navbar";
-import HeroSection from "@/components/landing/HeroSection";
+import NeonOrbsHero from "@/components/landing/NeonOrbsHero";
 import FeaturesSection from "@/components/landing/FeaturesSection";
 import PartnerSearchSection from "@/components/landing/PartnerSearchSection";
 import AboutSection from "@/components/landing/AboutSection";
@@ -26,7 +26,7 @@ export default function Home() {
       <Navbar />
       
       <main>
-        <HeroSection />
+        <NeonOrbsHero />
         <div id="features">
           <FeaturesSection />
         </div>
