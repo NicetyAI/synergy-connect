@@ -31,15 +31,24 @@ export default function AdCampaigns() {
   }, []);
 
   const { data: campaigns = [] } = useQuery({
-    queryKey: ['ad-campaigns', vendorApp?.vendor_id],
-    queryFn: () => base44.entities.AdvertiseApplication.filter({ vendor_id: vendorApp.vendor_id }),
-    enabled: !!vendorApp?.vendor_id,
+    queryKey: ['ad-campaigns', currentUser?.email],
+    queryFn: () => base44.entities.AdvertiseApplication.filter({ user_email: currentUser.email }),
+    enabled: !!currentUser?.email,
   });
 
   const { data: allMetrics = [] } = useQuery({
-    queryKey: ['ad-metrics', vendorApp?.vendor_id],
-    queryFn: () => base44.entities.AdMetrics.filter({ vendor_id: vendorApp.vendor_id }),
-    enabled: !!vendorApp?.vendor_id,
+    queryKey: ['ad-metrics', currentUser?.email],
+    queryFn: async () => {
+      const userCampaigns = await base44.entities.AdvertiseApplication.filter({ user_email: currentUser.email });
+      const vendorIds = [...new Set(userCampaigns.map(c => c.vendor_id))];
+      const allMetrics = [];
+      for (const vendorId of vendorIds) {
+        const metrics = await base44.entities.AdMetrics.filter({ vendor_id: vendorId });
+        allMetrics.push(...metrics);
+      }
+      return allMetrics;
+    },
+    enabled: !!currentUser?.email,
   });
 
   const activeCampaigns = campaigns.filter(c => c.status === 'approved' && (!c.expiry_date || new Date(c.expiry_date) > new Date()));
