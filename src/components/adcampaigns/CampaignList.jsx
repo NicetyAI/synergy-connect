@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Eye, MousePointerClick, CheckCircle, Clock, RefreshCw } from "lucide-react";
+import { Calendar, Eye, MousePointerClick, CheckCircle, Clock, RefreshCw, Edit } from "lucide-react";
 import moment from "moment";
 import RenewCampaignDialog from "./RenewCampaignDialog";
+import EditCampaignDialog from "./EditCampaignDialog";
 
 export default function CampaignList({ campaigns, metrics, type }) {
   const [selectedCampaign, setSelectedCampaign] = useState(null);
   const [showRenewDialog, setShowRenewDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
 
   const getCampaignMetrics = (campaignId) => {
     const campaignMetrics = metrics.filter(m => m.application_id === campaignId);
@@ -41,6 +43,11 @@ export default function CampaignList({ campaigns, metrics, type }) {
   const handleRenew = (campaign) => {
     setSelectedCampaign(campaign);
     setShowRenewDialog(true);
+  };
+
+  const handleEdit = (campaign) => {
+    setSelectedCampaign(campaign);
+    setShowEditDialog(true);
   };
 
   if (campaigns.length === 0) {
@@ -133,6 +140,16 @@ export default function CampaignList({ campaigns, metrics, type }) {
 
                 {/* Actions */}
                 <div className="flex flex-col gap-2">
+                  {campaign.status === 'pending' && (
+                    <Button
+                      onClick={() => handleEdit(campaign)}
+                      className="rounded-lg flex items-center gap-2"
+                      style={{ background: 'rgba(99, 102, 241, 0.2)', color: '#A5B4FC', border: '1px solid rgba(99, 102, 241, 0.3)' }}
+                    >
+                      <Edit className="w-4 h-4" />
+                      Edit Campaign
+                    </Button>
+                  )}
                   {(type === 'expired' || isExpiringSoon) && (
                     <Button
                       onClick={() => handleRenew(campaign)}
@@ -151,11 +168,18 @@ export default function CampaignList({ campaigns, metrics, type }) {
       </div>
 
       {selectedCampaign && (
-        <RenewCampaignDialog
-          open={showRenewDialog}
-          onOpenChange={setShowRenewDialog}
-          campaign={selectedCampaign}
-        />
+        <>
+          <RenewCampaignDialog
+            open={showRenewDialog}
+            onOpenChange={setShowRenewDialog}
+            campaign={selectedCampaign}
+          />
+          <EditCampaignDialog
+            open={showEditDialog}
+            onOpenChange={setShowEditDialog}
+            campaign={selectedCampaign}
+          />
+        </>
       )}
     </>
   );
