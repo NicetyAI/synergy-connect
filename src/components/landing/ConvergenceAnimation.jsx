@@ -9,7 +9,7 @@ const stakeholders = [
     icon: Lightbulb,
     color: "#7C3AED",
     gradient: "from-purple-500 to-purple-600",
-    position: { initial: { x: -180, y: -140 }, center: { x: 0, y: 0 } },
+    position: { initial: { x: -160, y: -160 }, center: { x: 0, y: 0 } },
   },
   {
     id: "investor",
@@ -17,7 +17,7 @@ const stakeholders = [
     icon: TrendingUp,
     color: "#22C55E",
     gradient: "from-green-500 to-green-600",
-    position: { initial: { x: 180, y: -140 }, center: { x: 0, y: 0 } },
+    position: { initial: { x: 160, y: -160 }, center: { x: 0, y: 0 } },
   },
   {
     id: "partner",
@@ -25,7 +25,7 @@ const stakeholders = [
     icon: Handshake,
     color: "#3B82F6",
     gradient: "from-blue-500 to-blue-600",
-    position: { initial: { x: -180, y: 140 }, center: { x: 0, y: 0 } },
+    position: { initial: { x: -160, y: 160 }, center: { x: 0, y: 0 } },
   },
   {
     id: "expert",
@@ -33,7 +33,7 @@ const stakeholders = [
     icon: Users,
     color: "#EF4444",
     gradient: "from-red-500 to-red-600",
-    position: { initial: { x: 180, y: 140 }, center: { x: 0, y: 0 } },
+    position: { initial: { x: 160, y: 160 }, center: { x: 0, y: 0 } },
   },
 ];
 
@@ -150,8 +150,8 @@ export default function ConvergenceAnimation() {
       </AnimatePresence>
 
       {/* Main animation container */}
-      <div className="relative w-full h-[420px] flex items-center justify-center">
-        <div className="relative w-full max-w-xl h-full">
+      <div className="relative w-full h-[500px] flex items-center justify-center py-8">
+        <div className="relative w-full max-w-xl h-full flex items-center justify-center">
           {/* Center goal - always visible */}
           <motion.div
             key={`center-${animationKey}`}
