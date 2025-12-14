@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Edit2, Trash2, User, ChevronLeft, ChevronRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Search, Edit2, Trash2, User, ChevronLeft, ChevronRight, Shield, Edit, Eye } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import EditUserDialog from "./EditUserDialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,10 +18,18 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+const ROLE_CONFIG = {
+  Admin: { color: '#EF4444', bgColor: 'rgba(239, 68, 68, 0.15)', icon: Shield },
+  Editor: { color: '#F59E0B', bgColor: 'rgba(245, 158, 11, 0.15)', icon: Edit },
+  Viewer: { color: '#3B82F6', bgColor: 'rgba(59, 130, 246, 0.15)', icon: Eye },
+  User: { color: '#10B981', bgColor: 'rgba(16, 185, 129, 0.15)', icon: User }
+};
+
 export default function UsersTable({ users }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [userToDelete, setUserToDelete] = useState(null);
+  const [userToEdit, setUserToEdit] = useState(null);
   const itemsPerPage = 10;
   const queryClient = useQueryClient();
 
@@ -92,6 +102,7 @@ export default function UsersTable({ users }) {
                 <th className="text-left py-4 px-3 text-sm font-semibold" style={{ color: '#B6C4E0' }}>State</th>
                 <th className="text-left py-4 px-3 text-sm font-semibold" style={{ color: '#B6C4E0' }}>Address</th>
                 <th className="text-left py-4 px-3 text-sm font-semibold" style={{ color: '#B6C4E0' }}>Biography</th>
+                <th className="text-left py-4 px-3 text-sm font-semibold" style={{ color: '#B6C4E0' }}>Role</th>
                 <th className="text-left py-4 px-3 text-sm font-semibold" style={{ color: '#B6C4E0' }}>Actions</th>
               </tr>
             </thead>
@@ -141,12 +152,33 @@ export default function UsersTable({ users }) {
                     {user.overview || 'N/A'}
                   </td>
                   <td className="py-4 px-3">
+                    {(() => {
+                      const role = user.platform_role || 'User';
+                      const config = ROLE_CONFIG[role];
+                      const RoleIcon = config?.icon || User;
+                      return (
+                        <Badge 
+                          className="flex items-center gap-2 w-fit px-3 py-1"
+                          style={{ 
+                            background: config?.bgColor,
+                            color: config?.color,
+                            border: `1px solid ${config?.color}30`
+                          }}
+                        >
+                          <RoleIcon className="w-3 h-3" />
+                          {role}
+                        </Badge>
+                      );
+                    })()}
+                  </td>
+                  <td className="py-4 px-3">
                     <div className="flex gap-2">
                       <Button
                         size="sm"
                         variant="ghost"
                         className="hover:bg-blue-500/20"
                         style={{ color: '#3B82F6' }}
+                        onClick={() => setUserToEdit(user)}
                       >
                         <Edit2 className="w-4 h-4" />
                       </Button>
@@ -198,6 +230,13 @@ export default function UsersTable({ users }) {
           </div>
         </div>
       </motion.div>
+
+      {/* Edit User Dialog */}
+      <EditUserDialog 
+        user={userToEdit}
+        open={!!userToEdit}
+        onOpenChange={(open) => !open && setUserToEdit(null)}
+      />
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={!!userToDelete} onOpenChange={() => setUserToDelete(null)}>
