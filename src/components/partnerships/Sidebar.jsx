@@ -25,6 +25,7 @@ import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import NotificationBell from "@/components/notifications/NotificationBell";
+import { canAccessAdmin } from "@/components/utils/permissions";
 import { canAccessAdmin } from "@/utils/permissions";
 
 const mainMenuItems = [

@@ -5,6 +5,8 @@ import Sidebar from "@/components/partnerships/Sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import { canAccessAdmin } from "@/components/utils/permissions";
+import RolesManagementTab from "@/components/admin/RolesManagementTab";
 import GeneralSummary from "@/components/admin/GeneralSummary";
 import OpportunitiesSummary from "@/components/admin/OpportunitiesSummary";
 import ConnectionSummary from "@/components/admin/ConnectionSummary";
@@ -112,7 +114,7 @@ export default function Admin() {
     );
   }
 
-  if (!currentUser || currentUser.role !== 'admin') {
+  if (!currentUser || !canAccessAdmin(currentUser.role)) {
     return (
       <div className="flex min-h-screen bg-gradient-main">
         <Sidebar />
@@ -226,6 +228,9 @@ export default function Admin() {
               <TabsTrigger value="contact" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
                 Contact
               </TabsTrigger>
+              <TabsTrigger value="roles" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+                Roles
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="dashboard" className="space-y-8">
@@ -311,6 +316,10 @@ export default function Admin() {
               <div className="glass-card p-8 rounded-2xl text-center">
                 <p style={{ color: '#7A8BA6' }}>Contact management coming soon...</p>
               </div>
+            </TabsContent>
+
+            <TabsContent value="roles">
+              <RolesManagementTab />
             </TabsContent>
           </Tabs>
         </div>
