@@ -99,7 +99,7 @@ export default function HeroSection() {
         </div>
       </motion.div>
 
-      <div className="relative z-10 max-w-7xl mx-auto w-full">
+      <div className="relative z-10 max-w-[1600px] mx-auto w-full px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left content */}
           <motion.div
