@@ -9,7 +9,7 @@ const stakeholders = [
     icon: Lightbulb,
     color: "#7C3AED",
     gradient: "from-purple-500 to-purple-600",
-    position: { initial: { x: -200, y: -200 }, center: { x: 0, y: 0 } },
+    position: { initial: { x: -180, y: -140 }, center: { x: 0, y: 0 } },
   },
   {
     id: "investor",
@@ -17,7 +17,7 @@ const stakeholders = [
     icon: TrendingUp,
     color: "#22C55E",
     gradient: "from-green-500 to-green-600",
-    position: { initial: { x: 200, y: -200 }, center: { x: 0, y: 0 } },
+    position: { initial: { x: 180, y: -140 }, center: { x: 0, y: 0 } },
   },
   {
     id: "partner",
@@ -25,7 +25,7 @@ const stakeholders = [
     icon: Handshake,
     color: "#3B82F6",
     gradient: "from-blue-500 to-blue-600",
-    position: { initial: { x: -200, y: 200 }, center: { x: 0, y: 0 } },
+    position: { initial: { x: -180, y: 140 }, center: { x: 0, y: 0 } },
   },
   {
     id: "expert",
@@ -33,7 +33,7 @@ const stakeholders = [
     icon: Users,
     color: "#EF4444",
     gradient: "from-red-500 to-red-600",
-    position: { initial: { x: 200, y: 200 }, center: { x: 0, y: 0 } },
+    position: { initial: { x: 180, y: 140 }, center: { x: 0, y: 0 } },
   },
 ];
 
@@ -150,151 +150,153 @@ export default function ConvergenceAnimation() {
       </AnimatePresence>
 
       {/* Main animation container */}
-      <div className="relative w-full h-[450px] flex items-center justify-center px-4">
-        {/* Center goal - always visible */}
-        <motion.div
-          key={`center-${animationKey}`}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{
-            scale: stage === 3 ? 1.2 : 1,
-            opacity: 1,
-          }}
-          transition={{ duration: 0.8 }}
-        >
+      <div className="relative w-full h-[420px] flex items-center justify-center">
+        <div className="relative w-full max-w-xl h-full">
+          {/* Center goal - always visible */}
           <motion.div
-            animate={{
-              boxShadow:
-                stage === 3
-                  ? [
-                      "0 0 30px rgba(250, 204, 21, 0.4)",
-                      "0 0 60px rgba(250, 204, 21, 0.6)",
-                      "0 0 30px rgba(250, 204, 21, 0.4)",
-                    ]
-                  : "0 0 20px rgba(250, 204, 21, 0.3)",
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center shadow-2xl"
-          >
-            <Target className="w-16 h-16 lg:w-20 lg:h-20 text-white" />
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center mt-4 font-bold text-xl text-white"
-          >
-            Shared Goal
-          </motion.p>
-        </motion.div>
-
-        {/* Stakeholders */}
-        {stakeholders.map((stakeholder, index) => {
-          const position = getStakeholderPosition(stakeholder);
-          
-          return (
-            <React.Fragment key={`${stakeholder.id}-${animationKey}`}>
-              {/* Connection lines */}
-              {stage >= 1 && (
-                <motion.svg
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: stage >= 2 ? 0.4 : 0.2 }}
-                >
-                  <motion.line
-                    x1="50%"
-                    y1="50%"
-                    x2={`calc(50% + ${position.x}px)`}
-                    y2={`calc(50% + ${position.y}px)`}
-                    stroke={stakeholder.color}
-                    strokeWidth="2"
-                    strokeDasharray="8 4"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 1, delay: index * 0.1 }}
-                  />
-                </motion.svg>
-              )}
-
-              {/* Stakeholder node */}
-              <motion.div
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                initial={{ x: stakeholder.position.initial.x, y: stakeholder.position.initial.y }}
-                animate={{
-                  x: position.x,
-                  y: position.y,
-                }}
-                transition={{ duration: 0.8, ease: "easeInOut" }}
-              >
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  className={`w-20 h-20 lg:w-24 lg:h-24 rounded-2xl bg-gradient-to-br ${stakeholder.gradient} flex items-center justify-center shadow-xl relative`}
-                  animate={{
-                    boxShadow:
-                      stage === 3
-                        ? `0 10px 40px ${stakeholder.color}80`
-                        : `0 5px 20px ${stakeholder.color}40`,
-                  }}
-                >
-                  <stakeholder.icon className="w-10 h-10 lg:w-12 lg:h-12 text-white" />
-                  
-                  {/* Pulsing ring effect */}
-                  {stage >= 2 && (
-                    <motion.div
-                      className="absolute inset-0 rounded-2xl"
-                      style={{ border: `2px solid ${stakeholder.color}` }}
-                      animate={{
-                        scale: [1, 1.3, 1],
-                        opacity: [0.5, 0, 0.5],
-                      }}
-                      transition={{ duration: 2, repeat: Infinity, delay: index * 0.3 }}
-                    />
-                  )}
-                </motion.div>
-                
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-center mt-3 font-semibold text-sm lg:text-base text-white"
-                >
-                  {stakeholder.label}
-                </motion.p>
-              </motion.div>
-            </React.Fragment>
-          );
-        })}
-
-        {/* Energy particles during convergence */}
-        {stage >= 2 && stage < 3 && (
-          <>
-            {[...Array(8)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute top-1/2 left-1/2 w-2 h-2 rounded-full bg-cyan-400"
-                initial={{ x: 0, y: 0, opacity: 0 }}
-                animate={{
-                  x: Math.cos((i * Math.PI * 2) / 8) * 100,
-                  y: Math.sin((i * Math.PI * 2) / 8) * 100,
-                  opacity: [0, 1, 0],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  delay: i * 0.1,
-                }}
-              />
-            ))}
-          </>
-        )}
-
-        {/* Success burst effect */}
-        {stage === 3 && (
-          <motion.div
+            key={`center-${animationKey}`}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
             initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 2, opacity: 0 }}
-            transition={{ duration: 1 }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-gradient-to-br from-yellow-400/30 to-amber-500/30 blur-2xl"
-          />
-        )}
+            animate={{
+              scale: stage === 3 ? 1.15 : 1,
+              opacity: 1,
+            }}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.div
+              animate={{
+                boxShadow:
+                  stage === 3
+                    ? [
+                        "0 0 30px rgba(250, 204, 21, 0.4)",
+                        "0 0 60px rgba(250, 204, 21, 0.6)",
+                        "0 0 30px rgba(250, 204, 21, 0.4)",
+                      ]
+                    : "0 0 20px rgba(250, 204, 21, 0.3)",
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="w-28 h-28 lg:w-32 lg:h-32 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center shadow-2xl"
+            >
+              <Target className="w-14 h-14 lg:w-16 lg:h-16 text-white" />
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center mt-3 font-bold text-lg lg:text-xl text-white"
+            >
+              Shared Goal
+            </motion.p>
+          </motion.div>
+
+          {/* Stakeholders */}
+          {stakeholders.map((stakeholder, index) => {
+            const position = getStakeholderPosition(stakeholder);
+            
+            return (
+              <React.Fragment key={`${stakeholder.id}-${animationKey}`}>
+                {/* Connection lines */}
+                {stage >= 1 && (
+                  <motion.svg
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: stage >= 2 ? 0.4 : 0.2 }}
+                  >
+                    <motion.line
+                      x1="50%"
+                      y1="50%"
+                      x2={`calc(50% + ${position.x}px)`}
+                      y2={`calc(50% + ${position.y}px)`}
+                      stroke={stakeholder.color}
+                      strokeWidth="2"
+                      strokeDasharray="8 4"
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: 1 }}
+                      transition={{ duration: 1, delay: index * 0.1 }}
+                    />
+                  </motion.svg>
+                )}
+
+                {/* Stakeholder node */}
+                <motion.div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                  initial={{ x: stakeholder.position.initial.x, y: stakeholder.position.initial.y }}
+                  animate={{
+                    x: position.x,
+                    y: position.y,
+                  }}
+                  transition={{ duration: 0.8, ease: "easeInOut" }}
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.08 }}
+                    className={`w-18 h-18 lg:w-20 lg:h-20 rounded-2xl bg-gradient-to-br ${stakeholder.gradient} flex items-center justify-center shadow-xl relative`}
+                    animate={{
+                      boxShadow:
+                        stage === 3
+                          ? `0 10px 40px ${stakeholder.color}80`
+                          : `0 5px 20px ${stakeholder.color}40`,
+                    }}
+                  >
+                    <stakeholder.icon className="w-9 h-9 lg:w-10 lg:h-10 text-white" />
+                    
+                    {/* Pulsing ring effect */}
+                    {stage >= 2 && (
+                      <motion.div
+                        className="absolute inset-0 rounded-2xl"
+                        style={{ border: `2px solid ${stakeholder.color}` }}
+                        animate={{
+                          scale: [1, 1.3, 1],
+                          opacity: [0.5, 0, 0.5],
+                        }}
+                        transition={{ duration: 2, repeat: Infinity, delay: index * 0.3 }}
+                      />
+                    )}
+                  </motion.div>
+                  
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center mt-2 font-semibold text-sm text-white"
+                  >
+                    {stakeholder.label}
+                  </motion.p>
+                </motion.div>
+              </React.Fragment>
+            );
+          })}
+
+          {/* Energy particles during convergence */}
+          {stage >= 2 && stage < 3 && (
+            <>
+              {[...Array(8)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute top-1/2 left-1/2 w-2 h-2 rounded-full bg-cyan-400"
+                  initial={{ x: 0, y: 0, opacity: 0 }}
+                  animate={{
+                    x: Math.cos((i * Math.PI * 2) / 8) * 100,
+                    y: Math.sin((i * Math.PI * 2) / 8) * 100,
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    delay: i * 0.1,
+                  }}
+                />
+              ))}
+            </>
+          )}
+
+          {/* Success burst effect */}
+          {stage === 3 && (
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 2, opacity: 0 }}
+              transition={{ duration: 1 }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-gradient-to-br from-yellow-400/30 to-amber-500/30 blur-2xl"
+            />
+          )}
+        </div>
       </div>
     </div>
   );
