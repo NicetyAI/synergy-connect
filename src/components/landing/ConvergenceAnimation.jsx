@@ -95,9 +95,62 @@ export default function ConvergenceAnimation() {
   };
 
   return (
-    <div className="relative w-full h-[500px] lg:h-[600px] flex items-center justify-center">
+    <div className="relative w-full flex flex-col gap-6">
+      {/* Stage description panel - moved to top */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={stage}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.5 }}
+          className="w-full"
+        >
+          <div
+            className="backdrop-blur-xl rounded-2xl p-6 text-center"
+            style={{
+              background: "rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(255, 255, 255, 0.2)",
+              boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            <motion.h3
+              className="text-xl lg:text-2xl font-bold text-white mb-2"
+              animate={{ scale: [1, 1.02, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              {animationStages[stage].title}
+            </motion.h3>
+            <p className="text-sm lg:text-base text-white/80 leading-relaxed">
+              {animationStages[stage].description}
+            </p>
+
+            {/* Progress indicators */}
+            <div className="flex justify-center gap-2 mt-4">
+              {animationStages.map((_, idx) => (
+                <motion.div
+                  key={idx}
+                  className="h-1.5 rounded-full"
+                  style={{
+                    width: idx === stage ? "32px" : "8px",
+                    background:
+                      idx === stage
+                        ? "linear-gradient(90deg, #3B82F6, #7C3AED)"
+                        : "rgba(255, 255, 255, 0.3)",
+                  }}
+                  animate={{
+                    width: idx === stage ? "32px" : "8px",
+                  }}
+                  transition={{ duration: 0.3 }}
+                />
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+
       {/* Main animation container */}
-      <div className="relative w-full h-full max-w-2xl mx-auto">
+      <div className="relative w-full h-[450px] flex items-center justify-center px-4">
         {/* Center goal - always visible */}
         <motion.div
           key={`center-${animationKey}`}
@@ -243,59 +296,6 @@ export default function ConvergenceAnimation() {
           />
         )}
       </div>
-
-      {/* Stage description panel */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={stage}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 w-11/12 max-w-xl"
-        >
-          <div
-            className="backdrop-blur-xl rounded-2xl p-6 text-center"
-            style={{
-              background: "rgba(255, 255, 255, 0.1)",
-              border: "1px solid rgba(255, 255, 255, 0.2)",
-              boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)",
-            }}
-          >
-            <motion.h3
-              className="text-xl lg:text-2xl font-bold text-white mb-2"
-              animate={{ scale: [1, 1.02, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              {animationStages[stage].title}
-            </motion.h3>
-            <p className="text-sm lg:text-base text-white/80 leading-relaxed">
-              {animationStages[stage].description}
-            </p>
-
-            {/* Progress indicators */}
-            <div className="flex justify-center gap-2 mt-4">
-              {animationStages.map((_, idx) => (
-                <motion.div
-                  key={idx}
-                  className="h-1.5 rounded-full"
-                  style={{
-                    width: idx === stage ? "32px" : "8px",
-                    background:
-                      idx === stage
-                        ? "linear-gradient(90deg, #3B82F6, #7C3AED)"
-                        : "rgba(255, 255, 255, 0.3)",
-                  }}
-                  animate={{
-                    width: idx === stage ? "32px" : "8px",
-                  }}
-                  transition={{ duration: 0.3 }}
-                />
-              ))}
-            </div>
-          </div>
-        </motion.div>
-      </AnimatePresence>
     </div>
   );
 }
