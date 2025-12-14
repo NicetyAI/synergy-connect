@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, TrendingUp, Handshake, Lightbulb, Target } from "lucide-react";
+import { Users, TrendingUp, Handshake, Lightbulb, Target, Play, Pause, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const stakeholders = [
   {
@@ -63,12 +64,15 @@ const animationStages = [
 export default function ConvergenceAnimation() {
   const [stage, setStage] = useState(0);
   const [animationKey, setAnimationKey] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [hoveredStakeholder, setHoveredStakeholder] = useState(null);
 
   useEffect(() => {
+    if (isPaused) return;
+
     const timer = setInterval(() => {
       setStage((prev) => {
         if (prev >= 3) {
-          // Reset animation
           setAnimationKey((k) => k + 1);
           return 0;
         }
@@ -77,7 +81,26 @@ export default function ConvergenceAnimation() {
     }, 3000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [isPaused]);
+
+  const handleStakeholderClick = (stakeholderId) => {
+    setIsPaused(!isPaused);
+    setHoveredStakeholder(stakeholderId);
+  };
+
+  const handlePrevStage = () => {
+    setIsPaused(true);
+    setStage((prev) => (prev > 0 ? prev - 1 : 3));
+  };
+
+  const handleNextStage = () => {
+    setIsPaused(true);
+    setStage((prev) => (prev < 3 ? prev + 1 : 0));
+  };
+
+  const togglePlayPause = () => {
+    setIsPaused(!isPaused);
+  };
 
   const getStakeholderPosition = (stakeholder) => {
     if (stage === 0) {
@@ -125,25 +148,76 @@ export default function ConvergenceAnimation() {
               {animationStages[stage].description}
             </p>
 
-            {/* Progress indicators */}
-            <div className="flex justify-center gap-2 mt-4">
-              {animationStages.map((_, idx) => (
-                <motion.div
-                  key={idx}
-                  className="h-1.5 rounded-full"
-                  style={{
-                    width: idx === stage ? "32px" : "8px",
-                    background:
-                      idx === stage
-                        ? "linear-gradient(90deg, #3B82F6, #7C3AED)"
-                        : "rgba(255, 255, 255, 0.3)",
-                  }}
-                  animate={{
-                    width: idx === stage ? "32px" : "8px",
-                  }}
-                  transition={{ duration: 0.3 }}
-                />
-              ))}
+            {/* Progress indicators and controls */}
+            <div className="flex flex-col items-center gap-3 mt-4">
+              <div className="flex justify-center gap-2">
+                {animationStages.map((_, idx) => (
+                  <motion.button
+                    key={idx}
+                    onClick={() => {
+                      setStage(idx);
+                      setIsPaused(true);
+                    }}
+                    className="h-1.5 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+                    style={{
+                      width: idx === stage ? "32px" : "8px",
+                      background:
+                        idx === stage
+                          ? "linear-gradient(90deg, #3B82F6, #7C3AED)"
+                          : "rgba(255, 255, 255, 0.3)",
+                    }}
+                    animate={{
+                      width: idx === stage ? "32px" : "8px",
+                    }}
+                    transition={{ duration: 0.3 }}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.95 }}
+                  />
+                ))}
+              </div>
+
+              {/* Playback controls */}
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={handlePrevStage}
+                  size="sm"
+                  variant="ghost"
+                  className="h-8 w-8 p-0 rounded-full"
+                  style={{ background: 'rgba(255, 255, 255, 0.1)', color: '#fff' }}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                
+                <Button
+                  onClick={togglePlayPause}
+                  size="sm"
+                  variant="ghost"
+                  className="h-8 w-8 p-0 rounded-full"
+                  style={{ background: isPaused ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)', color: '#fff' }}
+                >
+                  {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+                </Button>
+
+                <Button
+                  onClick={handleNextStage}
+                  size="sm"
+                  variant="ghost"
+                  className="h-8 w-8 p-0 rounded-full"
+                  style={{ background: 'rgba(255, 255, 255, 0.1)', color: '#fff' }}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+
+              {isPaused && (
+                <motion.p
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-xs text-white/60"
+                >
+                  Click stakeholders to pause • Use controls to navigate
+                </motion.p>
+              )}
             </div>
           </div>
         </motion.div>
@@ -218,25 +292,43 @@ export default function ConvergenceAnimation() {
 
                 {/* Stakeholder node */}
                 <motion.div
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer"
                   initial={{ x: stakeholder.position.initial.x, y: stakeholder.position.initial.y }}
                   animate={{
                     x: position.x,
                     y: position.y,
                   }}
                   transition={{ duration: 0.8, ease: "easeInOut" }}
+                  onClick={() => handleStakeholderClick(stakeholder.id)}
+                  onMouseEnter={() => setHoveredStakeholder(stakeholder.id)}
+                  onMouseLeave={() => !isPaused && setHoveredStakeholder(null)}
                 >
                   <motion.div
-                    whileHover={{ scale: 1.08 }}
+                    whileHover={{ scale: 1.12 }}
+                    whileTap={{ scale: 0.95 }}
                     className={`w-18 h-18 lg:w-20 lg:h-20 rounded-2xl bg-gradient-to-br ${stakeholder.gradient} flex items-center justify-center shadow-xl relative`}
                     animate={{
                       boxShadow:
-                        stage === 3
+                        hoveredStakeholder === stakeholder.id || stage === 3
                           ? `0 10px 40px ${stakeholder.color}80`
                           : `0 5px 20px ${stakeholder.color}40`,
+                      scale: hoveredStakeholder === stakeholder.id ? 1.05 : 1,
                     }}
                   >
                     <stakeholder.icon className="w-9 h-9 lg:w-10 lg:h-10 text-white" />
+                    
+                    {/* Interactive indicator */}
+                    {hoveredStakeholder === stakeholder.id && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap"
+                      >
+                        <div className="bg-black/80 text-white text-xs px-2 py-1 rounded">
+                          Click to {isPaused ? 'play' : 'pause'}
+                        </div>
+                      </motion.div>
+                    )}
                     
                     {/* Pulsing ring effect */}
                     {stage >= 2 && (
