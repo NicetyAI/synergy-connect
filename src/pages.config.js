@@ -14,6 +14,7 @@ import Events from './pages/Events';
 import EventDetail from './pages/EventDetail';
 import AdCampaigns from './pages/AdCampaigns';
 import Admin from './pages/Admin';
+import Sitemap from './pages/Sitemap';
 import __Layout from './Layout.jsx';
 
 
@@ -34,6 +35,7 @@ export const PAGES = {
     "EventDetail": EventDetail,
     "AdCampaigns": AdCampaigns,
     "Admin": Admin,
+    "Sitemap": Sitemap,
 }
 
 export const pagesConfig = {
