@@ -8,6 +8,10 @@ import GeneralSummary from "@/components/admin/GeneralSummary";
 import OpportunitiesSummary from "@/components/admin/OpportunitiesSummary";
 import ConnectionSummary from "@/components/admin/ConnectionSummary";
 import InterestsSummary from "@/components/admin/InterestsSummary";
+import UserGrowthChart from "@/components/admin/UserGrowthChart";
+import OpportunityDistributionChart from "@/components/admin/OpportunityDistributionChart";
+import ActivityChart from "@/components/admin/ActivityChart";
+import InterestTrendsChart from "@/components/admin/InterestTrendsChart";
 
 export default function Admin() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -53,6 +57,12 @@ export default function Admin() {
   const { data: groups = [] } = useQuery({
     queryKey: ['allGroups'],
     queryFn: () => base44.entities.GroupChat.list(),
+    enabled: currentUser?.role === 'admin',
+  });
+
+  const { data: activities = [] } = useQuery({
+    queryKey: ['allActivities'],
+    queryFn: () => base44.entities.Activity.list(),
     enabled: currentUser?.role === 'admin',
   });
 
@@ -177,6 +187,20 @@ export default function Admin() {
 
             <TabsContent value="dashboard" className="space-y-8">
               <GeneralSummary metrics={generalMetrics} />
+              
+              {/* Analytics Charts */}
+              <div>
+                <h2 className="text-xl font-bold mb-6" style={{ color: '#E5EDFF' }}>
+                  Analytics & Insights
+                </h2>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                  <UserGrowthChart users={users} />
+                  <OpportunityDistributionChart opportunities={opportunities} />
+                  <ActivityChart activities={activities} />
+                  <InterestTrendsChart interests={interests} />
+                </div>
+              </div>
+
               <OpportunitiesSummary metrics={opportunitiesMetrics} />
               <ConnectionSummary metrics={connectionMetrics} />
               <InterestsSummary metrics={interestsMetrics} />
