@@ -26,7 +26,6 @@ import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import { canAccessAdmin } from "@/components/utils/permissions";
-import { canAccessAdmin } from "@/utils/permissions";
 
 const mainMenuItems = [
   { icon: Sparkles, label: "Recommendations", href: "Recommendations" },
