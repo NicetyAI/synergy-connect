@@ -172,7 +172,16 @@ export default function CategoryManagementTab() {
 
       {/* Create Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent className="glass-card border-0 sm:max-w-md" style={{ color: '#E5EDFF' }}>
+        <DialogContent 
+          className="border-0 sm:max-w-md" 
+          style={{ 
+            background: 'rgba(15, 23, 42, 0.95)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            color: '#E5EDFF' 
+          }}
+        >
           <DialogHeader>
             <DialogTitle className="text-lg" style={{ color: '#E5EDFF' }}>Create New Category</DialogTitle>
           </DialogHeader>
@@ -239,7 +248,16 @@ export default function CategoryManagementTab() {
 
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="glass-card border-0 sm:max-w-md" style={{ color: '#E5EDFF' }}>
+        <DialogContent 
+          className="border-0 sm:max-w-md" 
+          style={{ 
+            background: 'rgba(15, 23, 42, 0.95)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            color: '#E5EDFF' 
+          }}
+        >
           <DialogHeader>
             <DialogTitle className="text-lg" style={{ color: '#E5EDFF' }}>Edit Category</DialogTitle>
           </DialogHeader>
