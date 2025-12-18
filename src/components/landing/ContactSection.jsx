@@ -103,7 +103,7 @@ export default function ContactSection() {
                     placeholder="john@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="bg-white border-gray-300 placeholder:text-gray-400 focus:border-[#D8A11F] rounded-xl py-6"
+                    className="bg-white border-black placeholder:text-black focus:border-[#D8A11F] rounded-xl py-6"
                     style={{ color: '#000' }}
                   />
                 </div>
@@ -114,7 +114,7 @@ export default function ContactSection() {
                     placeholder="Partnership Opportunities"
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    className="bg-white border-gray-300 placeholder:text-gray-400 focus:border-[#D8A11F] rounded-xl py-6"
+                    className="bg-white border-black placeholder:text-black focus:border-[#D8A11F] rounded-xl py-6"
                     style={{ color: '#000' }}
                   />
                 </div>
@@ -125,7 +125,7 @@ export default function ContactSection() {
                     placeholder="How can we help you?"
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="bg-white border-gray-300 placeholder:text-gray-400 focus:border-[#D8A11F] rounded-xl min-h-[150px]"
+                    className="bg-white border-black placeholder:text-black focus:border-[#D8A11F] rounded-xl min-h-[150px]"
                     style={{ color: '#000' }}
                   />
                 </div>
