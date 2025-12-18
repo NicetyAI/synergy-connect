@@ -61,10 +61,9 @@ const plans = [
 
 export default function PricingSection() {
   return (
-    <section className="relative py-24 px-4">
+    <section className="relative py-24 px-4" style={{ background: '#F2F1F5' }}>
       {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-600/5 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">
@@ -83,23 +82,23 @@ export default function PricingSection() {
             style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.18)' }}
           >
             <Check className="w-4 h-4 text-green-400" />
-            <span className="text-sm font-medium text-white">14-day free trial • No credit card required</span>
+            <span className="text-sm font-medium" style={{ color: '#000' }}>14-day free trial • No credit card required</span>
           </motion.div>
 
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight" style={{ color: '#000' }}>
             Simple, Transparent{" "}
             <motion.span
               animate={{
                 backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
               }}
               transition={{ duration: 5, repeat: Infinity }}
-              className="bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent"
+              className="bg-gradient-to-r from-[#D8A11F] via-[#F59E0B] to-[#D8A11F] bg-clip-text text-transparent"
               style={{ backgroundSize: "200% 200%" }}
             >
               Pricing
             </motion.span>
           </h2>
-          <p className="text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl max-w-3xl mx-auto leading-relaxed" style={{ color: '#333' }}>
             Choose the plan that fits your networking needs. Cancel anytime, no questions asked.
           </p>
         </motion.div>
@@ -165,18 +164,19 @@ export default function PricingSection() {
                   <plan.icon className="w-8 h-8 text-white" />
                 </motion.div>
                 
-                <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
-                <p className="text-white/60 text-sm mb-6 font-medium">{plan.description}</p>
+                <h3 className="text-2xl font-bold mb-2" style={{ color: '#000' }}>{plan.name}</h3>
+                <p className="text-sm mb-6 font-medium" style={{ color: '#333' }}>{plan.description}</p>
                 
                 <div className="flex items-baseline gap-2 mb-8">
                   <motion.span 
-                    className="text-5xl font-bold text-white"
+                    className="text-5xl font-bold"
+                    style={{ color: '#000' }}
                     animate={{ scale: [1, 1.05, 1] }}
                     transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
                   >
                     {plan.price}
                   </motion.span>
-                  {plan.period && <span className="text-white/50 text-lg font-medium">{plan.period}</span>}
+                  {plan.period && <span className="text-lg font-medium" style={{ color: '#666' }}>{plan.period}</span>}
                 </div>
 
                 <div className="space-y-4 mb-8">
@@ -192,7 +192,7 @@ export default function PricingSection() {
                       <div className={`w-6 h-6 rounded-full bg-gradient-to-r ${plan.gradient} flex items-center justify-center flex-shrink-0 shadow-lg`}>
                         <Check className="w-3.5 h-3.5 text-white" />
                       </div>
-                      <span className="text-white/80 text-base font-medium">{feature}</span>
+                      <span className="text-base font-medium" style={{ color: '#333' }}>{feature}</span>
                     </motion.div>
                   ))}
                 </div>

@@ -26,9 +26,9 @@ const steps = [
 
 export default function JourneySection() {
   return (
-    <section className="relative py-24 px-4">
+    <section className="relative py-24 px-4" style={{ background: '#F2F1F5' }}>
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/10 to-transparent" />
+      <div className="absolute inset-0" />
       
       <div className="relative z-10 max-w-6xl mx-auto">
         <motion.div
@@ -37,13 +37,13 @@ export default function JourneySection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4" style={{ color: '#000' }}>
             Your Partnership{" "}
-            <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#D8A11F] to-[#F59E0B] bg-clip-text text-transparent">
               Journey
             </span>
           </h2>
-          <p className="text-lg text-white/60 max-w-2xl mx-auto">
+          <p className="text-lg max-w-2xl mx-auto" style={{ color: '#333' }}>
             Three simple steps to finding your ideal business partner
           </p>
         </motion.div>
@@ -76,8 +76,8 @@ export default function JourneySection() {
                   <step.icon className="w-10 h-10 text-white" />
                 </div>
                 
-                <h3 className="text-xl font-semibold text-white mb-3">{step.title}</h3>
-                <p className="text-white/60">{step.description}</p>
+                <h3 className="text-xl font-semibold mb-3" style={{ color: '#000' }}>{step.title}</h3>
+                <p style={{ color: '#333' }}>{step.description}</p>
               </div>
             </motion.div>
           ))}
@@ -96,8 +96,8 @@ export default function JourneySection() {
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-white">Start Networking Today</h3>
-                <p className="text-white/60">Join thousands of professionals making deals happen</p>
+                <h3 className="text-2xl font-bold" style={{ color: '#000' }}>Start Networking Today</h3>
+                <p style={{ color: '#333' }}>Join thousands of professionals making deals happen</p>
               </div>
             </div>
             <Button className="bg-white text-gray-900 hover:bg-white/90 px-8 py-6 rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105">
