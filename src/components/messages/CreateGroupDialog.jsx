@@ -59,39 +59,39 @@ export default function CreateGroupDialog({ open, onOpenChange, currentUser, con
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent style={{ background: '#0F2744', border: '1px solid rgba(255, 255, 255, 0.18)' }} className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent style={{ background: '#F2F1F5', border: '1px solid #000' }} className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle style={{ color: '#E5EDFF' }}>Create Group Chat</DialogTitle>
+          <DialogTitle style={{ color: '#000' }}>Create Group Chat</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-4 py-4">
           <div>
-            <Label style={{ color: '#B6C4E0' }}>Group Name *</Label>
+            <Label style={{ color: '#000' }}>Group Name *</Label>
             <Input
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="e.g., Project Alpha Team"
-              className="glass-input mt-2"
-              style={{ color: '#E5EDFF' }}
+              className="mt-2"
+              style={{ color: '#000', background: '#fff', border: '1px solid #000' }}
             />
           </div>
 
           <div>
-            <Label style={{ color: '#B6C4E0' }}>Description</Label>
+            <Label style={{ color: '#000' }}>Description</Label>
             <Textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="What's this group about?"
-              className="glass-input mt-2"
-              style={{ color: '#E5EDFF' }}
+              className="mt-2"
+              style={{ color: '#000', background: '#fff', border: '1px solid #000' }}
               rows={2}
             />
           </div>
 
           <div>
-            <Label style={{ color: '#B6C4E0' }}>Group Type</Label>
+            <Label style={{ color: '#000' }}>Group Type</Label>
             <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
-              <SelectTrigger className="glass-input mt-2" style={{ color: '#E5EDFF' }}>
+              <SelectTrigger className="mt-2" style={{ color: '#000', background: '#fff', border: '1px solid #000' }}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -103,14 +103,15 @@ export default function CreateGroupDialog({ open, onOpenChange, currentUser, con
           </div>
 
           <div>
-            <Label style={{ color: '#B6C4E0' }}>Add Members * (Select from your connections)</Label>
-            <div className="mt-2 max-h-60 overflow-y-auto glass-card p-3 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
+            <Label style={{ color: '#000' }}>Add Members * (Select from your connections)</Label>
+            <div className="mt-2 max-h-60 overflow-y-auto p-3 rounded-xl" style={{ background: '#fff', border: '1px solid #000' }}>
               {connectedUsers.length > 0 ? (
                 <div className="space-y-2">
                   {connectedUsers.map((user) => (
                     <div 
                       key={user.email}
-                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 cursor-pointer"
+                      className="flex items-center gap-3 p-2 rounded-lg cursor-pointer"
+                      style={{ background: '#F9FAFB' }}
                       onClick={() => toggleMember(user.email)}
                     >
                       <Checkbox
@@ -119,25 +120,25 @@ export default function CreateGroupDialog({ open, onOpenChange, currentUser, con
                       />
                       <div 
                         className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                        style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #A855F7 100%)' }}
+                        style={{ background: '#D8A11F' }}
                       >
-                        <User className="w-4 h-4" style={{ color: '#E5EDFF' }} />
+                        <User className="w-4 h-4" style={{ color: '#fff' }} />
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm font-semibold" style={{ color: '#E5EDFF' }}>{user.full_name}</p>
-                        <p className="text-xs" style={{ color: '#7A8BA6' }}>{user.email}</p>
+                        <p className="text-sm font-semibold" style={{ color: '#000' }}>{user.full_name}</p>
+                        <p className="text-xs" style={{ color: '#666' }}>{user.email}</p>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-center py-4" style={{ color: '#7A8BA6' }}>
+                <p className="text-sm text-center py-4" style={{ color: '#666' }}>
                   No connections available. Connect with others first!
                 </p>
               )}
             </div>
             {formData.members.length > 0 && (
-              <p className="text-xs mt-2" style={{ color: '#7A8BA6' }}>
+              <p className="text-xs mt-2" style={{ color: '#666' }}>
                 {formData.members.length} member{formData.members.length !== 1 ? 's' : ''} selected
               </p>
             )}
@@ -147,14 +148,14 @@ export default function CreateGroupDialog({ open, onOpenChange, currentUser, con
         <div className="flex gap-3">
           <Button
             onClick={() => onOpenChange(false)}
-            style={{ background: 'rgba(255, 255, 255, 0.1)', color: '#B6C4E0' }}
+            style={{ background: '#fff', color: '#000', border: '1px solid #000' }}
           >
             Cancel
           </Button>
           <Button
             onClick={handleSubmit}
             disabled={!formData.name.trim() || formData.members.length === 0 || createGroupMutation.isPending}
-            style={{ background: '#7C3AED', color: '#fff' }}
+            style={{ background: '#D8A11F', color: '#fff' }}
           >
             {createGroupMutation.isPending ? 'Creating...' : 'Create Group'}
           </Button>
