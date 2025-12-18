@@ -103,7 +103,8 @@ export default function ContactSection() {
                     placeholder="john@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-purple-500/50 rounded-xl py-6"
+                    className="bg-white border-gray-300 placeholder:text-gray-400 focus:border-[#D8A11F] rounded-xl py-6"
+                    style={{ color: '#000' }}
                   />
                 </div>
                 <div>
@@ -113,7 +114,8 @@ export default function ContactSection() {
                     placeholder="Partnership Opportunities"
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-purple-500/50 rounded-xl py-6"
+                    className="bg-white border-gray-300 placeholder:text-gray-400 focus:border-[#D8A11F] rounded-xl py-6"
+                    style={{ color: '#000' }}
                   />
                 </div>
                 <div>
