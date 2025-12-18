@@ -74,11 +74,59 @@ Deno.serve(async (req) => {
     const seenTitles = new Set();
     
     for (const article of allArticles) {
-      const normalizedTitle = article.title.toLowerCase().trim();
-      if (!seenTitles.has(normalizedTitle)) {
+      // Normalize title by removing punctuation and extra spaces
+      const normalizedTitle = article.title
+        .toLowerCase()
+        .replace(/[^\w\s]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      
+      // Check if similar title already exists
+      let isDuplicate = false;
+      for (const seenTitle of seenTitles) {
+        const similarity = calculateSimilarity(normalizedTitle, seenTitle);
+        if (similarity > 0.8) { // 80% similarity threshold
+          isDuplicate = true;
+          break;
+        }
+      }
+      
+      if (!isDuplicate) {
         seenTitles.add(normalizedTitle);
         uniqueArticles.push(article);
       }
+    }
+
+    // Helper function to calculate string similarity
+    function calculateSimilarity(str1, str2) {
+      const longer = str1.length > str2.length ? str1 : str2;
+      const shorter = str1.length > str2.length ? str2 : str1;
+      
+      if (longer.length === 0) return 1.0;
+      
+      const editDistance = getEditDistance(longer, shorter);
+      return (longer.length - editDistance) / longer.length;
+    }
+
+    function getEditDistance(str1, str2) {
+      const costs = [];
+      for (let i = 0; i <= str1.length; i++) {
+        let lastValue = i;
+        for (let j = 0; j <= str2.length; j++) {
+          if (i === 0) {
+            costs[j] = j;
+          } else if (j > 0) {
+            let newValue = costs[j - 1];
+            if (str1.charAt(i - 1) !== str2.charAt(j - 1)) {
+              newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+            }
+            costs[j - 1] = lastValue;
+            lastValue = newValue;
+          }
+        }
+        if (i > 0) costs[str2.length] = lastValue;
+      }
+      return costs[str2.length];
     }
 
     // Sort by latest first
