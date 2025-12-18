@@ -79,7 +79,7 @@ export default function Navbar() {
                 whileHover={{ rotate: [0, -10, 10, 0] }}
                 transition={{ duration: 0.5 }}
                 className="w-11 h-11 rounded-xl flex items-center justify-center relative" 
-                style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)' }}
+                style={{ background: '#D8A11F' }}
               >
                 <motion.div
                   animate={{
@@ -132,7 +132,7 @@ export default function Navbar() {
                 currentUser ? (
                   <Link to={createPageUrl('Recommendations')}>
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <Button className="rounded-xl px-6 py-5 font-semibold shadow-lg flex items-center gap-2" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}>
+                      <Button className="rounded-xl px-6 py-5 font-semibold shadow-lg flex items-center gap-2" style={{ background: '#D8A11F', color: '#fff' }}>
                         <User className="w-4 h-4" />
                         <span>Go to Dashboard</span>
                       </Button>
@@ -154,7 +154,7 @@ export default function Navbar() {
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                       <Button 
                         className="rounded-xl px-6 py-5 font-semibold shadow-lg relative overflow-hidden group" 
-                        style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}
+                        style={{ background: '#D8A11F', color: '#fff' }}
                         onClick={() => base44.auth.redirectToLogin()}
                       >
                         <motion.div
@@ -225,7 +225,7 @@ export default function Navbar() {
                       <Link to={createPageUrl('Recommendations')}>
                         <Button 
                           className="w-full flex items-center justify-center gap-2" 
-                          style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}
+                          style={{ background: '#D8A11F', color: '#fff' }}
                           onClick={() => setMobileMenuOpen(false)}
                         >
                           <User className="w-4 h-4" />
@@ -248,7 +248,7 @@ export default function Navbar() {
                         </Button>
                         <Button 
                           className="w-full" 
-                          style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}
+                          style={{ background: '#D8A11F', color: '#fff' }}
                           onClick={() => {
                             setMobileMenuOpen(false);
                             base44.auth.redirectToLogin();
