@@ -17,36 +17,42 @@ const features = [
     title: "Smart Matching",
     description: "AI-powered algorithm matches you with the most compatible business partners based on your criteria.",
     iconBg: "#D8A11F",
+    cardBg: "#E0F2FE",
   },
   {
     icon: Shield,
     title: "Verified Profiles",
     description: "Every member is verified to ensure you're connecting with legitimate professionals and founders.",
     iconBg: "#D8A11F",
+    cardBg: "#DCFCE7",
   },
   {
     icon: Users,
     title: "Professional Network",
     description: "Access an exclusive community of dealmakers, investors, and entrepreneurs worldwide.",
     iconBg: "#D8A11F",
+    cardBg: "#F3E8FF",
   },
   {
     icon: MessageSquare,
     title: "Secure Messaging",
     description: "End-to-end encrypted communication to discuss deals and opportunities privately.",
     iconBg: "#D8A11F",
+    cardBg: "#FCE7F3",
   },
   {
     icon: BarChart3,
     title: "Deal Analytics",
     description: "Track your connections, conversations, and deal progress with detailed insights.",
     iconBg: "#D8A11F",
+    cardBg: "#FED7AA",
   },
   {
     icon: Globe,
     title: "Global Reach",
     description: "Connect with partners across continents and expand your business horizons internationally.",
     iconBg: "#D8A11F",
+    cardBg: "#CCFBF1",
   },
 ];
 
@@ -119,7 +125,7 @@ export default function FeaturesSection() {
                 whileHover={{ y: -8, scale: 1.02 }}
                 className="h-full p-8 lg:p-10 rounded-3xl relative overflow-hidden"
                 style={{
-                  background: '#FFF5E6',
+                  background: feature.cardBg,
                   border: '1px solid rgba(0, 0, 0, 0.1)',
                   boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
                 }}
