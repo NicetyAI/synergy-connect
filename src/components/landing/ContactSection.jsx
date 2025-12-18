@@ -71,7 +71,7 @@ export default function ContactSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-8">
+            <div className="backdrop-blur-xl bg-white/5 border border-black rounded-3xl p-8">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
                   <MessageSquare className="w-6 h-6 text-white" />
@@ -148,7 +148,7 @@ export default function ContactSection() {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-8">
+            <div className="backdrop-blur-xl bg-white/5 border border-black rounded-3xl p-8">
               <h3 className="text-xl font-semibold mb-6" style={{ color: '#000' }}>Contact Information</h3>
               
               <div className="space-y-6">
@@ -171,7 +171,7 @@ export default function ContactSection() {
             </div>
 
             {/* Social Links */}
-            <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-8">
+            <div className="backdrop-blur-xl bg-white/5 border border-black rounded-3xl p-8">
               <h3 className="text-xl font-semibold mb-6" style={{ color: '#000' }}>Follow Us</h3>
               <div className="flex gap-4">
                 {[
