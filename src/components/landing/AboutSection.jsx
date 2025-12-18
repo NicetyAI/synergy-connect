@@ -25,7 +25,7 @@ const stats = [
 
 export default function AboutSection() {
   return (
-    <section className="relative py-24 px-4">
+    <section className="relative py-24 px-4" style={{ background: '#192234' }}>
       {/* Background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl" />
