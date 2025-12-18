@@ -49,7 +49,7 @@ export default function EventCard({ event, currentUser, userRSVP }) {
   const colorScheme = categoryColors[event.category] || categoryColors.Networking;
 
   return (
-    <div className="glass-card rounded-2xl overflow-hidden hover:scale-[1.02] transition-all">
+    <div className="glass-card rounded-2xl overflow-hidden hover:scale-[1.02] transition-all" style={{ background: '#fff', border: '1px solid #E5E7EB' }}>
       {event.image_url && (
         <div className="h-48 overflow-hidden">
           <img src={event.image_url} alt={event.title} className="w-full h-full object-cover" />
@@ -75,34 +75,34 @@ export default function EventCard({ event, currentUser, userRSVP }) {
           )}
         </div>
 
-        <h3 className="text-xl font-bold mb-2 line-clamp-2" style={{ color: '#E5EDFF' }}>
+        <h3 className="text-xl font-bold mb-2 line-clamp-2" style={{ color: '#000' }}>
           {event.title}
         </h3>
 
-        <p className="text-sm mb-4 line-clamp-2" style={{ color: '#B6C4E0' }}>
+        <p className="text-sm mb-4 line-clamp-2" style={{ color: '#666' }}>
           {event.description}
         </p>
 
         <div className="space-y-2 mb-4">
-          <div className="flex items-center gap-2 text-sm" style={{ color: '#B6C4E0' }}>
-            <Calendar className="w-4 h-4" style={{ color: '#667EEA' }} />
+          <div className="flex items-center gap-2 text-sm" style={{ color: '#000' }}>
+            <Calendar className="w-4 h-4" style={{ color: '#D8A11F' }} />
             <span>{moment(event.date).format('MMM D, YYYY')}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-sm" style={{ color: '#B6C4E0' }}>
-            <Clock className="w-4 h-4" style={{ color: '#F59E0B' }} />
+          <div className="flex items-center gap-2 text-sm" style={{ color: '#000' }}>
+            <Clock className="w-4 h-4" style={{ color: '#D8A11F' }} />
             <span>{event.time} {event.end_time && `- ${event.end_time}`}</span>
           </div>
 
           {!event.is_virtual && event.location && (
-            <div className="flex items-center gap-2 text-sm" style={{ color: '#B6C4E0' }}>
-              <MapPin className="w-4 h-4" style={{ color: '#22C55E' }} />
+            <div className="flex items-center gap-2 text-sm" style={{ color: '#000' }}>
+              <MapPin className="w-4 h-4" style={{ color: '#D8A11F' }} />
               <span className="line-clamp-1">{event.location}</span>
             </div>
           )}
 
-          <div className="flex items-center gap-2 text-sm" style={{ color: '#B6C4E0' }}>
-            <Users className="w-4 h-4" style={{ color: '#7C3AED' }} />
+          <div className="flex items-center gap-2 text-sm" style={{ color: '#000' }}>
+            <Users className="w-4 h-4" style={{ color: '#D8A11F' }} />
             <span>{attendeeCount} attending</span>
             {event.max_attendees && <span>/ {event.max_attendees} max</span>}
           </div>
@@ -113,7 +113,7 @@ export default function EventCard({ event, currentUser, userRSVP }) {
             <Button
               variant="outline"
               className="w-full rounded-xl font-semibold"
-              style={{ borderColor: '#667EEA', color: '#667EEA' }}
+              style={{ borderColor: '#D8A11F', color: '#D8A11F', background: '#fff' }}
             >
               View Details
             </Button>
@@ -125,8 +125,8 @@ export default function EventCard({ event, currentUser, userRSVP }) {
               disabled={rsvpMutation.isPending || (event.max_attendees && attendeeCount >= event.max_attendees && !userRSVP)}
               className="flex-1 rounded-xl font-semibold"
               style={userRSVP ? 
-                { background: 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)', color: '#fff' } :
-                { background: 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)', color: '#fff' }
+                { background: '#22C55E', color: '#fff' } :
+                { background: '#D8A11F', color: '#fff' }
               }
             >
               {userRSVP ? (
