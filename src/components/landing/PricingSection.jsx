@@ -18,7 +18,7 @@ const plans = [
       "Email support",
     ],
     buttonText: "Get Started",
-    buttonStyle: "border-white/20 bg-white/5 hover:bg-white/10 text-white",
+    buttonStyle: "bg-[#D8A11F] hover:bg-[#C4900F] text-white",
   },
   {
     name: "Professional",
@@ -37,7 +37,7 @@ const plans = [
       "Analytics dashboard",
     ],
     buttonText: "Start Free Trial",
-    buttonStyle: "bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 text-white",
+    buttonStyle: "bg-[#D8A11F] hover:bg-[#C4900F] text-white",
   },
   {
     name: "Enterprise",
@@ -55,7 +55,7 @@ const plans = [
       "White-glove onboarding",
     ],
     buttonText: "Contact Sales",
-    buttonStyle: "border-white/20 bg-white/5 hover:bg-white/10 text-white",
+    buttonStyle: "bg-[#D8A11F] hover:bg-[#C4900F] text-white",
   },
 ];
 
