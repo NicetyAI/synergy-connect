@@ -60,14 +60,14 @@ export default function News() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-main">
+    <div className="flex min-h-screen">
       <Sidebar />
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto" style={{ background: '#F2F1F5' }}>
         {/* Header with Gradient */}
         <div 
           className="px-8 py-12"
           style={{ 
-            background: 'linear-gradient(135deg, #3B82F6 0%, #F97316 100%)',
+            background: '#D8A11F',
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
           }}
         >
@@ -99,14 +99,14 @@ export default function News() {
           <div className="max-w-6xl mx-auto">
             {/* AI Recommendations */}
             {recommendations.length > 0 && (
-              <div className="glass-card p-6 mb-6">
+              <div className="glass-card p-6 mb-6" style={{ background: '#fff', border: '1px solid #000' }}>
                 <div className="flex items-center gap-2 mb-4">
-                  <TrendingUp className="w-5 h-5" style={{ color: '#3B82F6' }} />
-                  <h3 className="text-lg font-bold" style={{ color: '#E5EDFF' }}>Personalized for You</h3>
+                  <TrendingUp className="w-5 h-5" style={{ color: '#D8A11F' }} />
+                  <h3 className="text-lg font-bold" style={{ color: '#000' }}>Personalized for You</h3>
                 </div>
                 <div className="space-y-2">
                   {recommendations.map((rec, idx) => (
-                    <p key={idx} className="text-sm" style={{ color: '#B6C4E0' }}>
+                    <p key={idx} className="text-sm" style={{ color: '#000' }}>
                       • {rec}
                     </p>
                   ))}
@@ -116,25 +116,25 @@ export default function News() {
 
             {/* Search Bar */}
             <div className="relative mb-6">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: '#7A8BA6' }} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: '#666' }} />
               <Input
                 placeholder="Search articles..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 py-6 text-lg glass-input rounded-xl"
-                style={{ color: '#E5EDFF' }}
+                className="w-full pl-12 py-6 text-lg rounded-xl"
+                style={{ color: '#000', background: '#fff', border: '1px solid #000' }}
               />
             </div>
 
             {/* Articles Count */}
-            <p className="mb-6 text-lg" style={{ color: '#B6C4E0' }}>
+            <p className="mb-6 text-lg" style={{ color: '#000' }}>
               {filteredArticles.length} articles found
             </p>
 
             {/* Articles Grid */}
             {isLoading ? (
               <div className="text-center py-12">
-                <p className="text-lg" style={{ color: '#7A8BA6' }}>Loading news...</p>
+                <p className="text-lg" style={{ color: '#000' }}>Loading news...</p>
               </div>
             ) : filteredArticles.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -145,6 +145,7 @@ export default function News() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
                     className="glass-card glass-card-hover overflow-hidden"
+                    style={{ background: '#fff', border: '1px solid #000' }}
                   >
                     {/* Article Image */}
                     {article.image ? (
@@ -204,11 +205,11 @@ export default function News() {
                         </span>
                       </div>
 
-                      <h3 className="text-lg font-bold mb-2 line-clamp-2" style={{ color: '#E5EDFF' }}>
+                      <h3 className="text-lg font-bold mb-2 line-clamp-2" style={{ color: '#000' }}>
                         {article.title}
                       </h3>
 
-                      <p className="text-sm mb-4 line-clamp-3" style={{ color: '#B6C4E0' }}>
+                      <p className="text-sm mb-4 line-clamp-3" style={{ color: '#666' }}>
                         {article.description}
                       </p>
 
@@ -217,7 +218,7 @@ export default function News() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-80"
-                        style={{ color: '#3B82F6' }}
+                        style={{ color: '#D8A11F' }}
                       >
                         Read More
                         <ExternalLink className="w-4 h-4" />
@@ -227,12 +228,12 @@ export default function News() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 glass-card">
-                <Newspaper className="w-16 h-16 mx-auto mb-4" style={{ color: '#7A8BA6' }} />
-                <p className="text-lg mb-2" style={{ color: '#B6C4E0' }}>
+              <div className="text-center py-12 glass-card" style={{ background: '#fff', border: '1px solid #000' }}>
+                <Newspaper className="w-16 h-16 mx-auto mb-4" style={{ color: '#000' }} />
+                <p className="text-lg mb-2" style={{ color: '#000' }}>
                   {searchQuery ? 'No articles found matching your search' : 'No news articles available'}
                 </p>
-                <p className="text-sm" style={{ color: '#7A8BA6' }}>
+                <p className="text-sm" style={{ color: '#666' }}>
                   {!newsData?.articles && 'Configure NEWS_API_KEY in settings to fetch news'}
                 </p>
               </div>
