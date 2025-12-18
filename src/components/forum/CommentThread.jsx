@@ -52,7 +52,7 @@ export default function CommentThread({ comment, postId, currentUser, allComment
       animate={{ opacity: 1, x: 0 }}
       className={shouldIndent ? "ml-12" : "ml-4"}
       style={{ 
-        borderLeft: shouldIndent ? '2px solid rgba(255, 255, 255, 0.1)' : 'none',
+        borderLeft: shouldIndent ? '2px solid #E5E7EB' : 'none',
         paddingLeft: shouldIndent ? '1rem' : '0'
       }}
     >
@@ -60,17 +60,17 @@ export default function CommentThread({ comment, postId, currentUser, allComment
         <div className="flex gap-3">
           <div 
             className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #3B82F6 100%)' }}
+            style={{ background: '#D8A11F' }}
           >
-            <User className="w-4 h-4" style={{ color: '#E5EDFF' }} />
+            <User className="w-4 h-4" style={{ color: '#fff' }} />
           </div>
 
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
-              <span className="font-semibold text-sm" style={{ color: '#E5EDFF' }}>
+              <span className="font-semibold text-sm" style={{ color: '#000' }}>
                 {comment.author_email.split('@')[0]}
               </span>
-              <span className="text-xs" style={{ color: '#7A8BA6' }}>
+              <span className="text-xs" style={{ color: '#666' }}>
                 {formatDistanceToNow(new Date(comment.created_date), { addSuffix: true })}
               </span>
             </div>
@@ -80,7 +80,7 @@ export default function CommentThread({ comment, postId, currentUser, allComment
                 <p className="text-sm" style={{ color: '#EF4444' }}>Comment removed by moderator</p>
               </div>
             ) : (
-              <p className="text-sm mb-2 leading-relaxed" style={{ color: '#B6C4E0' }}>
+              <p className="text-sm mb-2 leading-relaxed" style={{ color: '#000' }}>
                 {comment.content}
               </p>
             )}
@@ -90,9 +90,9 @@ export default function CommentThread({ comment, postId, currentUser, allComment
                 onClick={() => setShowReply(!showReply)}
                 className="gap-1 px-3 py-1 h-auto text-xs rounded-lg"
                 style={{ 
-                  background: 'rgba(255, 255, 255, 0.05)', 
-                  color: '#7A8BA6',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
+                  background: '#F3F4F6', 
+                  color: '#000',
+                  border: '1px solid #E5E7EB'
                 }}
               >
                 <Reply className="w-3 h-3" />
@@ -112,8 +112,8 @@ export default function CommentThread({ comment, postId, currentUser, allComment
                   value={replyContent}
                   onChange={(e) => setReplyContent(e.target.value)}
                   placeholder="Write your reply..."
-                  className="glass-input text-sm"
-                  style={{ color: '#E5EDFF' }}
+                  className="text-sm"
+                  style={{ color: '#000', background: '#F9FAFB', border: '1px solid #E5E7EB' }}
                   rows={3}
                 />
                 <div className="flex gap-2">
@@ -121,7 +121,7 @@ export default function CommentThread({ comment, postId, currentUser, allComment
                     type="submit"
                     disabled={!replyContent.trim() || createReplyMutation.isPending}
                     className="gap-2 px-4 py-2 h-auto text-sm rounded-lg"
-                    style={{ background: '#3B82F6', color: '#fff' }}
+                    style={{ background: '#D8A11F', color: '#fff' }}
                   >
                     <Send className="w-3 h-3" />
                     Reply
@@ -130,7 +130,7 @@ export default function CommentThread({ comment, postId, currentUser, allComment
                     type="button"
                     onClick={() => setShowReply(false)}
                     className="px-4 py-2 h-auto text-sm rounded-lg"
-                    style={{ background: 'rgba(255, 255, 255, 0.05)', color: '#B6C4E0' }}
+                    style={{ background: '#F3F4F6', color: '#000', border: '1px solid #E5E7EB' }}
                   >
                     Cancel
                   </Button>
