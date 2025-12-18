@@ -22,15 +22,15 @@ export default function FilterBar({ viewMode, setViewMode, totalResults }) {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         {/* Left - Results count */}
         <div className="flex items-center gap-4">
-          <p style={{ color: '#B6C4E0' }}>
-            Showing <span className="font-semibold" style={{ color: '#E5EDFF' }}>{totalResults}</span> partnerships
+          <p style={{ color: '#000' }}>
+            Showing <span className="font-semibold" style={{ color: '#000' }}>{totalResults}</span> partnerships
           </p>
           <Button
             variant="outline"
             className="glass-card glass-card-hover rounded-xl"
-            style={{ color: '#B6C4E0' }}
+            style={{ color: '#000', background: '#fff', border: '1px solid rgba(0, 0, 0, 0.1)' }}
           >
-            <Filter className="w-4 h-4 mr-2" />
+            <Filter className="w-4 h-4 mr-2" style={{ color: '#D8A11F' }} />
             Filters
           </Button>
         </div>
@@ -39,8 +39,8 @@ export default function FilterBar({ viewMode, setViewMode, totalResults }) {
         <div className="flex items-center gap-3">
           {/* Sort */}
           <Select defaultValue="match">
-            <SelectTrigger className="w-40 glass-card rounded-xl" style={{ color: '#E5EDFF' }}>
-              <ArrowUpDown className="w-4 h-4 mr-2" />
+            <SelectTrigger className="w-40 glass-card rounded-xl" style={{ color: '#000', background: '#fff', border: '1px solid rgba(0, 0, 0, 0.1)' }}>
+              <ArrowUpDown className="w-4 h-4 mr-2" style={{ color: '#D8A11F' }} />
               <SelectValue />
             </SelectTrigger>
             <SelectContent style={{ background: '#0B1F3B', borderColor: 'rgba(255, 255, 255, 0.18)', color: '#E5EDFF' }}>
@@ -62,10 +62,10 @@ export default function FilterBar({ viewMode, setViewMode, totalResults }) {
               onClick={() => setViewMode("grid")}
               className="p-2 rounded-lg transition-all"
               style={viewMode === "grid" ? {
-                background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(31, 58, 138, 0.2) 100%)',
-                color: '#E5EDFF'
+                background: '#D8A11F',
+                color: '#fff'
               } : {
-                color: '#7A8BA6'
+                color: '#000'
               }}
             >
               <Grid3x3 className="w-4 h-4" />
@@ -74,10 +74,10 @@ export default function FilterBar({ viewMode, setViewMode, totalResults }) {
               onClick={() => setViewMode("list")}
               className="p-2 rounded-lg transition-all"
               style={viewMode === "list" ? {
-                background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(31, 58, 138, 0.2) 100%)',
-                color: '#E5EDFF'
+                background: '#D8A11F',
+                color: '#fff'
               } : {
-                color: '#7A8BA6'
+                color: '#000'
               }}
             >
               <List className="w-4 h-4" />
