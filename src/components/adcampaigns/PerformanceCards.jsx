@@ -49,17 +49,18 @@ export default function PerformanceCards({ campaigns, metrics }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}
-          className="glass-card p-6 rounded-2xl"
+          className="p-6 rounded-2xl"
+          style={{ background: '#fff', border: '1px solid #000' }}
         >
           <div className="flex items-start justify-between mb-4">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg" style={{ background: card.bgGradient }}>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg" style={{ background: '#D8A11F' }}>
               <card.icon className="w-6 h-6" style={{ color: '#fff' }} />
             </div>
           </div>
-          <h3 className="text-sm font-medium mb-1" style={{ color: '#B6C4E0' }}>
+          <h3 className="text-sm font-medium mb-1" style={{ color: '#666' }}>
             {card.title}
           </h3>
-          <p className="text-3xl font-bold" style={{ color: '#E5EDFF' }}>
+          <p className="text-3xl font-bold" style={{ color: '#000' }}>
             {card.value}
           </p>
         </motion.div>

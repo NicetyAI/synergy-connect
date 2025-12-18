@@ -56,15 +56,15 @@ export default function AdCampaigns() {
 
   if (!vendorApp) {
     return (
-      <div className="flex min-h-screen bg-gradient-main">
+      <div className="flex min-h-screen" style={{ background: '#F2F1F5' }}>
         <Sidebar />
         <div className="flex-1 flex items-center justify-center p-8">
-          <div className="glass-card p-8 max-w-md text-center">
-            <BarChart3 className="w-16 h-16 mx-auto mb-4" style={{ color: '#7A8BA6' }} />
-            <h2 className="text-2xl font-bold mb-2" style={{ color: '#E5EDFF' }}>
+          <div className="p-8 max-w-md text-center rounded-2xl" style={{ background: '#fff', border: '1px solid #000' }}>
+            <BarChart3 className="w-16 h-16 mx-auto mb-4" style={{ color: '#666' }} />
+            <h2 className="text-2xl font-bold mb-2" style={{ color: '#000' }}>
               Vendor Status Required
             </h2>
-            <p style={{ color: '#B6C4E0' }}>
+            <p style={{ color: '#666' }}>
               You must be an approved vendor to access the Ad Campaign Management dashboard.
             </p>
           </div>
@@ -74,19 +74,19 @@ export default function AdCampaigns() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-main">
+    <div className="flex min-h-screen" style={{ background: '#F2F1F5' }}>
       <Sidebar />
       <div className="flex-1 overflow-y-auto p-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">
-              <BarChart3 className="w-8 h-8" style={{ color: '#3B82F6' }} />
-              <h1 className="text-3xl font-bold" style={{ color: '#E5EDFF' }}>
+              <BarChart3 className="w-8 h-8" style={{ color: '#D8A11F' }} />
+              <h1 className="text-3xl font-bold" style={{ color: '#000' }}>
                 Ad Campaign Management
               </h1>
             </div>
-            <p style={{ color: '#B6C4E0' }}>
+            <p style={{ color: '#666' }}>
               Monitor performance, manage campaigns, and optimize your advertising strategy
             </p>
           </div>
@@ -102,14 +102,14 @@ export default function AdCampaigns() {
 
           {/* Campaign Management Tabs */}
           <Tabs defaultValue="active" className="mt-8">
-            <TabsList className="glass-card p-2 rounded-2xl mb-6" style={{ background: 'rgba(255, 255, 255, 0.08)' }}>
-              <TabsTrigger value="active" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+            <TabsList className="p-2 rounded-2xl mb-6" style={{ background: '#fff', border: '1px solid #000' }}>
+              <TabsTrigger value="active" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Active Campaigns ({activeCampaigns.length})
               </TabsTrigger>
-              <TabsTrigger value="expired" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="expired" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Expired Campaigns ({expiredCampaigns.length})
               </TabsTrigger>
-              <TabsTrigger value="all" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="all" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 All Campaigns ({campaigns.length})
               </TabsTrigger>
             </TabsList>

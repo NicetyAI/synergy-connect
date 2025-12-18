@@ -52,12 +52,12 @@ export default function CampaignList({ campaigns, metrics, type }) {
 
   if (campaigns.length === 0) {
     return (
-      <div className="glass-card p-12 text-center rounded-2xl">
-        <Calendar className="w-16 h-16 mx-auto mb-4" style={{ color: '#7A8BA6' }} />
-        <h3 className="text-xl font-semibold mb-2" style={{ color: '#E5EDFF' }}>
+      <div className="p-12 text-center rounded-2xl" style={{ background: '#fff', border: '1px solid #000' }}>
+        <Calendar className="w-16 h-16 mx-auto mb-4" style={{ color: '#666' }} />
+        <h3 className="text-xl font-semibold mb-2" style={{ color: '#000' }}>
           No {type} campaigns found
         </h3>
-        <p style={{ color: '#B6C4E0' }}>
+        <p style={{ color: '#666' }}>
           {type === 'active' ? 'Create your first ad campaign to get started.' : 'Your expired campaigns will appear here.'}
         </p>
       </div>
@@ -78,7 +78,8 @@ export default function CampaignList({ campaigns, metrics, type }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              className="glass-card p-6 rounded-2xl hover:shadow-xl transition-all"
+              className="p-6 rounded-2xl hover:shadow-xl transition-all"
+              style={{ background: '#fff', border: '1px solid #000' }}
             >
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 {/* Campaign Info */}
@@ -86,7 +87,7 @@ export default function CampaignList({ campaigns, metrics, type }) {
                   <div className="flex items-start gap-3 mb-3">
                     <div>
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-bold" style={{ color: '#E5EDFF' }}>
+                        <h3 className="text-lg font-bold" style={{ color: '#000' }}>
                           {campaign.business_name}
                         </h3>
                         {getStatusBadge(campaign)}
@@ -97,10 +98,10 @@ export default function CampaignList({ campaigns, metrics, type }) {
                           </Badge>
                         )}
                       </div>
-                      <p className="text-sm mb-2" style={{ color: '#B6C4E0' }}>
+                      <p className="text-sm mb-2" style={{ color: '#666' }}>
                         Package: {campaign.package}
                       </p>
-                      <div className="flex flex-wrap gap-4 text-sm" style={{ color: '#7A8BA6' }}>
+                      <div className="flex flex-wrap gap-4 text-sm" style={{ color: '#666' }}>
                         {campaign.approved_date && (
                           <span>Started: {moment(campaign.approved_date).format('MMM DD, YYYY')}</span>
                         )}
@@ -115,25 +116,25 @@ export default function CampaignList({ campaigns, metrics, type }) {
                   {/* Performance Metrics */}
                   <div className="flex flex-wrap gap-6 mt-4">
                     <div className="flex items-center gap-2">
-                      <Eye className="w-4 h-4" style={{ color: '#3B82F6' }} />
-                      <span className="text-sm font-medium" style={{ color: '#E5EDFF' }}>
+                      <Eye className="w-4 h-4" style={{ color: '#D8A11F' }} />
+                      <span className="text-sm font-medium" style={{ color: '#000' }}>
                         {stats.impressions.toLocaleString()}
                       </span>
-                      <span className="text-xs" style={{ color: '#7A8BA6' }}>impressions</span>
+                      <span className="text-xs" style={{ color: '#666' }}>impressions</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <MousePointerClick className="w-4 h-4" style={{ color: '#8B5CF6' }} />
-                      <span className="text-sm font-medium" style={{ color: '#E5EDFF' }}>
+                      <MousePointerClick className="w-4 h-4" style={{ color: '#666' }} />
+                      <span className="text-sm font-medium" style={{ color: '#000' }}>
                         {stats.clicks.toLocaleString()}
                       </span>
-                      <span className="text-xs" style={{ color: '#7A8BA6' }}>clicks</span>
+                      <span className="text-xs" style={{ color: '#666' }}>clicks</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4" style={{ color: '#22C55E' }} />
-                      <span className="text-sm font-medium" style={{ color: '#E5EDFF' }}>
+                      <span className="text-sm font-medium" style={{ color: '#000' }}>
                         {stats.conversions.toLocaleString()}
                       </span>
-                      <span className="text-xs" style={{ color: '#7A8BA6' }}>conversions</span>
+                      <span className="text-xs" style={{ color: '#666' }}>conversions</span>
                     </div>
                   </div>
                 </div>
@@ -144,7 +145,7 @@ export default function CampaignList({ campaigns, metrics, type }) {
                     <Button
                       onClick={() => handleEdit(campaign)}
                       className="rounded-lg flex items-center gap-2"
-                      style={{ background: 'rgba(99, 102, 241, 0.2)', color: '#A5B4FC', border: '1px solid rgba(99, 102, 241, 0.3)' }}
+                      style={{ background: '#fff', color: '#000', border: '1px solid #000' }}
                     >
                       <Edit className="w-4 h-4" />
                       Edit Campaign
@@ -154,7 +155,7 @@ export default function CampaignList({ campaigns, metrics, type }) {
                     <Button
                       onClick={() => handleRenew(campaign)}
                       className="rounded-lg flex items-center gap-2"
-                      style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#fff' }}
+                      style={{ background: '#D8A11F', color: '#fff' }}
                     >
                       <RefreshCw className="w-4 h-4" />
                       Renew Campaign
