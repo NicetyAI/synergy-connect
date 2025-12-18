@@ -103,13 +103,13 @@ export default function PostDetail() {
 
   if (!post) {
     return (
-      <div className="flex min-h-screen bg-gradient-main">
+      <div className="flex min-h-screen" style={{ background: '#F2F1F5' }}>
         <Sidebar />
         <div className="flex-1 p-8">
           <div className="max-w-4xl mx-auto text-center py-12">
-            <p className="text-xl" style={{ color: '#B6C4E0' }}>Post not found</p>
+            <p className="text-xl" style={{ color: '#000' }}>Post not found</p>
             <Link to={createPageUrl('Forum')}>
-              <Button className="mt-4 gap-2" style={{ background: '#3B82F6', color: '#fff' }}>
+              <Button className="mt-4 gap-2" style={{ background: '#D8A11F', color: '#fff' }}>
                 <ArrowLeft className="w-4 h-4" />
                 Back to Forum
               </Button>
@@ -121,33 +121,33 @@ export default function PostDetail() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-main">
+    <div className="flex min-h-screen" style={{ background: '#F2F1F5' }}>
       <Sidebar />
       <div className="flex-1 p-8 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
           {/* Back Button */}
           <Link to={createPageUrl('Forum')}>
-            <Button className="mb-6 gap-2" style={{ background: 'rgba(255, 255, 255, 0.05)', color: '#B6C4E0' }}>
+            <Button className="mb-6 gap-2" style={{ background: '#fff', color: '#000', border: '1px solid #E5E7EB' }}>
               <ArrowLeft className="w-4 h-4" />
               Back to Forum
             </Button>
           </Link>
 
           {/* Post Content */}
-          <div className="glass-card p-8 mb-6">
+          <div className="p-8 mb-6 rounded-xl" style={{ background: '#fff', border: '1px solid #E5E7EB' }}>
             <div className="flex items-start gap-5 mb-6">
               <div 
                 className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)' }}
+                style={{ background: '#D8A11F' }}
               >
-                <User className="w-8 h-8" style={{ color: '#E5EDFF' }} />
+                <User className="w-8 h-8" style={{ color: '#fff' }} />
               </div>
 
               <div className="flex-1">
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
-                      <h1 className="text-3xl font-bold" style={{ color: '#E5EDFF' }}>
+                      <h1 className="text-3xl font-bold" style={{ color: '#000' }}>
                         {post.title}
                       </h1>
                       {post.flagged && (
@@ -164,15 +164,15 @@ export default function PostDetail() {
                       )}
                     </div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-semibold text-sm px-3 py-1 rounded-full" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#3B82F6' }}>
+                      <span className="font-semibold text-sm px-3 py-1 rounded-full" style={{ background: '#F3F4F6', color: '#000' }}>
                         {post.author_name || post.author_email.split('@')[0]}
                       </span>
-                      <span className="text-sm" style={{ color: '#7A8BA6' }}>in</span>
-                      <span className="text-sm font-medium px-3 py-1 rounded-full" style={{ background: 'rgba(124, 58, 237, 0.15)', color: '#7C3AED' }}>
+                      <span className="text-sm" style={{ color: '#666' }}>in</span>
+                      <span className="text-sm font-medium px-3 py-1 rounded-full" style={{ background: '#FEF3C7', color: '#92400E' }}>
                         {category?.name || 'General'}
                       </span>
-                      <span className="text-sm" style={{ color: '#7A8BA6' }}>•</span>
-                      <span className="text-sm" style={{ color: '#7A8BA6' }}>
+                      <span className="text-sm" style={{ color: '#666' }}>•</span>
+                      <span className="text-sm" style={{ color: '#666' }}>
                         {formatDistanceToNow(new Date(post.created_date), { addSuffix: true })}
                       </span>
                     </div>
@@ -184,11 +184,11 @@ export default function PostDetail() {
                   <div className="mb-4 p-4 rounded-xl" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
                     <p className="font-medium mb-1" style={{ color: '#EF4444' }}>This post has been removed</p>
                     {post.removal_reason && (
-                      <p className="text-sm" style={{ color: '#B6C4E0' }}>Reason: {post.removal_reason}</p>
+                      <p className="text-sm" style={{ color: '#666' }}>Reason: {post.removal_reason}</p>
                     )}
                   </div>
                 ) : (
-                  <p className="text-lg leading-relaxed mb-6" style={{ color: '#B6C4E0' }}>
+                  <p className="text-lg leading-relaxed mb-6" style={{ color: '#000' }}>
                     {post.content}
                   </p>
                 )}
@@ -224,24 +224,24 @@ export default function PostDetail() {
                   </div>
                 )}
 
-                <div className="flex items-center gap-4 pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.15)' }}>
+                <div className="flex items-center gap-4 pt-4" style={{ borderTop: '1px solid #E5E7EB' }}>
                   <Button
                     onClick={() => user && likeMutation.mutate()}
                     disabled={!user}
                     className="gap-2 px-5 py-2 rounded-lg"
                     style={{ 
-                      background: hasLiked ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255, 255, 255, 0.05)', 
-                      color: hasLiked ? '#3B82F6' : '#B6C4E0',
-                      border: hasLiked ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid rgba(255, 255, 255, 0.1)'
+                      background: hasLiked ? '#D8A11F' : '#F3F4F6', 
+                      color: hasLiked ? '#fff' : '#000',
+                      border: '1px solid #E5E7EB'
                     }}
                   >
-                    <ThumbsUp className="w-5 h-5" fill={hasLiked ? '#3B82F6' : 'none'} />
+                    <ThumbsUp className="w-5 h-5" fill={hasLiked ? '#fff' : 'none'} />
                     <span className="font-medium">{postLikes.length}</span>
                   </Button>
 
-                  <div className="flex items-center gap-2 px-5 py-2 rounded-lg" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
-                    <MessageSquare className="w-5 h-5" style={{ color: '#B6C4E0' }} />
-                    <span className="font-medium" style={{ color: '#B6C4E0' }}>{postComments.length}</span>
+                  <div className="flex items-center gap-2 px-5 py-2 rounded-lg" style={{ background: '#F3F4F6', border: '1px solid #E5E7EB' }}>
+                    <MessageSquare className="w-5 h-5" style={{ color: '#000' }} />
+                    <span className="font-medium" style={{ color: '#000' }}>{postComments.length}</span>
                   </div>
                 </div>
               </div>
@@ -249,8 +249,8 @@ export default function PostDetail() {
           </div>
 
           {/* Comments Section */}
-          <div className="glass-card p-6">
-            <h2 className="text-2xl font-bold mb-6" style={{ color: '#E5EDFF' }}>
+          <div className="p-6 rounded-xl" style={{ background: '#fff', border: '1px solid #E5E7EB' }}>
+            <h2 className="text-2xl font-bold mb-6" style={{ color: '#000' }}>
               Discussion ({postComments.length})
             </h2>
 
@@ -261,15 +261,15 @@ export default function PostDetail() {
                   value={commentContent}
                   onChange={(e) => setCommentContent(e.target.value)}
                   placeholder="Share your thoughts..."
-                  className="glass-input mb-3"
-                  style={{ color: '#E5EDFF' }}
+                  className="mb-3"
+                  style={{ color: '#000', background: '#F9FAFB', border: '1px solid #E5E7EB' }}
                   rows={4}
                 />
                 <Button
                   type="submit"
                   disabled={!commentContent.trim() || createCommentMutation.isPending}
                   className="gap-2 px-6 py-2 rounded-lg"
-                  style={{ background: '#3B82F6', color: '#fff' }}
+                  style={{ background: '#D8A11F', color: '#fff' }}
                 >
                   <Send className="w-4 h-4" />
                   Post Comment
@@ -278,8 +278,8 @@ export default function PostDetail() {
             )}
 
             {!user && (
-              <div className="mb-8 p-4 rounded-xl text-center" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
-                <p style={{ color: '#7A8BA6' }}>Sign in to join the discussion</p>
+              <div className="mb-8 p-4 rounded-xl text-center" style={{ background: '#F3F4F6' }}>
+                <p style={{ color: '#666' }}>Sign in to join the discussion</p>
               </div>
             )}
 
@@ -298,7 +298,7 @@ export default function PostDetail() {
                 ))
               ) : (
                 <div className="text-center py-8">
-                  <p style={{ color: '#7A8BA6' }}>No comments yet. Be the first to share your thoughts!</p>
+                  <p style={{ color: '#666' }}>No comments yet. Be the first to share your thoughts!</p>
                 </div>
               )}
             </div>
