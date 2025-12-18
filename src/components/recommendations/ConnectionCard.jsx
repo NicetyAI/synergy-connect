@@ -11,7 +11,7 @@ export default function ConnectionCard({ connection, index }) {
       transition={{ delay: index * 0.05 }}
       className="rounded-2xl p-6 text-center transition-all duration-300 hover:transform hover:-translate-y-1"
       style={{
-        background: '#0F2744',
+        background: '#192234',
         border: '1px solid rgba(255, 255, 255, 0.1)',
         boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)'
       }}
@@ -54,7 +54,7 @@ export default function ConnectionCard({ connection, index }) {
       {/* Connect Button */}
       <Button 
         className="w-full rounded-lg px-4 py-3 text-sm font-semibold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2" 
-        style={{ background: '#6366F1', color: '#fff' }}
+        style={{ background: '#D8A11F', color: '#fff' }}
       >
         <UserPlus className="w-4 h-4" />
         Connect
