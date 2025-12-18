@@ -16,48 +16,48 @@ const features = [
     icon: Search,
     title: "Smart Matching",
     description: "AI-powered algorithm matches you with the most compatible business partners based on your criteria.",
-    gradient: "from-[#3B82F6] to-[#1F3A8A]",
+    gradient: "from-[#D8A11F] to-[#F59E0B]",
   },
   {
     icon: Shield,
     title: "Verified Profiles",
     description: "Every member is verified to ensure you're connecting with legitimate professionals and founders.",
-    gradient: "from-[#7C3AED] to-[#3B82F6]",
+    gradient: "from-[#D8A11F] to-[#F59E0B]",
   },
   {
     icon: Users,
     title: "Professional Network",
     description: "Access an exclusive community of dealmakers, investors, and entrepreneurs worldwide.",
-    gradient: "from-[#1F3A8A] to-[#0B1F3B]",
+    gradient: "from-[#D8A11F] to-[#F59E0B]",
   },
   {
     icon: MessageSquare,
     title: "Secure Messaging",
     description: "End-to-end encrypted communication to discuss deals and opportunities privately.",
-    gradient: "from-[#3B82F6] to-[#7C3AED]",
+    gradient: "from-[#D8A11F] to-[#F59E0B]",
   },
   {
     icon: BarChart3,
     title: "Deal Analytics",
     description: "Track your connections, conversations, and deal progress with detailed insights.",
-    gradient: "from-[#FACC15] to-[#22C55E]",
+    gradient: "from-[#D8A11F] to-[#F59E0B]",
   },
   {
     icon: Globe,
     title: "Global Reach",
     description: "Connect with partners across continents and expand your business horizons internationally.",
-    gradient: "from-[#7C3AED] to-[#1F3A8A]",
+    gradient: "from-[#D8A11F] to-[#F59E0B]",
   },
 ];
 
 export default function FeaturesSection() {
   return (
-    <section className="relative py-32 px-4">
+    <section className="relative py-32 px-4" style={{ background: '#F2F1F5' }}>
       {/* Enhanced background with depth */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#1F3A8A]/15 to-transparent" />
-        <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] bg-[#7C3AED]/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-[#3B82F6]/10 rounded-full blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#D8A11F]/10 to-transparent" />
+        <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] bg-[#D8A11F]/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-[#D8A11F]/5 rounded-full blur-3xl" />
       </div>
       
       <div className="relative z-10 max-w-7xl mx-auto">
@@ -80,25 +80,25 @@ export default function FeaturesSection() {
             >
               <Shield className="w-4 h-4" style={{ color: '#22C55E' }} />
             </motion.div>
-            <span className="text-sm font-medium" style={{ color: '#E5EDFF' }}>
+            <span className="text-sm font-medium" style={{ color: '#000' }}>
               Trusted by Fortune 500 Companies
             </span>
           </motion.div>
 
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight" style={{ color: '#E5EDFF' }}>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight" style={{ color: '#000' }}>
             Powerful Features for{" "}
             <motion.span
               animate={{
                 backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
               }}
               transition={{ duration: 4, repeat: Infinity }}
-              className="bg-gradient-to-r from-[#3B82F6] via-[#7C3AED] to-[#3B82F6] bg-clip-text text-transparent"
+              className="bg-gradient-to-r from-[#D8A11F] via-[#F59E0B] to-[#D8A11F] bg-clip-text text-transparent"
               style={{ backgroundSize: "200% 200%" }}
             >
               Professional Networking
             </motion.span>
           </h2>
-          <p className="text-xl max-w-3xl mx-auto leading-relaxed" style={{ color: '#B6C4E0' }}>
+          <p className="text-xl max-w-3xl mx-auto leading-relaxed" style={{ color: '#333' }}>
             Everything you need to find, connect, and close deals with the right partners. 
             Built for serious dealmakers.
           </p>
@@ -145,10 +145,10 @@ export default function FeaturesSection() {
                     <feature.icon className="w-8 h-8 lg:w-10 lg:h-10" style={{ color: '#fff' }} />
                   </motion.div>
                   
-                  <h3 className="text-2xl lg:text-3xl font-bold mb-4" style={{ color: '#E5EDFF' }}>
+                  <h3 className="text-2xl lg:text-3xl font-bold mb-4" style={{ color: '#000' }}>
                     {feature.title}
                   </h3>
-                  <p className="leading-relaxed text-base lg:text-lg" style={{ color: '#B6C4E0' }}>
+                  <p className="leading-relaxed text-base lg:text-lg" style={{ color: '#333' }}>
                     {feature.description}
                   </p>
 
@@ -189,7 +189,7 @@ export default function FeaturesSection() {
           viewport={{ once: true }}
           className="mt-16 text-center"
         >
-          <p className="text-lg font-medium mb-4" style={{ color: '#B6C4E0' }}>
+          <p className="text-lg font-medium mb-4" style={{ color: '#333' }}>
             Join 10,000+ professionals already closing deals
           </p>
           <div className="flex items-center justify-center gap-8 flex-wrap">
@@ -206,10 +206,10 @@ export default function FeaturesSection() {
                 transition={{ delay: 0.5 + i * 0.1 }}
                 className="text-center"
               >
-                <p className="text-3xl font-bold bg-gradient-to-r from-[#3B82F6] to-[#7C3AED] bg-clip-text text-transparent">
+                <p className="text-3xl font-bold bg-gradient-to-r from-[#D8A11F] to-[#F59E0B] bg-clip-text text-transparent">
                   {stat.value}
                 </p>
-                <p className="text-sm font-medium mt-1" style={{ color: '#7A8BA6' }}>{stat.label}</p>
+                <p className="text-sm font-medium mt-1" style={{ color: '#666' }}>{stat.label}</p>
               </motion.div>
             ))}
           </div>
