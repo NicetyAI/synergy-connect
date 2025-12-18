@@ -55,31 +55,28 @@ export default function PostCard({ post, category, likes, comments, hasLiked, cu
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -2, scale: 1.005 }}
       onClick={handleCardClick}
-      className="glass-card glass-card-hover p-6 cursor-pointer relative overflow-hidden"
+      className="p-6 cursor-pointer relative overflow-hidden rounded-xl"
       style={{
-        background: 'rgba(255, 255, 255, 0.05)',
-        backdropFilter: 'blur(20px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+        background: '#fff',
+        border: '1px solid #E5E7EB',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
       }}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
       <div className="flex items-start gap-5 relative z-10">
         <div 
           className="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg"
           style={{ 
-            background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)',
-            boxShadow: '0 8px 24px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+            background: '#D8A11F',
           }}
         >
-          <User className="w-7 h-7" style={{ color: '#E5EDFF' }} />
+          <User className="w-7 h-7" style={{ color: '#fff' }} />
         </div>
 
         <div className="flex-1 min-w-0 relative z-10">
           <div className="flex items-start justify-between mb-3">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
-                <h3 className="text-xl font-bold hover:opacity-80 transition-opacity" style={{ color: '#E5EDFF' }}>
+                <h3 className="text-xl font-bold hover:opacity-80 transition-opacity" style={{ color: '#000' }}>
                   {post.title}
                 </h3>
                 {post.flagged && (
@@ -96,17 +93,17 @@ export default function PostCard({ post, category, likes, comments, hasLiked, cu
                 )}
               </div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-semibold text-sm px-3 py-1 rounded-full" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#3B82F6' }}>
+                <span className="font-semibold text-sm px-3 py-1 rounded-full" style={{ background: '#F3F4F6', color: '#000' }}>
                   {post.author_name || post.author_email.split('@')[0]}
                 </span>
-                <span className="text-sm" style={{ color: '#7A8BA6' }}>in</span>
-                <span className="text-sm font-medium px-3 py-1 rounded-full" style={{ background: 'rgba(124, 58, 237, 0.15)', color: '#7C3AED' }}>
+                <span className="text-sm" style={{ color: '#666' }}>in</span>
+                <span className="text-sm font-medium px-3 py-1 rounded-full" style={{ background: '#FEF3C7', color: '#92400E' }}>
                   {category?.name || 'General'}
                 </span>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm px-3 py-1 rounded-full" style={{ background: 'rgba(255, 255, 255, 0.05)', color: '#7A8BA6' }}>
+              <span className="text-sm px-3 py-1 rounded-full" style={{ background: '#F3F4F6', color: '#666' }}>
                 {formatDistanceToNow(new Date(post.created_date), { addSuffix: true })}
               </span>
               <ModerationMenu post={post} currentUser={currentUser} />
@@ -117,11 +114,11 @@ export default function PostCard({ post, category, likes, comments, hasLiked, cu
             <div className="mb-4 p-4 rounded-xl" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
               <p className="font-medium mb-1" style={{ color: '#EF4444' }}>This post has been removed</p>
               {post.removal_reason && (
-                <p className="text-sm" style={{ color: '#B6C4E0' }}>Reason: {post.removal_reason}</p>
+                <p className="text-sm" style={{ color: '#666' }}>Reason: {post.removal_reason}</p>
               )}
             </div>
           ) : (
-            <p className="mb-4 line-clamp-3 leading-relaxed" style={{ color: '#B6C4E0' }}>
+            <p className="mb-4 line-clamp-3 leading-relaxed" style={{ color: '#666' }}>
               {post.content}
             </p>
           )}
@@ -159,7 +156,7 @@ export default function PostCard({ post, category, likes, comments, hasLiked, cu
             </div>
           )}
 
-          <div className="flex items-center gap-3 pt-3 relative z-10" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.15)' }}>
+          <div className="flex items-center gap-3 pt-3 relative z-10" style={{ borderTop: '1px solid #E5E7EB' }}>
             <Button
               onClick={(e) => {
                 e.stopPropagation();
@@ -167,21 +164,21 @@ export default function PostCard({ post, category, likes, comments, hasLiked, cu
               }}
               className="gap-2 px-4 py-2 rounded-lg transition-all hover:scale-105"
               style={{ 
-                background: hasLiked ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255, 255, 255, 0.05)', 
-                color: hasLiked ? '#3B82F6' : '#B6C4E0',
-                border: hasLiked ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid rgba(255, 255, 255, 0.1)'
+                background: hasLiked ? '#D8A11F' : '#F3F4F6', 
+                color: hasLiked ? '#fff' : '#000',
+                border: '1px solid #E5E7EB'
               }}
             >
-              <ThumbsUp className="w-4 h-4" fill={hasLiked ? '#3B82F6' : 'none'} />
+              <ThumbsUp className="w-4 h-4" fill={hasLiked ? '#fff' : 'none'} />
               <span className="font-medium">{likes}</span>
             </Button>
 
             <Button
               className="gap-2 px-4 py-2 rounded-lg transition-all hover:scale-105"
               style={{ 
-                background: 'rgba(255, 255, 255, 0.05)', 
-                color: '#B6C4E0',
-                border: '1px solid rgba(255, 255, 255, 0.1)'
+                background: '#F3F4F6', 
+                color: '#000',
+                border: '1px solid #E5E7EB'
               }}
               onClick={(e) => e.stopPropagation()}
             >

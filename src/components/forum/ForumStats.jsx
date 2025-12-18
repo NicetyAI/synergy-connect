@@ -24,7 +24,8 @@ export default function ForumStats({ totalPosts, activeMembers, totalViews }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}
-          className="glass-card p-6"
+          className="p-6 rounded-xl"
+          style={{ background: '#fff', border: '1px solid #E5E7EB' }}
         >
           <div className="flex items-center gap-4">
             <div 
@@ -34,10 +35,10 @@ export default function ForumStats({ totalPosts, activeMembers, totalViews }) {
               <stat.icon className="w-6 h-6" style={{ color: stat.color }} />
             </div>
             <div>
-              <p className="text-2xl font-bold" style={{ color: '#E5EDFF' }}>
+              <p className="text-2xl font-bold" style={{ color: '#000' }}>
                 {stat.value || values[stat.key] || 0}
               </p>
-              <p className="text-sm" style={{ color: '#7A8BA6' }}>
+              <p className="text-sm" style={{ color: '#666' }}>
                 {stat.label}
               </p>
             </div>
