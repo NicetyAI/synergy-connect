@@ -16,37 +16,37 @@ const features = [
     icon: Search,
     title: "Smart Matching",
     description: "AI-powered algorithm matches you with the most compatible business partners based on your criteria.",
-    gradient: "from-[#D8A11F] to-[#F59E0B]",
+    iconBg: "#D8A11F",
   },
   {
     icon: Shield,
     title: "Verified Profiles",
     description: "Every member is verified to ensure you're connecting with legitimate professionals and founders.",
-    gradient: "from-[#D8A11F] to-[#F59E0B]",
+    iconBg: "#D8A11F",
   },
   {
     icon: Users,
     title: "Professional Network",
     description: "Access an exclusive community of dealmakers, investors, and entrepreneurs worldwide.",
-    gradient: "from-[#D8A11F] to-[#F59E0B]",
+    iconBg: "#D8A11F",
   },
   {
     icon: MessageSquare,
     title: "Secure Messaging",
     description: "End-to-end encrypted communication to discuss deals and opportunities privately.",
-    gradient: "from-[#D8A11F] to-[#F59E0B]",
+    iconBg: "#D8A11F",
   },
   {
     icon: BarChart3,
     title: "Deal Analytics",
     description: "Track your connections, conversations, and deal progress with detailed insights.",
-    gradient: "from-[#D8A11F] to-[#F59E0B]",
+    iconBg: "#D8A11F",
   },
   {
     icon: Globe,
     title: "Global Reach",
     description: "Connect with partners across continents and expand your business horizons internationally.",
-    gradient: "from-[#D8A11F] to-[#F59E0B]",
+    iconBg: "#D8A11F",
   },
 ];
 
@@ -117,29 +117,21 @@ export default function FeaturesSection() {
             >
               <motion.div
                 whileHover={{ y: -8, scale: 1.02 }}
-                className="h-full glass-card p-8 lg:p-10 rounded-3xl relative overflow-hidden"
+                className="h-full p-8 lg:p-10 rounded-3xl relative overflow-hidden"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  backdropFilter: 'blur(20px) saturate(180%)',
-                  border: '1px solid rgba(255, 255, 255, 0.18)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                  background: '#FFF5E6',
+                  border: '1px solid rgba(0, 0, 0, 0.1)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
                 }}
               >
-                {/* Animated gradient on hover */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 0.1 }}
-                  className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} transition-opacity duration-500`}
-                />
-                
                 <div className="relative z-10">
                   {/* Icon with enhanced styling */}
                   <motion.div
                     whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
                     transition={{ duration: 0.5 }}
-                    className={`w-16 h-16 lg:w-20 lg:h-20 rounded-2xl lg:rounded-3xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-2xl`}
+                    className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl lg:rounded-3xl flex items-center justify-center mb-6"
                     style={{
-                      boxShadow: '0 10px 40px rgba(59, 130, 246, 0.3)',
+                      backgroundColor: feature.iconBg,
                     }}
                   >
                     <feature.icon className="w-8 h-8 lg:w-10 lg:h-10" style={{ color: '#fff' }} />
@@ -167,15 +159,6 @@ export default function FeaturesSection() {
                       <span className="text-xs font-bold" style={{ color: '#FACC15' }}>PREMIUM</span>
                     </motion.div>
                   )}
-                </div>
-
-                {/* Corner accent */}
-                <div className="absolute top-0 right-0 w-32 h-32 opacity-20">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className={`w-full h-full bg-gradient-to-br ${feature.gradient} blur-2xl rounded-full`}
-                  />
                 </div>
               </motion.div>
             </motion.div>
