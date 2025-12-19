@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, XCircle, Clock, Eye, Search } from "lucide-react";
+import { CheckCircle, XCircle, Clock, Eye, Search, Star } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -52,6 +52,14 @@ export default function VendorApplicationsTable() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vendorApplications'] });
       setSelectedApplication(null);
+    },
+  });
+
+  const toggleFeaturedMutation = useMutation({
+    mutationFn: ({ appId, featured }) => 
+      base44.entities.VendorApplication.update(appId, { featured }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vendorApplications'] });
     },
   });
 
@@ -113,6 +121,7 @@ export default function VendorApplicationsTable() {
                 <TableHead style={{ color: '#B6C4E0' }}>Category</TableHead>
                 <TableHead style={{ color: '#B6C4E0' }}>Province</TableHead>
                 <TableHead style={{ color: '#B6C4E0' }}>Status</TableHead>
+                <TableHead style={{ color: '#B6C4E0' }}>Featured</TableHead>
                 <TableHead style={{ color: '#B6C4E0' }}>Date</TableHead>
                 <TableHead style={{ color: '#B6C4E0' }}>Actions</TableHead>
               </TableRow>
@@ -133,6 +142,20 @@ export default function VendorApplicationsTable() {
                         <StatusIcon className="w-3 h-3 mr-1" />
                         {app.status}
                       </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {app.status === 'approved' && (
+                        <Button
+                          size="sm"
+                          variant={app.featured ? "default" : "outline"}
+                          onClick={() => toggleFeaturedMutation.mutate({ appId: app.id, featured: !app.featured })}
+                          disabled={toggleFeaturedMutation.isPending}
+                          className={app.featured ? 'bg-[#D8A11F] hover:bg-[#C2941B]' : ''}
+                        >
+                          <Star className="w-3 h-3 mr-1" fill={app.featured ? 'currentColor' : 'none'} />
+                          {app.featured ? 'Featured' : 'Feature'}
+                        </Button>
+                      )}
                     </TableCell>
                     <TableCell style={{ color: '#B6C4E0' }}>
                       {new Date(app.created_date).toLocaleDateString()}
