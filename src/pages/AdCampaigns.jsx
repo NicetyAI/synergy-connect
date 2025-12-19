@@ -8,10 +8,13 @@ import CampaignList from "@/components/adcampaigns/CampaignList";
 import AnalyticsDashboard from "@/components/adcampaigns/AnalyticsDashboard";
 import PerformanceCards from "@/components/adcampaigns/PerformanceCards";
 import ExpiringAdsNotice from "@/components/adcampaigns/ExpiringAdsNotice";
+import AdvertiseBanner from "@/components/vendors/AdvertiseBanner";
+import AdvertiseApplicationDialog from "@/components/vendors/AdvertiseApplicationDialog";
 
 export default function AdCampaigns() {
   const [currentUser, setCurrentUser] = useState(null);
   const [vendorApp, setVendorApp] = useState(null);
+  const [isAdvertiseDialogOpen, setIsAdvertiseDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -90,6 +93,15 @@ export default function AdCampaigns() {
               Monitor performance, manage campaigns, and optimize your advertising strategy
             </p>
           </div>
+
+          {/* Apply to Advertise Banner */}
+          <AdvertiseBanner onApplyClick={() => setIsAdvertiseDialogOpen(true)} />
+
+          {/* Advertise Application Dialog */}
+          <AdvertiseApplicationDialog 
+            open={isAdvertiseDialogOpen} 
+            onOpenChange={setIsAdvertiseDialogOpen}
+          />
 
           {/* Expiring Ads Notice */}
           <ExpiringAdsNotice campaigns={activeCampaigns} />

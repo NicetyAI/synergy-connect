@@ -8,22 +8,22 @@ export default function AdvertiseBanner({ onApplyClick }) {
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="glass-card p-8 mb-8"
-      style={{ background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(79, 70, 229, 0.1) 100%)', border: '1px solid rgba(99, 102, 241, 0.3)' }}
+      className="p-8 mb-8 rounded-2xl"
+      style={{ background: '#fff', border: '1px solid #000' }}
     >
       <div className="flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-start gap-4">
-          <div className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#6366F1' }}>
+          <div className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#D8A11F' }}>
             <Megaphone className="w-7 h-7" style={{ color: '#fff' }} />
           </div>
           <div>
-            <h3 className="text-xl font-bold mb-2" style={{ color: '#E5EDFF' }}>
+            <h3 className="text-xl font-bold mb-2" style={{ color: '#000' }}>
               Apply to Advertise
             </h3>
-            <p className="text-sm mb-2" style={{ color: '#A5B4FC' }}>
+            <p className="text-sm mb-2" style={{ color: '#D8A11F' }}>
               Promote your business to our community
             </p>
-            <p className="text-sm" style={{ color: '#B6C4E0' }}>
+            <p className="text-sm" style={{ color: '#666' }}>
               Already a vendor? Take your visibility to the next level with featured advertising placements and reach more potential clients.
             </p>
           </div>
@@ -31,7 +31,7 @@ export default function AdvertiseBanner({ onApplyClick }) {
         <Button 
           onClick={onApplyClick}
           className="rounded-xl px-8 py-6 text-base font-semibold transition-all duration-300 hover:scale-105 flex items-center gap-2 whitespace-nowrap" 
-          style={{ background: '#6366F1', color: '#fff' }}
+          style={{ background: '#D8A11F', color: '#fff' }}
         >
           <Sparkles className="w-5 h-5" />
           Apply to Advertise

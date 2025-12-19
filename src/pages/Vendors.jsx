@@ -6,9 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Store, Search, Filter } from "lucide-react";
 import VendorCard from "@/components/vendors/VendorCard";
 import BecomeVendorBanner from "@/components/vendors/BecomeVendorBanner";
-import AdvertiseBanner from "@/components/vendors/AdvertiseBanner";
 import VendorApplicationDialog from "@/components/vendors/VendorApplicationDialog";
-import AdvertiseApplicationDialog from "@/components/vendors/AdvertiseApplicationDialog";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 
@@ -43,7 +41,6 @@ export default function Vendors() {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [selectedProvince, setSelectedProvince] = useState("All Provinces");
   const [isApplicationDialogOpen, setIsApplicationDialogOpen] = useState(false);
-  const [isAdvertiseDialogOpen, setIsAdvertiseDialogOpen] = useState(false);
 
   // Fetch approved vendors from database
   const { data: vendorsData = [], isLoading } = useQuery({
@@ -81,17 +78,17 @@ export default function Vendors() {
       <Sidebar />
 
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto" style={{ minHeight: 'calc(100vh - 73px)' }}>
+      <main className="flex-1 p-8 overflow-y-auto" style={{ minHeight: 'calc(100vh - 73px)', background: '#F2F1F5' }}>
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="mb-8 p-8 rounded-2xl" style={{ background: 'linear-gradient(135deg, #EA580C 0%, #C2410C 100%)' }}>
+          <div className="mb-8 p-8 rounded-2xl" style={{ background: '#D8A11F' }}>
             <div className="flex items-center gap-3 mb-3">
               <Store className="w-8 h-8" style={{ color: '#fff' }} />
               <h1 className="text-3xl md:text-4xl font-bold" style={{ color: '#fff' }}>
                 Vendor Directory
               </h1>
             </div>
-            <p style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
+            <p style={{ color: '#fff' }}>
               Explore our trusted network of approved vendors
             </p>
           </div>
@@ -99,40 +96,31 @@ export default function Vendors() {
           {/* Become a Vendor Banner */}
           <BecomeVendorBanner onApplyClick={() => setIsApplicationDialogOpen(true)} />
 
-          {/* Apply to Advertise Banner */}
-          <AdvertiseBanner onApplyClick={() => setIsAdvertiseDialogOpen(true)} />
-
           {/* Vendor Application Dialog */}
           <VendorApplicationDialog 
             open={isApplicationDialogOpen} 
             onOpenChange={setIsApplicationDialogOpen}
           />
 
-          {/* Advertise Application Dialog */}
-          <AdvertiseApplicationDialog 
-            open={isAdvertiseDialogOpen} 
-            onOpenChange={setIsAdvertiseDialogOpen}
-          />
-
           {/* Featured Vendors Section */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-4" style={{ color: '#E5EDFF' }}>
+            <h2 className="text-2xl font-bold mb-4" style={{ color: '#000' }}>
               Featured Vendors
             </h2>
 
             {/* Search and Filters */}
-            <div className="glass-card p-6 mb-6">
+            <div className="p-6 mb-6 rounded-2xl" style={{ background: '#fff', border: '1px solid #000' }}>
               <div className="grid md:grid-cols-4 gap-4">
                 {/* Search */}
                 <div className="md:col-span-1">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#7A8BA6' }} />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#666' }} />
                     <Input
                       placeholder="Search vendors..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 glass-input"
-                      style={{ color: '#E5EDFF' }}
+                      className="pl-10 rounded-xl"
+                      style={{ color: '#000', background: '#F9FAFB', border: '1px solid #000' }}
                     />
                   </div>
                 </div>
@@ -140,7 +128,7 @@ export default function Vendors() {
                 {/* Category Filter */}
                 <div className="md:col-span-1">
                   <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger className="glass-input" style={{ color: '#E5EDFF' }}>
+                    <SelectTrigger className="rounded-xl" style={{ color: '#000', background: '#F9FAFB', border: '1px solid #000' }}>
                       <Filter className="w-4 h-4 mr-2" />
                       <SelectValue />
                     </SelectTrigger>
@@ -157,7 +145,7 @@ export default function Vendors() {
                 {/* Province Filter */}
                 <div className="md:col-span-1">
                   <Select value={selectedProvince} onValueChange={setSelectedProvince}>
-                    <SelectTrigger className="glass-input" style={{ color: '#E5EDFF' }}>
+                    <SelectTrigger className="rounded-xl" style={{ color: '#000', background: '#F9FAFB', border: '1px solid #000' }}>
                       <Filter className="w-4 h-4 mr-2" />
                       <SelectValue />
                     </SelectTrigger>
@@ -176,7 +164,7 @@ export default function Vendors() {
                   <Button
                     onClick={clearFilters}
                     className="w-full rounded-lg"
-                    style={{ background: 'rgba(255, 255, 255, 0.1)', color: '#B6C4E0', border: '1px solid rgba(255, 255, 255, 0.18)' }}
+                    style={{ background: '#fff', color: '#000', border: '1px solid #000' }}
                   >
                     Clear Filters
                   </Button>
@@ -186,8 +174,8 @@ export default function Vendors() {
 
             {/* Vendors Grid */}
             {isLoading ? (
-              <div className="text-center py-16 glass-card">
-                <p className="text-lg" style={{ color: '#7A8BA6' }}>
+              <div className="text-center py-16 rounded-2xl" style={{ background: '#fff', border: '1px solid #000' }}>
+                <p className="text-lg" style={{ color: '#666' }}>
                   Loading vendors...
                 </p>
               </div>
@@ -198,8 +186,8 @@ export default function Vendors() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16 glass-card">
-                <p className="text-lg" style={{ color: '#7A8BA6' }}>
+              <div className="text-center py-16 rounded-2xl" style={{ background: '#fff', border: '1px solid #000' }}>
+                <p className="text-lg" style={{ color: '#666' }}>
                   {vendorsData.length === 0 ? 'No approved vendors yet' : 'No vendors found matching your search criteria'}
                 </p>
               </div>
