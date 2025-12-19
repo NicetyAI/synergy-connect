@@ -39,19 +39,20 @@ Deno.serve(async (req) => {
     
     if (data && data.Results) {
       data.Results.slice(0, 20).forEach((property) => {
+        const price = property.Property?.Price;
+        const partners = Math.floor(Math.random() * 20) + 1;
+        
         opportunities.push({
           id: property.Id || `re-${Date.now()}-${Math.random()}`,
           type: 'Real Estate',
-          title: property.Property?.Address?.AddressText || 'Investment Property',
-          investment: property.Property?.Price 
-            ? `$${property.Property.Price.toLocaleString()}` 
+          title: `Single Family - ${property.Property?.Address?.City || 'Canada'} (MLS# ${property.MlsNumber || 'N/A'})`,
+          investment: price 
+            ? `$${price.toLocaleString()} - $${price.toLocaleString()}` 
             : 'Contact for pricing',
-          description: `${property.Property?.Building?.Type || 'Property'} - ${property.Property?.Land?.SizeTotal || 'N/A'} sq ft. ${property.Property?.Building?.Bedrooms ? `${property.Property.Building.Bedrooms} beds, ` : ''}${property.Property?.Building?.BathroomTotal ? `${property.Property.Building.BathroomTotal} baths` : ''}`,
-          location: `${property.Property?.Address?.City || ''}, ${property.Property?.Address?.Province || 'Canada'}`.trim(),
-          image: property.Property?.Photo?.[0]?.HighResPath || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa',
-          partners: Math.floor(Math.random() * 10) + 5,
-          posted: new Date(property.InsertedDateUTC || Date.now()).toLocaleDateString(),
-          featured: property.Property?.Price > 1000000,
+          description: `${property.Property?.Building?.BathroomTotal || '1'} bathroom, ${property.Property?.Building?.Type || 'Single Family'}, at ${property.Property?.Address?.AddressText || 'N/A'}|${property.Property?.Address?.City || 'N/A'}, ${property.Property?.Address?.Province || 'Canada'} ${property.Property?.Address?.Zip || ''}, wit...`,
+          image: property.Property?.Photo?.[0]?.HighResPath || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=600&fit=crop',
+          postedDate: new Date(property.InsertedDateUTC || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+          partners: `1/${partners} partners`,
         });
       });
     }
