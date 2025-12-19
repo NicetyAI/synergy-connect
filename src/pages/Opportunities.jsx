@@ -152,7 +152,22 @@ export default function Opportunities() {
     enabled: !!currentUser,
   });
 
-  const filteredOpportunities = opportunitiesData.filter((opp) => {
+  const { data: realEstateData, isLoading: isLoadingRealEstate } = useQuery({
+    queryKey: ['realEstateOpportunities'],
+    queryFn: async () => {
+      const response = await base44.functions.invoke('fetchRealEstateOpportunities', {});
+      return response.data;
+    },
+    enabled: !!currentUser,
+  });
+
+  // Combine static data with real estate API data
+  const allOpportunities = [
+    ...opportunitiesData,
+    ...(realEstateData?.opportunities || [])
+  ];
+
+  const filteredOpportunities = allOpportunities.filter((opp) => {
     const matchesSearch = opp.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          opp.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = category === "all" || opp.type === category;
@@ -242,6 +257,27 @@ export default function Opportunities() {
             </div>
           </div>
         </div>
+
+        {/* Real Estate Highlights */}
+        {isLoadingRealEstate ? (
+          <div className="text-center py-8 mb-8">
+            <p style={{ color: '#666' }}>Loading real estate opportunities...</p>
+          </div>
+        ) : realEstateData?.success && realEstateData.opportunities?.length > 0 && (
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <TrendingUp className="w-5 h-5" style={{ color: '#D8A11F' }} />
+              <h2 className="text-xl font-bold" style={{ color: '#000' }}>
+                Featured Real Estate Opportunities
+              </h2>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {realEstateData.opportunities.filter(opp => opp.featured).slice(0, 3).map((opp) => (
+                <OpportunityCard key={opp.id} opportunity={opp} index={0} />
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* AI-Matched Opportunities */}
         {isLoading ? (
