@@ -175,50 +175,50 @@ export default function Opportunities() {
       <Sidebar />
 
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto" style={{ minHeight: 'calc(100vh - 73px)' }}>
+      <main className="flex-1 p-8 overflow-y-auto" style={{ minHeight: 'calc(100vh - 73px)', background: '#F2F1F5' }}>
         <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl md:text-4xl font-bold" style={{ color: '#E5EDFF' }}>
+            <h1 className="text-3xl md:text-4xl font-bold" style={{ color: '#000' }}>
               Business Opportunities
             </h1>
-            <div className="px-3 py-1 rounded-full text-sm font-medium" style={{ background: 'rgba(124, 58, 237, 0.15)', color: '#7C3AED' }}>
+            <div className="px-3 py-1 rounded-full text-sm font-medium" style={{ background: '#D8A11F', color: '#fff' }}>
               AI-Matched
             </div>
           </div>
-          <p style={{ color: '#B6C4E0' }}>
+          <p style={{ color: '#666' }}>
             Discover opportunities matched to your profile, interests, and activity
           </p>
         </div>
 
         {/* Filters */}
-        <div className="glass-card p-6 mb-8">
+        <div className="p-6 mb-8 rounded-2xl" style={{ background: '#fff', border: '1px solid #000' }}>
           <div className="grid md:grid-cols-3 gap-4">
             {/* Search */}
             <div className="md:col-span-1">
-              <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+              <label className="block text-sm font-medium mb-2" style={{ color: '#000' }}>
                 Search
               </label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#7A8BA6' }} />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#666' }} />
                 <Input
                   placeholder="Search by title or description..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 glass-input"
-                  style={{ color: '#E5EDFF' }}
+                  className="pl-10 rounded-xl"
+                  style={{ color: '#000', background: '#F9FAFB', border: '1px solid #000' }}
                 />
               </div>
             </div>
 
             {/* Category */}
             <div className="md:col-span-1">
-              <label className="block text-sm font-medium mb-2" style={{ color: '#B6C4E0' }}>
+              <label className="block text-sm font-medium mb-2" style={{ color: '#000' }}>
                 Category
               </label>
               <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="glass-input" style={{ color: '#E5EDFF' }}>
+                <SelectTrigger className="rounded-xl" style={{ color: '#000', background: '#F9FAFB', border: '1px solid #000' }}>
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
@@ -235,7 +235,7 @@ export default function Opportunities() {
               <Button
                 onClick={clearFilters}
                 className="w-full rounded-lg"
-                style={{ background: 'rgba(255, 255, 255, 0.1)', color: '#B6C4E0', border: '1px solid rgba(255, 255, 255, 0.18)' }}
+                style={{ background: '#fff', color: '#000', border: '1px solid #000' }}
               >
                 Clear Filters
               </Button>
@@ -246,59 +246,59 @@ export default function Opportunities() {
         {/* AI-Matched Opportunities */}
         {isLoading ? (
           <div className="text-center py-12">
-            <p style={{ color: '#7A8BA6' }}>Analyzing opportunities for you...</p>
+            <p style={{ color: '#666' }}>Analyzing opportunities for you...</p>
           </div>
         ) : aiMatches?.success && aiMatches.opportunities?.length > 0 ? (
           <>
             {/* Top 3 Matches */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="w-5 h-5" style={{ color: '#7C3AED' }} />
-                <h2 className="text-xl font-bold" style={{ color: '#E5EDFF' }}>
+                <Sparkles className="w-5 h-5" style={{ color: '#D8A11F' }} />
+                <h2 className="text-xl font-bold" style={{ color: '#000' }}>
                   Your Top Matches
                 </h2>
               </div>
               <div className="grid grid-cols-1 gap-6">
                 {aiMatches.opportunities.slice(0, 3).map((opp) => (
-                  <div key={opp.id} className="glass-card glass-card-hover p-6">
+                  <div key={opp.id} className="p-6 rounded-2xl" style={{ background: '#fff', border: '1px solid #000' }}>
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2 flex-wrap">
-                          <h3 className="text-2xl font-bold" style={{ color: '#E5EDFF' }}>{opp.title}</h3>
+                          <h3 className="text-2xl font-bold" style={{ color: '#000' }}>{opp.title}</h3>
                           <div className="px-3 py-1 rounded-full text-sm font-bold" style={{ 
-                            background: opp.matchScore >= 80 ? 'rgba(34, 197, 94, 0.15)' : opp.matchScore >= 60 ? 'rgba(59, 130, 246, 0.15)' : 'rgba(245, 158, 11, 0.15)',
-                            color: opp.matchScore >= 80 ? '#22C55E' : opp.matchScore >= 60 ? '#3B82F6' : '#F59E0B'
+                            background: opp.matchScore >= 80 ? '#22C55E' : opp.matchScore >= 60 ? '#D8A11F' : '#F59E0B',
+                            color: '#fff'
                           }}>
                             {opp.matchScore}% Match
                           </div>
                         </div>
                         <div className="flex items-center gap-3 mb-3 flex-wrap">
-                          <span className="px-3 py-1 rounded-full text-sm" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#3B82F6' }}>
+                          <span className="px-3 py-1 rounded-full text-sm" style={{ background: '#D8A11F', color: '#fff' }}>
                             {opp.category}
                           </span>
-                          <span className="px-3 py-1 rounded-full text-sm" style={{ background: 'rgba(124, 58, 237, 0.15)', color: '#7C3AED' }}>
+                          <span className="px-3 py-1 rounded-full text-sm" style={{ background: '#666', color: '#fff' }}>
                             {opp.industry}
                           </span>
                         </div>
                       </div>
                     </div>
-                    <p className="mb-4" style={{ color: '#B6C4E0' }}>{opp.description}</p>
+                    <p className="mb-4" style={{ color: '#666' }}>{opp.description}</p>
                     
                     {opp.matchExplanation && (
-                      <div className="mb-4 p-4 rounded-lg" style={{ background: 'rgba(124, 58, 237, 0.1)', border: '1px solid rgba(124, 58, 237, 0.2)' }}>
+                      <div className="mb-4 p-4 rounded-lg" style={{ background: '#FEF3C7', border: '1px solid #D8A11F' }}>
                         <div className="flex items-start gap-2">
-                          <Sparkles className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#7C3AED' }} />
-                          <p className="text-sm" style={{ color: '#B6C4E0' }}>{opp.matchExplanation}</p>
+                          <Sparkles className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#D8A11F' }} />
+                          <p className="text-sm" style={{ color: '#000' }}>{opp.matchExplanation}</p>
                         </div>
                       </div>
                     )}
 
                     {opp.matchReasons && opp.matchReasons.length > 0 && (
                       <div>
-                        <p className="text-sm font-semibold mb-2" style={{ color: '#E5EDFF' }}>Why this matches you:</p>
+                        <p className="text-sm font-semibold mb-2" style={{ color: '#000' }}>Why this matches you:</p>
                         <ul className="space-y-1">
                           {opp.matchReasons.map((reason, idx) => (
-                            <li key={idx} className="text-sm flex items-start gap-2" style={{ color: '#7A8BA6' }}>
+                            <li key={idx} className="text-sm flex items-start gap-2" style={{ color: '#666' }}>
                               <TrendingUp className="w-3 h-3 mt-1 flex-shrink-0" style={{ color: '#22C55E' }} />
                               {reason}
                             </li>
@@ -313,30 +313,30 @@ export default function Opportunities() {
 
             {/* All Opportunities with Scores */}
             <div>
-              <h2 className="text-xl font-bold mb-4" style={{ color: '#E5EDFF' }}>
+              <h2 className="text-xl font-bold mb-4" style={{ color: '#000' }}>
                 All Opportunities (Sorted by Match Score)
               </h2>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {aiMatches.opportunities.map((opp) => (
-                  <div key={opp.id} className="glass-card glass-card-hover p-6">
+                  <div key={opp.id} className="p-6 rounded-2xl" style={{ background: '#fff', border: '1px solid #000' }}>
                     <div className="flex items-start justify-between mb-3">
-                      <h3 className="text-lg font-bold flex-1" style={{ color: '#E5EDFF' }}>{opp.title}</h3>
+                      <h3 className="text-lg font-bold flex-1" style={{ color: '#000' }}>{opp.title}</h3>
                       <div className="px-2 py-1 rounded-full text-xs font-bold ml-2 flex-shrink-0" style={{ 
-                        background: opp.matchScore >= 80 ? 'rgba(34, 197, 94, 0.15)' : opp.matchScore >= 60 ? 'rgba(59, 130, 246, 0.15)' : 'rgba(245, 158, 11, 0.15)',
-                        color: opp.matchScore >= 80 ? '#22C55E' : opp.matchScore >= 60 ? '#3B82F6' : '#F59E0B'
+                        background: opp.matchScore >= 80 ? '#22C55E' : opp.matchScore >= 60 ? '#D8A11F' : '#F59E0B',
+                        color: '#fff'
                       }}>
                         {opp.matchScore}%
                       </div>
                     </div>
                     <div className="flex gap-2 mb-3 flex-wrap">
-                      <span className="px-2 py-1 rounded-full text-xs" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#3B82F6' }}>
+                      <span className="px-2 py-1 rounded-full text-xs" style={{ background: '#D8A11F', color: '#fff' }}>
                         {opp.category}
                       </span>
-                      <span className="px-2 py-1 rounded-full text-xs" style={{ background: 'rgba(124, 58, 237, 0.15)', color: '#7C3AED' }}>
+                      <span className="px-2 py-1 rounded-full text-xs" style={{ background: '#666', color: '#fff' }}>
                         {opp.industry}
                       </span>
                     </div>
-                    <p className="text-sm" style={{ color: '#B6C4E0' }}>{opp.description}</p>
+                    <p className="text-sm" style={{ color: '#666' }}>{opp.description}</p>
                   </div>
                 ))}
               </div>
@@ -353,7 +353,7 @@ export default function Opportunities() {
 
             {filteredOpportunities.length === 0 && (
               <div className="text-center py-16">
-                <p className="text-lg" style={{ color: '#7A8BA6' }}>
+                <p className="text-lg" style={{ color: '#666' }}>
                   No opportunities found matching your filters
                 </p>
               </div>
