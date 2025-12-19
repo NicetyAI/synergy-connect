@@ -32,7 +32,20 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
   });
 
   const createOpportunityMutation = useMutation({
-    mutationFn: (data) => base44.entities.Opportunity.create(data),
+    mutationFn: async (data) => {
+      const opportunity = await base44.entities.Opportunity.create(data);
+      
+      // Trigger opportunity matching notifications
+      try {
+        await base44.functions.invoke('checkOpportunityMatches', {
+          opportunityId: opportunity.id
+        });
+      } catch (error) {
+        console.error('Failed to check opportunity matches:', error);
+      }
+      
+      return opportunity;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['opportunities'] });
       resetForm();
