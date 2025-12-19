@@ -33,6 +33,7 @@ export default function News() {
       const response = await base44.functions.invoke('fetchNews', {});
       return response.data;
     },
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
   });
 
   const articles = newsData?.articles || [];
@@ -244,8 +245,25 @@ export default function News() {
 
             {/* Articles Grid */}
             {isLoading ? (
-              <div className="text-center py-12">
-                <p className="text-lg" style={{ color: '#000' }}>Loading news...</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[...Array(9)].map((_, i) => (
+                  <div key={i} className="rounded-2xl overflow-hidden animate-pulse" style={{ background: '#fff', border: '1px solid #000' }}>
+                    <div className="w-full h-48 bg-gray-300"></div>
+                    <div className="p-6">
+                      <div className="flex gap-2 mb-3">
+                        <div className="h-6 w-20 bg-gray-300 rounded-full"></div>
+                        <div className="h-6 w-16 bg-gray-300 rounded-full"></div>
+                      </div>
+                      <div className="h-6 bg-gray-300 rounded mb-2"></div>
+                      <div className="h-6 bg-gray-300 rounded mb-2 w-3/4"></div>
+                      <div className="space-y-2 mt-4">
+                        <div className="h-4 bg-gray-300 rounded"></div>
+                        <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+                        <div className="h-4 bg-gray-300 rounded w-4/6"></div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : filteredArticles.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
