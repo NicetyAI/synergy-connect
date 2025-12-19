@@ -14,9 +14,17 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'API key not configured' }, { status: 500 });
     }
 
-    // Coordinates for central Canada (approximate center)
+    // Major Canadian cities coordinates to try
+    const locations = [
+      { name: 'Toronto', lat: 43.65, lon: -79.38 },
+      { name: 'Vancouver', lat: 49.28, lon: -123.12 },
+      { name: 'Calgary', lat: 51.05, lon: -114.07 },
+    ];
+
+    // Try first location (Toronto)
+    const location = locations[0];
     const response = await fetch(
-      'https://realty-in-ca1.p.rapidapi.com/properties/get-statistics?Longitude=-95.0&Latitude=60.0&CultureId=1',
+      `https://realty-in-ca1.p.rapidapi.com/properties/list?LatitudeMax=${location.lat + 0.5}&LatitudeMin=${location.lat - 0.5}&LongitudeMax=${location.lon + 0.5}&LongitudeMin=${location.lon - 0.5}&CurrentPage=1&RecordsPerPage=20&SortOrder=A&SortBy=1&CultureId=1&ApplicationId=1`,
       {
         headers: {
           'x-rapidapi-host': 'realty-in-ca1.p.rapidapi.com',
