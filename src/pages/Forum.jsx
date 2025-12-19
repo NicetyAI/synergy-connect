@@ -116,7 +116,7 @@ export default function Forum() {
                 {categories.length} categories available
               </p>
             </div>
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-4 gap-4">
               {categories.map((category) => (
                 <CategoryCard
                   key={category.id}
