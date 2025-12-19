@@ -2,12 +2,19 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { DollarSign, Calendar, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 
 export default function OpportunityCard({ opportunity, index }) {
+  const navigate = useNavigate();
   const typeColors = {
     "Real Estate": "bg-blue-500/20 text-blue-400 border-blue-500/30",
     "Franchise": "bg-purple-500/20 text-purple-400 border-purple-500/30",
     "Business": "bg-green-500/20 text-green-400 border-green-500/30",
+  };
+
+  const handleCardClick = () => {
+    navigate(createPageUrl('OpportunityDetail'), { state: { opportunity } });
   };
 
   return (
@@ -15,7 +22,8 @@ export default function OpportunityCard({ opportunity, index }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className="rounded-2xl overflow-hidden transition-all duration-300 hover:transform hover:-translate-y-1"
+      onClick={handleCardClick}
+      className="rounded-2xl overflow-hidden transition-all duration-300 hover:transform hover:-translate-y-1 cursor-pointer"
       style={{
         background: '#fff',
         border: '1px solid #000',
@@ -67,6 +75,10 @@ export default function OpportunityCard({ opportunity, index }) {
           </div>
           
           <Button 
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCardClick();
+            }}
             className="rounded-lg px-4 py-2 text-sm font-medium transition-all duration-300 hover:scale-105" 
             style={{ background: '#D8A11F', color: '#fff' }}
           >
