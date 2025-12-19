@@ -32,7 +32,9 @@ export default function Settings() {
       post_mentions: true,
       post_comments: true,
       post_likes: false,
-    }
+      opportunity_match: true,
+    },
+    email_notifications: true
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -70,7 +72,9 @@ export default function Settings() {
           post_mentions: true,
           post_comments: true,
           post_likes: false,
-        }
+          opportunity_match: true,
+        },
+        email_notifications: user.email_notifications !== false
       });
     });
   }, []);
@@ -314,6 +318,29 @@ export default function Settings() {
             </div>
 
             <div className="space-y-4">
+              {/* Email Notifications Master Toggle */}
+              <div 
+                className="flex items-start justify-between p-4 rounded-xl transition-all"
+                style={{ background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.3)' }}
+              >
+                <div className="flex-1">
+                  <p className="font-semibold mb-1" style={{ color: '#E5EDFF' }}>📧 Email Notifications</p>
+                  <p className="text-sm" style={{ color: '#B6C4E0' }}>Receive notifications via email in addition to in-app notifications</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer ml-4">
+                  <input
+                    type="checkbox"
+                    checked={formData.email_notifications ?? true}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      email_notifications: e.target.checked
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all" style={{ background: formData.email_notifications ? '#3B82F6' : '#4B5563' }}></div>
+                </label>
+              </div>
+
               {[
                 { key: 'connection_requests', label: 'Connection Requests', description: 'Get notified when someone sends you a connection request' },
                 { key: 'connection_accepted', label: 'Connection Accepted', description: 'Get notified when someone accepts your connection request' },
@@ -321,6 +348,7 @@ export default function Settings() {
                 { key: 'post_mentions', label: 'Post Mentions', description: 'Get notified when someone mentions you in a post' },
                 { key: 'post_comments', label: 'Post Comments', description: 'Get notified when someone comments on your posts' },
                 { key: 'post_likes', label: 'Post Likes', description: 'Get notified when someone likes your posts' },
+                { key: 'opportunity_match', label: 'Opportunity Matches', description: 'Get notified when new opportunities match your interests' },
               ].map((pref) => (
                 <div 
                   key={pref.key}

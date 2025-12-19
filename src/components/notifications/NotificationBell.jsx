@@ -17,6 +17,7 @@ const notificationIcons = {
   post_mention: AtSign,
   post_comment: MessageSquare,
   post_like: Heart,
+  opportunity_match: ThumbsUp,
 };
 
 const notificationColors = {
@@ -26,6 +27,7 @@ const notificationColors = {
   post_mention: '#7C3AED',
   post_comment: '#06B6D4',
   post_like: '#EF4444',
+  opportunity_match: '#D8A11F',
 };
 
 export default function NotificationBell({ currentUser }) {
@@ -36,7 +38,7 @@ export default function NotificationBell({ currentUser }) {
     queryKey: ['notifications', currentUser?.email],
     queryFn: () => base44.entities.Notification.filter({ recipient_email: currentUser.email }, '-created_date'),
     enabled: !!currentUser,
-    refetchInterval: 30000, // Refetch every 30 seconds
+    refetchInterval: 10000, // Refetch every 10 seconds for real-time feel
   });
 
   const unreadCount = notifications.filter(n => !n.read).length;
