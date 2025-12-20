@@ -160,9 +160,9 @@ export default function OpportunitiesManagementTab() {
                     className="hover:bg-gray-50 transition-colors"
                   >
                     <td className="px-6 py-4">
-                      {opp.images && opp.images.length > 0 ? (
+                      {opp.image_url ? (
                         <img
-                          src={opp.images[0]}
+                          src={opp.image_url}
                           alt={opp.title}
                           className="w-16 h-16 rounded-lg object-cover"
                           style={{ border: '1px solid #ddd' }}
@@ -184,15 +184,15 @@ export default function OpportunitiesManagementTab() {
                       </p>
                     </td>
                     <td className="px-6 py-4">
-                      {opp.source_link ? (
+                      {opp.source_url ? (
                         <a 
-                          href={opp.source_link} 
+                          href={opp.source_url} 
                           target="_blank" 
                           rel="noopener noreferrer"
                           className="text-sm hover:underline"
                           style={{ color: '#3B82F6' }}
                         >
-                          {opp.source_link.substring(0, 20)}...
+                          {opp.source_url.substring(0, 20)}...
                         </a>
                       ) : (
                         <span className="text-sm" style={{ color: '#666' }}>N/A</span>
@@ -205,16 +205,16 @@ export default function OpportunitiesManagementTab() {
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-sm font-medium" style={{ color: '#000' }}>
-                        {opp.min_investment && opp.max_investment 
-                          ? `$${opp.min_investment.toLocaleString()} - $${opp.max_investment.toLocaleString()}`
-                          : opp.min_investment 
-                          ? `$${opp.min_investment.toLocaleString()}`
+                        {opp.investment_min && opp.investment_max 
+                          ? `$${opp.investment_min.toLocaleString()} - $${opp.investment_max.toLocaleString()}`
+                          : opp.investment_min 
+                          ? `$${opp.investment_min.toLocaleString()}`
                           : 'N/A'}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-sm" style={{ color: '#000' }}>
-                        {opp.created_by || 'N/A'}
+                        {opp.creator_email || 'N/A'}
                       </span>
                     </td>
                     <td className="px-6 py-4">
@@ -276,17 +276,14 @@ export default function OpportunitiesManagementTab() {
           </DialogHeader>
           {selectedOpportunity && (
             <div className="space-y-4 py-4">
-              {selectedOpportunity.images && selectedOpportunity.images.length > 0 && (
-                <div className="grid grid-cols-2 gap-2">
-                  {selectedOpportunity.images.slice(0, 4).map((img, idx) => (
-                    <img
-                      key={idx}
-                      src={img}
-                      alt={`${selectedOpportunity.title} ${idx + 1}`}
-                      className="w-full h-40 rounded-lg object-cover"
-                      style={{ border: '1px solid #000' }}
-                    />
-                  ))}
+              {selectedOpportunity.image_url && (
+                <div>
+                  <img
+                    src={selectedOpportunity.image_url}
+                    alt={selectedOpportunity.title}
+                    className="w-full h-60 rounded-lg object-cover"
+                    style={{ border: '1px solid #000' }}
+                  />
                 </div>
               )}
               <div>
@@ -312,39 +309,33 @@ export default function OpportunitiesManagementTab() {
                   </span>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-semibold mb-1 block" style={{ color: '#000' }}>Investment Range</label>
-                  <p style={{ color: '#333' }}>
-                    {selectedOpportunity.min_investment && selectedOpportunity.max_investment 
-                      ? `$${selectedOpportunity.min_investment.toLocaleString()} - $${selectedOpportunity.max_investment.toLocaleString()}`
-                      : selectedOpportunity.min_investment 
-                      ? `$${selectedOpportunity.min_investment.toLocaleString()}`
-                      : 'N/A'}
-                  </p>
-                </div>
-                <div>
-                  <label className="text-sm font-semibold mb-1 block" style={{ color: '#000' }}>Location</label>
-                  <p style={{ color: '#333' }}>{selectedOpportunity.location || 'N/A'}</p>
-                </div>
+              <div>
+                <label className="text-sm font-semibold mb-1 block" style={{ color: '#000' }}>Investment Range</label>
+                <p style={{ color: '#333' }}>
+                  {selectedOpportunity.investment_min && selectedOpportunity.investment_max 
+                    ? `$${selectedOpportunity.investment_min.toLocaleString()} - $${selectedOpportunity.investment_max.toLocaleString()}`
+                    : selectedOpportunity.investment_min 
+                    ? `$${selectedOpportunity.investment_min.toLocaleString()}`
+                    : 'N/A'}
+                </p>
               </div>
-              {selectedOpportunity.source_link && (
+              {selectedOpportunity.source_url && (
                 <div>
                   <label className="text-sm font-semibold mb-1 block" style={{ color: '#000' }}>Source Link</label>
                   <a 
-                    href={selectedOpportunity.source_link} 
+                    href={selectedOpportunity.source_url} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="hover:underline"
                     style={{ color: '#3B82F6' }}
                   >
-                    {selectedOpportunity.source_link}
+                    {selectedOpportunity.source_url}
                   </a>
                 </div>
               )}
               <div>
                 <label className="text-sm font-semibold mb-1 block" style={{ color: '#000' }}>Created By</label>
-                <p style={{ color: '#333' }}>{selectedOpportunity.created_by || 'N/A'}</p>
+                <p style={{ color: '#333' }}>{selectedOpportunity.creator_email || 'N/A'}</p>
               </div>
             </div>
           )}
