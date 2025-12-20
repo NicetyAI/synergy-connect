@@ -65,7 +65,7 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <aside className="w-64 h-screen sticky top-0 p-6 overflow-y-auto flex flex-col" style={{ 
+    <aside className="hidden lg:flex w-64 h-screen sticky top-0 p-6 overflow-y-auto flex-col" style={{ 
       background: '#192234',
       backdropFilter: 'blur(10px) saturate(180%)',
       WebkitBackdropFilter: 'blur(10px) saturate(180%)',

@@ -302,19 +302,19 @@ export default function Opportunities() {
       <Sidebar />
 
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto" style={{ minHeight: 'calc(100vh - 73px)', background: '#F2F1F5' }}>
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto" style={{ minHeight: 'calc(100vh - 73px)', background: '#F2F1F5' }}>
         <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl md:text-4xl font-bold" style={{ color: '#000' }}>
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3 mb-2 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold" style={{ color: '#000' }}>
               Business Opportunities
             </h1>
-            <div className="px-3 py-1 rounded-full text-sm font-medium" style={{ background: '#D8A11F', color: '#fff' }}>
+            <div className="px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium" style={{ background: '#D8A11F', color: '#fff' }}>
               AI-Matched
             </div>
           </div>
-          <p style={{ color: '#666' }}>
+          <p className="text-sm sm:text-base" style={{ color: '#666' }}>
             Discover opportunities matched to your profile, interests, and activity
           </p>
         </div>
@@ -342,20 +342,20 @@ export default function Opportunities() {
         ) : aiMatches?.success && aiMatches.opportunities?.length > 0 ? (
           <>
             {/* Top 2 Matches */}
-            <div className="mb-8">
+            <div className="mb-6 sm:mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="w-5 h-5" style={{ color: '#D8A11F' }} />
-                <h2 className="text-xl font-bold" style={{ color: '#000' }}>
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: '#D8A11F' }} />
+                <h2 className="text-lg sm:text-xl font-bold" style={{ color: '#000' }}>
                   Your Top Matches
                 </h2>
               </div>
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
                 {aiMatches.opportunities.slice(0, 2).map((opp) => (
-                  <div key={opp.id} className="p-6 rounded-2xl" style={{ background: '#fff', border: '1px solid #000' }}>
+                  <div key={opp.id} className="p-4 sm:p-6 rounded-2xl" style={{ background: '#fff', border: '1px solid #000' }}>
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2 flex-wrap">
-                          <h3 className="text-2xl font-bold" style={{ color: '#000' }}>{opp.title}</h3>
+                        <div className="flex items-center gap-2 sm:gap-3 mb-2 flex-wrap">
+                          <h3 className="text-lg sm:text-xl md:text-2xl font-bold" style={{ color: '#000' }}>{opp.title}</h3>
                           <div className="px-3 py-1 rounded-full text-sm font-bold" style={{ 
                             background: opp.matchScore >= 80 ? '#22C55E' : opp.matchScore >= 60 ? '#D8A11F' : '#F59E0B',
                             color: '#fff'
@@ -373,7 +373,7 @@ export default function Opportunities() {
                         </div>
                       </div>
                     </div>
-                    <p className="mb-4" style={{ color: '#666' }}>{opp.description}</p>
+                    <p className="mb-4 text-sm sm:text-base" style={{ color: '#666' }}>{opp.description}</p>
                     
                     {opp.matchExplanation && (
                       <div className="mb-4 p-4 rounded-lg" style={{ background: '#FEF3C7', border: '1px solid #D8A11F' }}>
@@ -443,17 +443,17 @@ export default function Opportunities() {
             {/* Filtered Opportunities with Pagination */}
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold" style={{ color: '#000' }}>
+                <h2 className="text-lg sm:text-xl font-bold" style={{ color: '#000' }}>
                   All Opportunities
-                  <span className="ml-2 text-sm font-normal" style={{ color: '#666' }}>
-                    ({filteredOpportunities.length} results)
+                  <span className="ml-2 text-xs sm:text-sm font-normal" style={{ color: '#666' }}>
+                    ({filteredOpportunities.length})
                   </span>
                 </h2>
               </div>
 
               {paginatedOpportunities.length > 0 ? (
                 <>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     {paginatedOpportunities.map((opportunity, index) => (
                       <OpportunityCard 
                         key={`${opportunity.source}-${opportunity.id}`} 

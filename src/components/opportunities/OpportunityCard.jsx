@@ -23,7 +23,7 @@ export default function OpportunityCard({ opportunity, index }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
       onClick={handleCardClick}
-      className="rounded-2xl overflow-hidden transition-all duration-300 hover:transform hover:-translate-y-1 cursor-pointer"
+      className="rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer touch-target"
       style={{
         background: '#fff',
         border: '1px solid #000',
@@ -31,7 +31,7 @@ export default function OpportunityCard({ opportunity, index }) {
       }}
     >
       {/* Image */}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-40 sm:h-48 overflow-hidden">
         <img
           src={opportunity.image}
           alt={opportunity.title}
@@ -43,32 +43,33 @@ export default function OpportunityCard({ opportunity, index }) {
       </div>
 
       {/* Content */}
-      <div className="p-5">
-        <h3 className="text-lg font-semibold mb-3 line-clamp-2" style={{ color: '#000' }}>
+      <div className="p-4 sm:p-5">
+        <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 line-clamp-2" style={{ color: '#000' }}>
           {opportunity.title}
         </h3>
 
         {/* Investment */}
-        <div className="flex items-center gap-2 mb-3">
-          <DollarSign className="w-5 h-5" style={{ color: '#22C55E' }} />
-          <span className="text-sm font-semibold" style={{ color: '#22C55E' }}>
-            Investment: {opportunity.investment}
+        <div className="flex items-center gap-2 mb-2 sm:mb-3">
+          <DollarSign className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: '#22C55E' }} />
+          <span className="text-xs sm:text-sm font-semibold" style={{ color: '#22C55E' }}>
+            {opportunity.investment}
           </span>
         </div>
 
         {/* Description */}
-        <p className="text-sm mb-4 line-clamp-2" style={{ color: '#666' }}>
+        <p className="text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2" style={{ color: '#666' }}>
           {opportunity.description}
         </p>
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-4" style={{ borderTop: '1px solid #000' }}>
-          <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-xs" style={{ color: '#666' }}>
+        <div className="flex items-center justify-between pt-3 sm:pt-4 gap-2" style={{ borderTop: '1px solid #000' }}>
+          <div className="space-y-1 text-xs">
+            <div className="flex items-center gap-1.5" style={{ color: '#666' }}>
               <Calendar className="w-3 h-3" />
-              <span>Posted {opportunity.postedDate}</span>
+              <span className="hidden sm:inline">Posted {opportunity.postedDate}</span>
+              <span className="sm:hidden">{opportunity.postedDate}</span>
             </div>
-            <div className="flex items-center gap-1.5 text-xs" style={{ color: '#666' }}>
+            <div className="flex items-center gap-1.5" style={{ color: '#666' }}>
               <Users className="w-3 h-3" />
               <span>{opportunity.partners}</span>
             </div>
@@ -79,10 +80,11 @@ export default function OpportunityCard({ opportunity, index }) {
               e.stopPropagation();
               handleCardClick();
             }}
-            className="rounded-lg px-4 py-2 text-sm font-medium transition-all duration-300 hover:scale-105" 
+            className="rounded-lg px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium touch-target" 
             style={{ background: '#D8A11F', color: '#fff' }}
           >
-            View Details
+            <span className="hidden sm:inline">View Details</span>
+            <span className="sm:hidden">View</span>
           </Button>
         </div>
       </div>
