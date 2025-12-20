@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { ROLES, PERMISSIONS } from "@/components/utils/permissions";
-import { Shield, Settings, BarChart3, Megaphone, User } from "lucide-react";
+import { Shield, Settings, BarChart3, Megaphone, User, Save } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 const ROLE_ICONS = {
   [ROLES.ADMIN]: Shield,
@@ -20,25 +22,80 @@ const ROLE_COLORS = {
 };
 
 export default function RolesManagementTab() {
+  const { toast } = useToast();
+  const [permissions, setPermissions] = useState(JSON.parse(JSON.stringify(PERMISSIONS)));
+  const [hasChanges, setHasChanges] = useState(false);
+
+  const togglePermission = (role, permissionKey) => {
+    setPermissions(prev => ({
+      ...prev,
+      [role]: {
+        ...prev[role],
+        [permissionKey]: !prev[role][permissionKey]
+      }
+    }));
+    setHasChanges(true);
+  };
+
+  const handleSave = () => {
+    // In a real implementation, you would save to backend/database here
+    console.log('Saving permissions:', permissions);
+    toast({
+      title: "Permissions Updated",
+      description: "Role permissions have been saved successfully.",
+    });
+    setHasChanges(false);
+  };
+
+  const handleReset = () => {
+    setPermissions(JSON.parse(JSON.stringify(PERMISSIONS)));
+    setHasChanges(false);
+    toast({
+      title: "Changes Discarded",
+      description: "Permissions have been reset to defaults.",
+    });
+  };
+
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold mb-2" style={{ color: '#000' }}>
-          Roles & Permissions
-        </h2>
-        <p style={{ color: '#000' }}>
-          Overview of all platform roles and their access levels
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold mb-2" style={{ color: '#000' }}>
+            Roles & Permissions
+          </h2>
+          <p style={{ color: '#000' }}>
+            Overview of all platform roles and their access levels
+          </p>
+        </div>
+        {hasChanges && (
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={handleReset}
+              style={{ border: '1px solid #000', color: '#000' }}
+            >
+              Reset
+            </Button>
+            <Button
+              onClick={handleSave}
+              style={{ background: '#D8A11F', color: '#fff' }}
+              className="hover:opacity-80"
+            >
+              <Save className="w-4 h-4 mr-2" />
+              Save Changes
+            </Button>
+          </div>
+        )}
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {Object.keys(ROLES).map((roleKey, index) => {
           const role = ROLES[roleKey];
-          const permissions = PERMISSIONS[role];
+          const rolePermissions = permissions[role];
           const Icon = ROLE_ICONS[role];
           const colors = ROLE_COLORS[role];
 
-          const permissionsList = Object.entries(permissions)
+          const permissionsList = Object.entries(rolePermissions)
             .filter(([key]) => key.startsWith('can'))
             .map(([key, value]) => ({ key, value }));
 
@@ -66,7 +123,7 @@ export default function RolesManagementTab() {
                   </div>
                   <div>
                     <h3 className="font-bold text-lg" style={{ color: '#000' }}>
-                      {permissions.label}
+                      {rolePermissions.label}
                     </h3>
                     <p className="text-xs" style={{ color: '#666' }}>
                       {enabledCount} permissions
@@ -76,7 +133,7 @@ export default function RolesManagementTab() {
               </div>
 
               <p className="text-sm mb-4" style={{ color: '#000' }}>
-                {permissions.description}
+                {rolePermissions.description}
               </p>
 
               <div className="space-y-2">
@@ -85,7 +142,11 @@ export default function RolesManagementTab() {
                 </p>
                 <div className="space-y-1.5">
                   {permissionsList.slice(0, 5).map(({ key, value }) => (
-                    <div key={key} className="flex items-center gap-2">
+                    <div 
+                      key={key} 
+                      className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors"
+                      onClick={() => togglePermission(role, key)}
+                    >
                       <div
                         className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0"
                         style={{
@@ -124,17 +185,17 @@ export default function RolesManagementTab() {
                 <th className="text-left py-3 px-4" style={{ color: '#000', fontWeight: 600 }}>Permission</th>
                 {Object.keys(ROLES).map(roleKey => {
                   const role = ROLES[roleKey];
-                  const permissions = PERMISSIONS[role];
+                  const rolePermissions = permissions[role];
                   return (
                     <th key={role} className="text-center py-3 px-2" style={{ color: '#000', fontWeight: 600 }}>
-                      {permissions.label}
+                      {rolePermissions.label}
                     </th>
                   );
                 })}
               </tr>
             </thead>
             <tbody>
-              {Object.keys(PERMISSIONS[ROLES.ADMIN])
+              {Object.keys(permissions[ROLES.ADMIN])
                 .filter(key => key.startsWith('can'))
                 .map((permissionKey, idx) => (
                   <tr
@@ -149,16 +210,17 @@ export default function RolesManagementTab() {
                     </td>
                     {Object.keys(ROLES).map(roleKey => {
                       const role = ROLES[roleKey];
-                      const hasPermission = PERMISSIONS[role][permissionKey];
+                      const hasPermission = permissions[role][permissionKey];
                       return (
                         <td key={role} className="text-center py-3 px-2">
                           <div className="flex justify-center">
                             <div
-                              className="w-5 h-5 rounded flex items-center justify-center"
+                              className="w-5 h-5 rounded flex items-center justify-center cursor-pointer hover:opacity-70 transition-opacity"
                               style={{
                                 background: hasPermission ? 'rgba(34, 197, 94, 0.15)' : 'rgba(107, 114, 128, 0.05)',
                                 border: `1px solid ${hasPermission ? 'rgba(34, 197, 94, 0.3)' : 'rgba(107, 114, 128, 0.1)'}`
                               }}
+                              onClick={() => togglePermission(role, permissionKey)}
                             >
                               {hasPermission && <span style={{ color: '#22C55E', fontSize: '12px' }}>✓</span>}
                             </div>
