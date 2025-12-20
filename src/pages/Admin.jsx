@@ -27,6 +27,8 @@ import ForumCategoriesManagementTab from "@/components/admin/ForumCategoriesMana
 import ContactManagementTab from "@/components/admin/ContactManagementTab";
 import ProfessionManagementTab from "@/components/admin/ProfessionManagementTab";
 import InterestManagementTab from "@/components/admin/InterestManagementTab";
+import PartnershipGroupsTab from "@/components/admin/PartnershipGroupsTab";
+import PartnershipIntentsTab from "@/components/admin/PartnershipIntentsTab";
 
 export default function Admin() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -328,10 +330,31 @@ export default function Admin() {
               </TabsContent>
             )}
 
-            <TabsContent value="partner">
-              <div className="p-8 rounded-2xl text-center" style={{ background: '#fff', border: '2px solid #000' }}>
-                <p style={{ color: '#666' }}>Partner management coming soon...</p>
-              </div>
+            <TabsContent value="partner" className="space-y-6">
+              <Tabs defaultValue="groups" className="w-full">
+                <TabsList 
+                  className="w-full p-2 rounded-2xl mb-6 flex justify-start gap-1"
+                  style={{ 
+                    background: '#fff',
+                    border: '1px solid #ddd',
+                  }}
+                >
+                  <TabsTrigger value="groups" className="rounded-xl px-4 py-2 font-semibold data-[state=active]:bg-[#3B82F6] data-[state=active]:text-white" style={{ color: '#000' }}>
+                    All Partnership Groups
+                  </TabsTrigger>
+                  <TabsTrigger value="intents" className="rounded-xl px-4 py-2 font-semibold data-[state=active]:bg-[#3B82F6] data-[state=active]:text-white" style={{ color: '#000' }}>
+                    All Partnership Intents
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="groups">
+                  <PartnershipGroupsTab />
+                </TabsContent>
+
+                <TabsContent value="intents">
+                  <PartnershipIntentsTab />
+                </TabsContent>
+              </Tabs>
             </TabsContent>
 
             {hasPermission(currentUser.role, 'canManageOpportunities') && (
