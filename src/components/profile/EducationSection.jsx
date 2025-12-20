@@ -44,7 +44,7 @@ export default function EducationSection({ user, isOwnProfile }) {
     <>
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: '#E5EDFF' }}>
+          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: '#000' }}>
             <div className="w-1 h-6 rounded-full" style={{ background: 'linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 90%)' }} />
             Education
           </h3>
@@ -62,9 +62,9 @@ export default function EducationSection({ user, isOwnProfile }) {
         </div>
 
         {education.length === 0 ? (
-          <div className="glass-card p-8 rounded-2xl text-center" style={{ background: 'rgba(250, 139, 255, 0.05)' }}>
-            <GraduationCap className="w-12 h-12 mx-auto mb-3" style={{ color: '#FA8BFF', opacity: 0.5 }} />
-            <p style={{ color: '#B6C4E0' }}>No education history added yet</p>
+          <div className="p-8 rounded-2xl text-center" style={{ background: '#FEEAFF', border: '1px solid #FA8BFF' }}>
+            <GraduationCap className="w-12 h-12 mx-auto mb-3" style={{ color: '#FA8BFF' }} />
+            <p style={{ color: '#000' }}>No education history added yet</p>
           </div>
         ) : (
           <div className="space-y-4">

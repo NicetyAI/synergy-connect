@@ -44,7 +44,7 @@ export default function CertificationsSection({ user, isOwnProfile }) {
     <>
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: '#E5EDFF' }}>
+          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: '#000' }}>
             <div className="w-1 h-6 rounded-full" style={{ background: 'linear-gradient(135deg, #F093FB 0%, #F5576C 100%)' }} />
             Certifications & Achievements
           </h3>
@@ -62,9 +62,9 @@ export default function CertificationsSection({ user, isOwnProfile }) {
         </div>
 
         {certifications.length === 0 ? (
-          <div className="glass-card p-8 rounded-2xl text-center" style={{ background: 'rgba(240, 147, 251, 0.05)' }}>
-            <Award className="w-12 h-12 mx-auto mb-3" style={{ color: '#F093FB', opacity: 0.5 }} />
-            <p style={{ color: '#B6C4E0' }}>No certifications added yet</p>
+          <div className="p-8 rounded-2xl text-center" style={{ background: '#FEE7FF', border: '1px solid #F093FB' }}>
+            <Award className="w-12 h-12 mx-auto mb-3" style={{ color: '#F093FB' }} />
+            <p style={{ color: '#000' }}>No certifications added yet</p>
           </div>
         ) : (
           <div className="space-y-4">

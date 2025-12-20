@@ -46,7 +46,7 @@ export default function ExperienceSection({ user, isOwnProfile }) {
     <>
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: '#E5EDFF' }}>
+          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: '#000' }}>
             <div className="w-1 h-6 rounded-full" style={{ background: 'linear-gradient(135deg, #43E97B 0%, #38F9D7 100%)' }} />
             Work Experience
           </h3>
@@ -64,9 +64,9 @@ export default function ExperienceSection({ user, isOwnProfile }) {
         </div>
 
         {experience.length === 0 ? (
-          <div className="glass-card p-8 rounded-2xl text-center" style={{ background: 'rgba(67, 233, 123, 0.05)' }}>
-            <Briefcase className="w-12 h-12 mx-auto mb-3" style={{ color: '#43E97B', opacity: 0.5 }} />
-            <p style={{ color: '#B6C4E0' }}>No work experience added yet</p>
+          <div className="p-8 rounded-2xl text-center" style={{ background: '#DFFCED', border: '1px solid #43E97B' }}>
+            <Briefcase className="w-12 h-12 mx-auto mb-3" style={{ color: '#43E97B' }} />
+            <p style={{ color: '#000' }}>No work experience added yet</p>
           </div>
         ) : (
           <div className="space-y-4">

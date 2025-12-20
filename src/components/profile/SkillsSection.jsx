@@ -39,7 +39,7 @@ export default function SkillsSection({ user, isOwnProfile }) {
     <>
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: '#E5EDFF' }}>
+          <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: '#000' }}>
             <div className="w-1 h-6 rounded-full" style={{ background: 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)' }} />
             Skills & Expertise
           </h3>
@@ -57,9 +57,9 @@ export default function SkillsSection({ user, isOwnProfile }) {
         </div>
 
         {skills.length === 0 ? (
-          <div className="glass-card p-8 rounded-2xl text-center" style={{ background: 'rgba(102, 126, 234, 0.05)' }}>
-            <Award className="w-12 h-12 mx-auto mb-3" style={{ color: '#667EEA', opacity: 0.5 }} />
-            <p style={{ color: '#B6C4E0' }}>No skills added yet</p>
+          <div className="p-8 rounded-2xl text-center" style={{ background: '#E8ECF9', border: '1px solid #667EEA' }}>
+            <Award className="w-12 h-12 mx-auto mb-3" style={{ color: '#667EEA' }} />
+            <p style={{ color: '#000' }}>No skills added yet</p>
           </div>
         ) : (
           <div className="flex flex-wrap gap-3">
