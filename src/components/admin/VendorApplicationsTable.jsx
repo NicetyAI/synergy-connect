@@ -86,8 +86,8 @@ export default function VendorApplicationsTable() {
 
   if (isLoading) {
     return (
-      <div className="glass-card p-8 rounded-2xl text-center">
-        <p style={{ color: '#7A8BA6' }}>Loading vendor applications...</p>
+      <div className="p-8 rounded-2xl text-center" style={{ background: '#fff', border: '2px solid #000' }}>
+        <p style={{ color: '#666' }}>Loading vendor applications...</p>
       </div>
     );
   }
@@ -97,26 +97,27 @@ export default function VendorApplicationsTable() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-card p-6 rounded-2xl"
+        className="p-6 rounded-2xl"
+        style={{ background: '#fff', border: '2px solid #000' }}
       >
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold" style={{ color: '#E5EDFF' }}>
+            <h2 className="text-2xl font-bold" style={{ color: '#000' }}>
               Vendor Applications
             </h2>
-            <p className="text-sm mt-1" style={{ color: '#7A8BA6' }}>
+            <p className="text-sm mt-1" style={{ color: '#666' }}>
               {applications.length} total applications
             </p>
           </div>
 
           <div className="relative w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#7A8BA6' }} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#666' }} />
             <Input
               placeholder="Search applications..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 glass-input"
-              style={{ color: '#E5EDFF' }}
+              className="pl-10"
+              style={{ background: '#fff', border: '1px solid #000', color: '#000' }}
             />
           </div>
         </div>
@@ -125,14 +126,14 @@ export default function VendorApplicationsTable() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead style={{ color: '#B6C4E0' }}>Business Name</TableHead>
-                <TableHead style={{ color: '#B6C4E0' }}>Email</TableHead>
-                <TableHead style={{ color: '#B6C4E0' }}>Category</TableHead>
-                <TableHead style={{ color: '#B6C4E0' }}>Province</TableHead>
-                <TableHead style={{ color: '#B6C4E0' }}>Status</TableHead>
-                <TableHead style={{ color: '#B6C4E0' }}>Featured</TableHead>
-                <TableHead style={{ color: '#B6C4E0' }}>Date</TableHead>
-                <TableHead style={{ color: '#B6C4E0' }}>Actions</TableHead>
+                <TableHead style={{ color: '#000', fontWeight: 600 }}>Business Name</TableHead>
+                <TableHead style={{ color: '#000', fontWeight: 600 }}>Email</TableHead>
+                <TableHead style={{ color: '#000', fontWeight: 600 }}>Category</TableHead>
+                <TableHead style={{ color: '#000', fontWeight: 600 }}>Province</TableHead>
+                <TableHead style={{ color: '#000', fontWeight: 600 }}>Status</TableHead>
+                <TableHead style={{ color: '#000', fontWeight: 600 }}>Featured</TableHead>
+                <TableHead style={{ color: '#000', fontWeight: 600 }}>Date</TableHead>
+                <TableHead style={{ color: '#000', fontWeight: 600 }}>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -140,12 +141,12 @@ export default function VendorApplicationsTable() {
                 const StatusIcon = statusColors[app.status]?.icon || Clock;
                 return (
                   <TableRow key={app.id}>
-                    <TableCell style={{ color: '#E5EDFF' }} className="font-medium">
+                    <TableCell style={{ color: '#000' }} className="font-medium">
                       {app.business_name}
                     </TableCell>
-                    <TableCell style={{ color: '#B6C4E0' }}>{app.user_email}</TableCell>
-                    <TableCell style={{ color: '#B6C4E0' }}>{app.category}</TableCell>
-                    <TableCell style={{ color: '#B6C4E0' }}>{app.province}</TableCell>
+                    <TableCell style={{ color: '#666' }}>{app.user_email}</TableCell>
+                    <TableCell style={{ color: '#666' }}>{app.category}</TableCell>
+                    <TableCell style={{ color: '#666' }}>{app.province}</TableCell>
                     <TableCell>
                       <Badge className={`${statusColors[app.status]?.bg} ${statusColors[app.status]?.text}`}>
                         <StatusIcon className="w-3 h-3 mr-1" />
@@ -159,14 +160,15 @@ export default function VendorApplicationsTable() {
                           variant={app.featured ? "default" : "outline"}
                           onClick={() => toggleFeaturedMutation.mutate({ appId: app.id, featured: !app.featured })}
                           disabled={toggleFeaturedMutation.isPending}
-                          className={app.featured ? 'bg-[#D8A11F] hover:bg-[#C2941B]' : ''}
+                          style={app.featured ? { background: '#D8A11F', color: '#fff', border: 'none' } : { border: '1px solid #000', color: '#000' }}
+                          className="hover:opacity-80"
                         >
                           <Star className="w-3 h-3 mr-1" fill={app.featured ? 'currentColor' : 'none'} />
                           {app.featured ? 'Featured' : 'Feature'}
                         </Button>
                       )}
                     </TableCell>
-                    <TableCell style={{ color: '#B6C4E0' }}>
+                    <TableCell style={{ color: '#666' }}>
                       {new Date(app.created_date).toLocaleDateString()}
                     </TableCell>
                     <TableCell>
@@ -183,7 +185,8 @@ export default function VendorApplicationsTable() {
                             <Button
                               size="sm"
                               onClick={() => approveMutation.mutate(app.id)}
-                              className="bg-green-600 hover:bg-green-700"
+                              style={{ background: '#D8A11F', color: '#fff' }}
+                              className="hover:opacity-80"
                             >
                               <CheckCircle className="w-4 h-4" />
                             </Button>
@@ -200,7 +203,8 @@ export default function VendorApplicationsTable() {
                           <Button
                             size="sm"
                             onClick={() => approveMutation.mutate(app.id)}
-                            className="bg-green-600 hover:bg-green-700"
+                            style={{ background: '#D8A11F', color: '#fff' }}
+                            className="hover:opacity-80"
                           >
                             <CheckCircle className="w-4 h-4" />
                           </Button>
@@ -231,37 +235,37 @@ export default function VendorApplicationsTable() {
 
       {/* View Details Dialog */}
       <Dialog open={!!selectedApplication} onOpenChange={() => setSelectedApplication(null)}>
-        <DialogContent className="glass-card max-w-4xl max-h-[90vh] overflow-y-auto" style={{ background: 'rgba(255, 255, 255, 0.08)' }}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" style={{ background: '#fff', border: '2px solid #000' }}>
           <DialogHeader>
-            <DialogTitle className="text-2xl" style={{ color: '#E5EDFF' }}>Application Details</DialogTitle>
-            <DialogDescription style={{ color: '#7A8BA6' }}>
+            <DialogTitle className="text-2xl" style={{ color: '#000' }}>Application Details</DialogTitle>
+            <DialogDescription style={{ color: '#666' }}>
               Review complete vendor application information
             </DialogDescription>
           </DialogHeader>
           {selectedApplication && (
             <div className="space-y-6 mt-4">
               {/* Basic Information */}
-              <div className="p-4 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
-                <h3 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ color: '#E5EDFF' }}>
+              <div className="p-4 rounded-xl" style={{ background: '#F2F1F5', border: '1px solid #000' }}>
+                <h3 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ color: '#000' }}>
                   <Briefcase className="w-5 h-5" />
                   Basic Information
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Business Name</p>
-                    <p className="font-semibold" style={{ color: '#E5EDFF' }}>{selectedApplication.business_name}</p>
+                    <p className="text-sm font-medium mb-1" style={{ color: '#666' }}>Business Name</p>
+                    <p className="font-semibold" style={{ color: '#000' }}>{selectedApplication.business_name}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Email</p>
-                    <p style={{ color: '#E5EDFF' }}>{selectedApplication.user_email}</p>
+                    <p className="text-sm font-medium mb-1" style={{ color: '#666' }}>Email</p>
+                    <p style={{ color: '#000' }}>{selectedApplication.user_email}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Category</p>
-                    <p style={{ color: '#E5EDFF' }}>{selectedApplication.category}</p>
+                    <p className="text-sm font-medium mb-1" style={{ color: '#666' }}>Category</p>
+                    <p style={{ color: '#000' }}>{selectedApplication.category}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Province</p>
-                    <p style={{ color: '#E5EDFF' }}>{selectedApplication.province}</p>
+                    <p className="text-sm font-medium mb-1" style={{ color: '#666' }}>Province</p>
+                    <p style={{ color: '#000' }}>{selectedApplication.province}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Status</p>
@@ -271,49 +275,49 @@ export default function VendorApplicationsTable() {
                   </div>
                   {selectedApplication.years_experience && (
                     <div>
-                      <p className="text-sm font-medium mb-1" style={{ color: '#7A8BA6' }}>Years in Business</p>
-                      <p style={{ color: '#E5EDFF' }}>{selectedApplication.years_experience} years</p>
+                      <p className="text-sm font-medium mb-1" style={{ color: '#666' }}>Years in Business</p>
+                      <p style={{ color: '#000' }}>{selectedApplication.years_experience} years</p>
                     </div>
                   )}
                 </div>
               </div>
 
               {/* Tagline */}
-              <div className="p-4 rounded-xl" style={{ background: selectedApplication.tagline ? 'rgba(216, 161, 31, 0.1)' : 'rgba(255, 255, 255, 0.02)' }}>
-                <p className="text-sm font-medium mb-2" style={{ color: '#7A8BA6' }}>Tagline / USP</p>
+              <div className="p-4 rounded-xl" style={{ background: '#F2F1F5', border: '1px solid #000' }}>
+                <p className="text-sm font-medium mb-2" style={{ color: '#666' }}>Tagline / USP</p>
                 {selectedApplication.tagline ? (
-                  <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>"{selectedApplication.tagline}"</p>
+                  <p className="text-lg font-semibold" style={{ color: '#000' }}>"{selectedApplication.tagline}"</p>
                 ) : (
-                  <p className="text-sm italic" style={{ color: '#7A8BA6' }}>Not provided</p>
+                  <p className="text-sm italic" style={{ color: '#666' }}>Not provided</p>
                 )}
               </div>
 
               {/* Description */}
               <div>
-                <p className="text-sm font-medium mb-2" style={{ color: '#7A8BA6' }}>Business Description</p>
+                <p className="text-sm font-medium mb-2" style={{ color: '#666' }}>Business Description</p>
                 {selectedApplication.description ? (
-                  <p className="leading-relaxed" style={{ color: '#E5EDFF' }}>{selectedApplication.description}</p>
+                  <p className="leading-relaxed" style={{ color: '#000' }}>{selectedApplication.description}</p>
                 ) : (
-                  <p className="text-sm italic" style={{ color: '#7A8BA6' }}>Not provided</p>
+                  <p className="text-sm italic" style={{ color: '#666' }}>Not provided</p>
                 )}
               </div>
 
               {/* Unique Value */}
-              <div className="p-4 rounded-xl" style={{ background: selectedApplication.unique_value ? 'rgba(59, 130, 246, 0.1)' : 'rgba(255, 255, 255, 0.02)' }}>
-                <p className="text-sm font-medium mb-2 flex items-center gap-2" style={{ color: '#7A8BA6' }}>
+              <div className="p-4 rounded-xl" style={{ background: '#F2F1F5', border: '1px solid #000' }}>
+                <p className="text-sm font-medium mb-2 flex items-center gap-2" style={{ color: '#666' }}>
                   <CheckCircle className="w-4 h-4" />
                   Why Choose This Vendor?
                 </p>
                 {selectedApplication.unique_value ? (
-                  <p className="leading-relaxed" style={{ color: '#E5EDFF' }}>{selectedApplication.unique_value}</p>
+                  <p className="leading-relaxed" style={{ color: '#000' }}>{selectedApplication.unique_value}</p>
                 ) : (
-                  <p className="text-sm italic" style={{ color: '#7A8BA6' }}>Not provided</p>
+                  <p className="text-sm italic" style={{ color: '#666' }}>Not provided</p>
                 )}
               </div>
 
               {/* Specialties */}
               <div>
-                <p className="text-sm font-medium mb-3" style={{ color: '#7A8BA6' }}>Service Specialties</p>
+                <p className="text-sm font-medium mb-3" style={{ color: '#666' }}>Service Specialties</p>
                 {selectedApplication.specialties && selectedApplication.specialties.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
                     {selectedApplication.specialties.map((specialty, idx) => (
@@ -329,52 +333,52 @@ export default function VendorApplicationsTable() {
 
               {/* Client Types */}
               <div>
-                <p className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: '#7A8BA6' }}>
+                <p className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: '#666' }}>
                   <Users className="w-4 h-4" />
                   Client Types Served
                 </p>
                 {selectedApplication.client_types && selectedApplication.client_types.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
                     {selectedApplication.client_types.map((type, idx) => (
-                      <div key={idx} className="px-3 py-2 rounded-lg" style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#3B82F6' }}>
+                      <div key={idx} className="px-3 py-2 rounded-lg" style={{ background: '#F2F1F5', color: '#000', border: '1px solid #000' }}>
                         {type}
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm italic" style={{ color: '#7A8BA6' }}>Not provided</p>
+                  <p className="text-sm italic" style={{ color: '#666' }}>Not provided</p>
                 )}
               </div>
 
               {/* Certifications */}
               <div>
-                <p className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: '#7A8BA6' }}>
+                <p className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: '#666' }}>
                   <Award className="w-4 h-4" />
                   Certifications & Awards
                 </p>
                 {selectedApplication.certifications && selectedApplication.certifications.length > 0 ? (
                   <div className="grid md:grid-cols-2 gap-2">
                     {selectedApplication.certifications.map((cert, idx) => (
-                      <div key={idx} className="flex items-center gap-2 p-3 rounded-lg" style={{ background: 'rgba(34, 197, 94, 0.1)' }}>
+                      <div key={idx} className="flex items-center gap-2 p-3 rounded-lg" style={{ background: '#F2F1F5', border: '1px solid #000' }}>
                         <Award className="w-4 h-4 flex-shrink-0" style={{ color: '#22C55E' }} />
-                        <span style={{ color: '#E5EDFF' }}>{cert}</span>
+                        <span style={{ color: '#000' }}>{cert}</span>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm italic" style={{ color: '#7A8BA6' }}>Not provided</p>
+                  <p className="text-sm italic" style={{ color: '#666' }}>Not provided</p>
                 )}
               </div>
 
               {/* Website & Portfolio */}
-              <div className="p-4 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
-                <p className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: '#7A8BA6' }}>
+              <div className="p-4 rounded-xl" style={{ background: '#F2F1F5', border: '1px solid #000' }}>
+                <p className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: '#666' }}>
                   <Globe className="w-4 h-4" />
                   Online Presence
                 </p>
                 <div className="space-y-2">
                   <div>
-                    <p className="text-xs mb-1" style={{ color: '#7A8BA6' }}>Website</p>
+                    <p className="text-xs mb-1" style={{ color: '#666' }}>Website</p>
                     {selectedApplication.website ? (
                       <a 
                         href={selectedApplication.website} 
@@ -387,11 +391,11 @@ export default function VendorApplicationsTable() {
                         <ExternalLink className="w-3 h-3" />
                       </a>
                     ) : (
-                      <p className="text-sm italic" style={{ color: '#7A8BA6' }}>Not provided</p>
+                      <p className="text-sm italic" style={{ color: '#666' }}>Not provided</p>
                     )}
                   </div>
                   <div>
-                    <p className="text-xs mb-1" style={{ color: '#7A8BA6' }}>Portfolio</p>
+                    <p className="text-xs mb-1" style={{ color: '#666' }}>Portfolio</p>
                     {selectedApplication.portfolio_url ? (
                       <a 
                         href={selectedApplication.portfolio_url} 
@@ -404,7 +408,7 @@ export default function VendorApplicationsTable() {
                         <ExternalLink className="w-3 h-3" />
                       </a>
                     ) : (
-                      <p className="text-sm italic" style={{ color: '#7A8BA6' }}>Not provided</p>
+                      <p className="text-sm italic" style={{ color: '#666' }}>Not provided</p>
                     )}
                   </div>
                 </div>
@@ -412,45 +416,45 @@ export default function VendorApplicationsTable() {
 
               {/* Social Media */}
               <div>
-                <p className="text-sm font-medium mb-3" style={{ color: '#7A8BA6' }}>Social Media</p>
+                <p className="text-sm font-medium mb-3" style={{ color: '#666' }}>Social Media</p>
                 {selectedApplication.social_media && Object.values(selectedApplication.social_media).some(v => v) ? (
                   <div className="flex flex-wrap gap-3">
                     {selectedApplication.social_media.facebook && (
-                      <a href={selectedApplication.social_media.facebook} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-lg flex items-center gap-2" style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#3B82F6' }}>
+                      <a href={selectedApplication.social_media.facebook} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-lg flex items-center gap-2" style={{ background: '#F2F1F5', color: '#3B82F6', border: '1px solid #000' }}>
                         Facebook <ExternalLink className="w-3 h-3" />
                       </a>
                     )}
                     {selectedApplication.social_media.twitter && (
-                      <a href={selectedApplication.social_media.twitter} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-lg flex items-center gap-2" style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#3B82F6' }}>
+                      <a href={selectedApplication.social_media.twitter} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-lg flex items-center gap-2" style={{ background: '#F2F1F5', color: '#3B82F6', border: '1px solid #000' }}>
                         Twitter <ExternalLink className="w-3 h-3" />
                       </a>
                     )}
                     {selectedApplication.social_media.linkedin && (
-                      <a href={selectedApplication.social_media.linkedin} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-lg flex items-center gap-2" style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#3B82F6' }}>
+                      <a href={selectedApplication.social_media.linkedin} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-lg flex items-center gap-2" style={{ background: '#F2F1F5', color: '#3B82F6', border: '1px solid #000' }}>
                         LinkedIn <ExternalLink className="w-3 h-3" />
                       </a>
                     )}
                     {selectedApplication.social_media.instagram && (
-                      <a href={selectedApplication.social_media.instagram} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-lg flex items-center gap-2" style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#3B82F6' }}>
+                      <a href={selectedApplication.social_media.instagram} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-lg flex items-center gap-2" style={{ background: '#F2F1F5', color: '#3B82F6', border: '1px solid #000' }}>
                         Instagram <ExternalLink className="w-3 h-3" />
                       </a>
                     )}
                   </div>
                 ) : (
-                  <p className="text-sm italic" style={{ color: '#7A8BA6' }}>Not provided</p>
+                  <p className="text-sm italic" style={{ color: '#666' }}>Not provided</p>
                 )}
               </div>
 
               {/* Application Metadata */}
-              <div className="pt-4 border-t" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
+              <div className="pt-4 border-t" style={{ borderColor: '#000' }}>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p style={{ color: '#7A8BA6' }}>Application Date</p>
-                    <p style={{ color: '#E5EDFF' }}>{new Date(selectedApplication.created_date).toLocaleDateString()}</p>
+                    <p style={{ color: '#666' }}>Application Date</p>
+                    <p style={{ color: '#000' }}>{new Date(selectedApplication.created_date).toLocaleDateString()}</p>
                   </div>
                   <div>
-                    <p style={{ color: '#7A8BA6' }}>Vendor ID</p>
-                    <p style={{ color: '#E5EDFF' }}>{selectedApplication.vendor_id || 'Not assigned'}</p>
+                    <p style={{ color: '#666' }}>Vendor ID</p>
+                    <p style={{ color: '#000' }}>{selectedApplication.vendor_id || 'Not assigned'}</p>
                   </div>
                 </div>
               </div>
@@ -461,7 +465,8 @@ export default function VendorApplicationsTable() {
                   <>
                     <Button
                       onClick={() => approveMutation.mutate(selectedApplication.id)}
-                      className="flex-1 bg-green-600 hover:bg-green-700"
+                      className="flex-1 hover:opacity-80"
+                      style={{ background: '#D8A11F', color: '#fff' }}
                     >
                       <CheckCircle className="w-4 h-4 mr-2" />
                       Approve Application
@@ -480,7 +485,8 @@ export default function VendorApplicationsTable() {
                   <>
                     <Button
                       onClick={() => approveMutation.mutate(selectedApplication.id)}
-                      className="flex-1 bg-green-600 hover:bg-green-700"
+                      className="flex-1 hover:opacity-80"
+                      style={{ background: '#D8A11F', color: '#fff' }}
                     >
                       <CheckCircle className="w-4 h-4 mr-2" />
                       Approve Application

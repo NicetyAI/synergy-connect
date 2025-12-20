@@ -141,10 +141,10 @@ export default function Admin() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen bg-gradient-main">
+      <div className="flex min-h-screen" style={{ background: '#F2F1F5' }}>
         <Sidebar />
         <div className="flex-1 flex items-center justify-center">
-          <p style={{ color: '#7A8BA6' }}>Loading...</p>
+          <p style={{ color: '#000' }}>Loading...</p>
         </div>
       </div>
     );
@@ -152,15 +152,15 @@ export default function Admin() {
 
   if (!currentUser || !canAccessAdmin(currentUser.role)) {
     return (
-      <div className="flex min-h-screen bg-gradient-main">
+      <div className="flex min-h-screen" style={{ background: '#F2F1F5' }}>
         <Sidebar />
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="text-center max-w-md">
             <AlertCircle className="w-16 h-16 mx-auto mb-4" style={{ color: '#EF4444' }} />
-            <h2 className="text-2xl font-bold mb-2" style={{ color: '#E5EDFF' }}>
+            <h2 className="text-2xl font-bold mb-2" style={{ color: '#000' }}>
               Access Denied
             </h2>
-            <p style={{ color: '#7A8BA6' }}>
+            <p style={{ color: '#666' }}>
               You need administrator privileges to access this page.
             </p>
           </div>
@@ -170,7 +170,7 @@ export default function Admin() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-main">
+    <div className="flex min-h-screen" style={{ background: '#F2F1F5' }}>
       <Sidebar />
       <div className="flex-1 overflow-y-auto p-8">
         <div className="max-w-7xl mx-auto">
@@ -180,18 +180,11 @@ export default function Admin() {
             animate={{ opacity: 1, y: 0 }}
             className="relative overflow-hidden rounded-3xl p-8 mb-8"
             style={{
-              background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.05) 100%)',
-              backdropFilter: 'blur(10px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(10px) saturate(180%)',
-              border: '1px solid rgba(239, 68, 68, 0.2)',
-              boxShadow: '0 8px 32px rgba(239, 68, 68, 0.2)',
+              background: '#fff',
+              border: '2px solid #000',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
             }}
           >
-            {/* Animated background elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 opacity-10" style={{
-              background: 'radial-gradient(circle, #EF4444 0%, transparent 70%)',
-            }} />
-            
             <div className="relative z-10 flex items-center gap-6">
               <motion.div
                 whileHover={{ rotate: 360 }}
@@ -206,13 +199,10 @@ export default function Admin() {
               </motion.div>
               
               <div>
-                <h1 className="text-4xl font-black mb-2" style={{ 
-                  color: '#E5EDFF',
-                  textShadow: '0 2px 10px rgba(0, 0, 0, 0.3)'
-                }}>
+                <h1 className="text-4xl font-black mb-2" style={{ color: '#000' }}>
                   Admin Dashboard
                 </h1>
-                <p className="text-base font-medium" style={{ color: '#B6C4E0' }}>
+                <p className="text-base font-medium" style={{ color: '#666' }}>
                   Monitor and manage platform metrics
                 </p>
               </div>
@@ -224,50 +214,48 @@ export default function Admin() {
             <TabsList 
               className="p-2 rounded-2xl mb-8"
               style={{ 
-                background: 'rgba(255, 255, 255, 0.05)',
-                backdropFilter: 'blur(10px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(10px) saturate(180%)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                background: '#fff',
+                border: '2px solid #000',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
               }}
             >
-              <TabsTrigger value="dashboard" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="dashboard" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Dashboard
               </TabsTrigger>
-              <TabsTrigger value="users" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="users" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Users
               </TabsTrigger>
-              <TabsTrigger value="partner" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="partner" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Partner
               </TabsTrigger>
-              <TabsTrigger value="opportunity" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="opportunity" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Opportunity
               </TabsTrigger>
-              <TabsTrigger value="interest" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="interest" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Interest
               </TabsTrigger>
-              <TabsTrigger value="vendor" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="vendor" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Vendor
               </TabsTrigger>
-              <TabsTrigger value="ad-campaigns" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="ad-campaigns" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Ad Campaigns
               </TabsTrigger>
-              <TabsTrigger value="category" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="category" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Category
               </TabsTrigger>
-              <TabsTrigger value="forum" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="forum" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Forum
               </TabsTrigger>
-              <TabsTrigger value="profession" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="profession" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Profession
               </TabsTrigger>
-              <TabsTrigger value="activity" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="activity" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Activity
               </TabsTrigger>
-              <TabsTrigger value="contact" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="contact" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Contact
               </TabsTrigger>
-              <TabsTrigger value="roles" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+              <TabsTrigger value="roles" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Roles
               </TabsTrigger>
             </TabsList>
@@ -283,7 +271,7 @@ export default function Admin() {
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-2 h-8 rounded-full" style={{ background: 'linear-gradient(180deg, #3B82F6 0%, #7C3AED 100%)' }} />
-                  <h2 className="text-2xl font-bold" style={{ color: '#E5EDFF' }}>
+                  <h2 className="text-2xl font-bold" style={{ color: '#000' }}>
                     Analytics & Insights
                   </h2>
                 </div>
@@ -308,7 +296,7 @@ export default function Admin() {
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-2 h-8 rounded-full" style={{ background: 'linear-gradient(180deg, #7C3AED 0%, #F59E0B 100%)' }} />
-                  <h2 className="text-2xl font-bold" style={{ color: '#E5EDFF' }}>
+                  <h2 className="text-2xl font-bold" style={{ color: '#000' }}>
                     Advertising Analytics
                   </h2>
                 </div>
@@ -321,27 +309,27 @@ export default function Admin() {
             </TabsContent>
 
             <TabsContent value="partner">
-              <div className="glass-card p-8 rounded-2xl text-center">
-                <p style={{ color: '#7A8BA6' }}>Partner management coming soon...</p>
+              <div className="p-8 rounded-2xl text-center" style={{ background: '#fff', border: '2px solid #000' }}>
+                <p style={{ color: '#666' }}>Partner management coming soon...</p>
               </div>
             </TabsContent>
 
             <TabsContent value="opportunity">
-              <div className="glass-card p-8 rounded-2xl text-center">
-                <p style={{ color: '#7A8BA6' }}>Opportunity management coming soon...</p>
+              <div className="p-8 rounded-2xl text-center" style={{ background: '#fff', border: '2px solid #000' }}>
+                <p style={{ color: '#666' }}>Opportunity management coming soon...</p>
               </div>
             </TabsContent>
 
             <TabsContent value="interest">
-              <div className="glass-card p-8 rounded-2xl text-center">
-                <p style={{ color: '#7A8BA6' }}>Interest management coming soon...</p>
+              <div className="p-8 rounded-2xl text-center" style={{ background: '#fff', border: '2px solid #000' }}>
+                <p style={{ color: '#666' }}>Interest management coming soon...</p>
               </div>
             </TabsContent>
 
             <TabsContent value="vendor" className="space-y-6">
               <div className="mb-6">
-                <h3 className="text-xl font-bold mb-2" style={{ color: '#E5EDFF' }}>Vendor Applications</h3>
-                <p className="text-sm mb-4" style={{ color: '#7A8BA6' }}>Review and approve vendor applications</p>
+                <h3 className="text-xl font-bold mb-2" style={{ color: '#000' }}>Vendor Applications</h3>
+                <p className="text-sm mb-4" style={{ color: '#666' }}>Review and approve vendor applications</p>
                 <VendorApplicationsTable />
               </div>
               <div className="mt-8">
@@ -351,8 +339,8 @@ export default function Admin() {
 
             <TabsContent value="ad-campaigns" className="space-y-6">
               <div className="mb-6">
-                <h3 className="text-xl font-bold mb-2" style={{ color: '#E5EDFF' }}>Ad Campaign Applications</h3>
-                <p className="text-sm mb-4" style={{ color: '#7A8BA6' }}>Review and approve ad campaign applications</p>
+                <h3 className="text-xl font-bold mb-2" style={{ color: '#000' }}>Ad Campaign Applications</h3>
+                <p className="text-sm mb-4" style={{ color: '#666' }}>Review and approve ad campaign applications</p>
               </div>
               <AdCampaignApplicationsTable />
             </TabsContent>
@@ -366,8 +354,8 @@ export default function Admin() {
             </TabsContent>
 
             <TabsContent value="profession">
-              <div className="glass-card p-8 rounded-2xl text-center">
-                <p style={{ color: '#7A8BA6' }}>Profession management coming soon...</p>
+              <div className="p-8 rounded-2xl text-center" style={{ background: '#fff', border: '2px solid #000' }}>
+                <p style={{ color: '#666' }}>Profession management coming soon...</p>
               </div>
             </TabsContent>
 
