@@ -290,7 +290,7 @@ export default function ProfileHeader({ user, isOwnProfile, currentUser }) {
                   <Button
                     onClick={() => setShowEditDialog(true)}
                     className="gap-2 px-6 py-2 rounded-xl shadow-lg hover:shadow-xl transition-all"
-                    style={{ background: 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)', color: '#fff' }}
+                    style={{ background: '#D8A11F', color: '#fff' }}
                   >
                     <Camera className="w-4 h-4" />
                     Edit Media
@@ -304,9 +304,9 @@ export default function ProfileHeader({ user, isOwnProfile, currentUser }) {
 
       {/* Edit Media Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="max-w-2xl" style={{ background: '#0F2744', border: '1px solid rgba(255, 255, 255, 0.18)' }}>
+        <DialogContent className="max-w-2xl" style={{ background: '#F2F1F5', border: '2px solid #000' }}>
           <DialogHeader>
-            <DialogTitle style={{ color: '#E5EDFF' }}>Edit Media</DialogTitle>
+            <DialogTitle style={{ color: '#000' }}>Edit Media</DialogTitle>
           </DialogHeader>
           
           <div className="space-y-6 py-4">
@@ -320,9 +320,9 @@ export default function ProfileHeader({ user, isOwnProfile, currentUser }) {
 
             {/* Cover Image Upload */}
             <div>
-              <Label className="mb-2 block" style={{ color: '#B6C4E0' }}>
+              <Label className="mb-2 block" style={{ color: '#000' }}>
                 Cover Image
-                <span className="text-xs ml-2" style={{ color: '#7A8BA6' }}>(Max 5MB, 1200x320 recommended)</span>
+                <span className="text-xs ml-2" style={{ color: '#666' }}>(Max 5MB, 1200x320 recommended)</span>
               </Label>
               
               {coverPreview ? (
@@ -349,16 +349,16 @@ export default function ProfileHeader({ user, isOwnProfile, currentUser }) {
                   onDrop={(e) => handleDrop(e, 'cover')}
                   className="relative rounded-lg h-40 flex flex-col items-center justify-center cursor-pointer transition-all"
                   style={{ 
-                    background: dragActive.cover ? 'rgba(59, 130, 246, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-                    border: `2px dashed ${dragActive.cover ? '#3B82F6' : 'rgba(255, 255, 255, 0.18)'}` 
+                    background: dragActive.cover ? 'rgba(59, 130, 246, 0.1)' : '#fff',
+                    border: `2px dashed ${dragActive.cover ? '#3B82F6' : '#000'}` 
                   }}
                   onClick={() => document.getElementById('cover-input').click()}
                 >
-                  <Upload className="w-8 h-8 mb-2" style={{ color: dragActive.cover ? '#3B82F6' : '#7A8BA6' }} />
-                  <p className="text-sm font-medium" style={{ color: dragActive.cover ? '#3B82F6' : '#B6C4E0' }}>
+                  <Upload className="w-8 h-8 mb-2" style={{ color: dragActive.cover ? '#3B82F6' : '#666' }} />
+                  <p className="text-sm font-medium" style={{ color: dragActive.cover ? '#3B82F6' : '#000' }}>
                     {dragActive.cover ? 'Drop your image here' : 'Click to upload or drag and drop'}
                   </p>
-                  <p className="text-xs mt-1" style={{ color: '#7A8BA6' }}>
+                  <p className="text-xs mt-1" style={{ color: '#666' }}>
                     JPEG, PNG or WebP (max 5MB)
                   </p>
                   <Input
@@ -374,9 +374,9 @@ export default function ProfileHeader({ user, isOwnProfile, currentUser }) {
 
             {/* Profile Picture Upload */}
             <div>
-              <Label className="mb-2 block" style={{ color: '#B6C4E0' }}>
+              <Label className="mb-2 block" style={{ color: '#000' }}>
                 Profile Picture
-                <span className="text-xs ml-2" style={{ color: '#7A8BA6' }}>(Max 5MB, square image recommended)</span>
+                <span className="text-xs ml-2" style={{ color: '#666' }}>(Max 5MB, square image recommended)</span>
               </Label>
               
               {avatarPreview ? (
@@ -403,13 +403,13 @@ export default function ProfileHeader({ user, isOwnProfile, currentUser }) {
                   onDrop={(e) => handleDrop(e, 'avatar')}
                   className="relative rounded-lg h-32 w-32 mx-auto flex flex-col items-center justify-center cursor-pointer transition-all"
                   style={{ 
-                    background: dragActive.avatar ? 'rgba(59, 130, 246, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-                    border: `2px dashed ${dragActive.avatar ? '#3B82F6' : 'rgba(255, 255, 255, 0.18)'}` 
+                    background: dragActive.avatar ? 'rgba(59, 130, 246, 0.1)' : '#fff',
+                    border: `2px dashed ${dragActive.avatar ? '#3B82F6' : '#000'}` 
                   }}
                   onClick={() => document.getElementById('avatar-input').click()}
                 >
-                  <Camera className="w-6 h-6 mb-1" style={{ color: dragActive.avatar ? '#3B82F6' : '#7A8BA6' }} />
-                  <p className="text-xs font-medium text-center px-2" style={{ color: dragActive.avatar ? '#3B82F6' : '#B6C4E0' }}>
+                  <Camera className="w-6 h-6 mb-1" style={{ color: dragActive.avatar ? '#3B82F6' : '#666' }} />
+                  <p className="text-xs font-medium text-center px-2" style={{ color: dragActive.avatar ? '#3B82F6' : '#000' }}>
                     {dragActive.avatar ? 'Drop here' : 'Upload'}
                   </p>
                   <Input
@@ -427,7 +427,7 @@ export default function ProfileHeader({ user, isOwnProfile, currentUser }) {
             {uploading && (
               <div className="space-y-2">
                 <Progress value={uploadProgress} className="h-2" />
-                <p className="text-sm text-center" style={{ color: '#B6C4E0' }}>
+                <p className="text-sm text-center" style={{ color: '#000' }}>
                   Uploading... {uploadProgress}%
                 </p>
               </div>
@@ -445,7 +445,7 @@ export default function ProfileHeader({ user, isOwnProfile, currentUser }) {
                 setError(null);
               }}
               disabled={uploading}
-              style={{ background: 'rgba(255, 255, 255, 0.1)', color: '#B6C4E0' }}
+              style={{ background: '#fff', color: '#000', border: '1px solid #000' }}
             >
               Cancel
             </Button>
@@ -453,7 +453,7 @@ export default function ProfileHeader({ user, isOwnProfile, currentUser }) {
               onClick={handleMediaUpload}
               disabled={uploading || (!coverFile && !avatarFile)}
               className="flex-1"
-              style={{ background: '#3B82F6', color: '#fff' }}
+              style={{ background: '#D8A11F', color: '#fff' }}
             >
               {uploading ? `Uploading... ${uploadProgress}%` : 'Save Changes'}
             </Button>
