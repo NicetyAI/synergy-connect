@@ -186,20 +186,20 @@ export default function AboutTab({ user, isOwnProfile }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {user.birth_date && (
                 <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.25 }}
-                  whileHover={{ scale: 1.02, y: -4 }}
-                  className="glass-card p-6 rounded-2xl cursor-pointer"
-                  style={{ transition: 'all 0.3s ease' }}
+                 initial={{ opacity: 0, y: 10 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ delay: 0.25 }}
+                 whileHover={{ scale: 1.02, y: -4 }}
+                 className="p-6 rounded-2xl cursor-pointer"
+                 style={{ transition: 'all 0.3s ease', background: '#F2F1F5', border: '1px solid #000' }}
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg" style={{ background: 'linear-gradient(135deg, #F093FB 0%, #F5576C 100%)' }}>
                       <Calendar className="w-6 h-6" style={{ color: '#E5EDFF' }} />
                     </div>
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#F093FB' }}>Birth Date</p>
-                      <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{new Date(user.birth_date).toLocaleDateString()}</p>
+                     <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#F093FB' }}>Birth Date</p>
+                     <p className="text-lg font-semibold" style={{ color: '#000' }}>{new Date(user.birth_date).toLocaleDateString()}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -207,20 +207,20 @@ export default function AboutTab({ user, isOwnProfile }) {
 
               {user.status && (
                 <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  whileHover={{ scale: 1.02, y: -4 }}
-                  className="glass-card p-6 rounded-2xl cursor-pointer"
-                  style={{ transition: 'all 0.3s ease' }}
+                 initial={{ opacity: 0, y: 10 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ delay: 0.3 }}
+                 whileHover={{ scale: 1.02, y: -4 }}
+                 className="p-6 rounded-2xl cursor-pointer"
+                 style={{ transition: 'all 0.3s ease', background: '#F2F1F5', border: '1px solid #000' }}
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg" style={{ background: 'linear-gradient(135deg, #FA709A 0%, #FEE140 100%)' }}>
                       <Heart className="w-6 h-6" style={{ color: '#E5EDFF' }} />
                     </div>
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#FA709A' }}>Status</p>
-                      <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{user.status}</p>
+                     <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#FA709A' }}>Status</p>
+                     <p className="text-lg font-semibold" style={{ color: '#000' }}>{user.status}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -228,20 +228,20 @@ export default function AboutTab({ user, isOwnProfile }) {
 
               {user.marital_status && (
                 <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.35 }}
-                  whileHover={{ scale: 1.02, y: -4 }}
-                  className="glass-card p-6 rounded-2xl cursor-pointer"
-                  style={{ transition: 'all 0.3s ease' }}
+                 initial={{ opacity: 0, y: 10 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ delay: 0.35 }}
+                 whileHover={{ scale: 1.02, y: -4 }}
+                 className="p-6 rounded-2xl cursor-pointer"
+                 style={{ transition: 'all 0.3s ease', background: '#F2F1F5', border: '1px solid #000' }}
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg" style={{ background: 'linear-gradient(135deg, #FFA8A8 0%, #FCFF00 100%)' }}>
                       <Heart className="w-6 h-6" style={{ color: '#0A1628' }} />
                     </div>
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#FFA8A8' }}>Marital Status</p>
-                      <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{user.marital_status}</p>
+                     <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#FFA8A8' }}>Marital Status</p>
+                     <p className="text-lg font-semibold" style={{ color: '#000' }}>{user.marital_status}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -259,20 +259,20 @@ export default function AboutTab({ user, isOwnProfile }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {user.location && (
               <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                whileHover={{ scale: 1.02, y: -4 }}
-                className="glass-card p-6 rounded-2xl cursor-pointer"
-                style={{ transition: 'all 0.3s ease' }}
+               initial={{ opacity: 0, y: 10 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ delay: 0.4 }}
+               whileHover={{ scale: 1.02, y: -4 }}
+               className="p-6 rounded-2xl cursor-pointer"
+               style={{ transition: 'all 0.3s ease', background: '#F2F1F5', border: '1px solid #000' }}
               >
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg" style={{ background: 'linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%)' }}>
                     <MapPin className="w-6 h-6" style={{ color: '#E5EDFF' }} />
                   </div>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#4FACFE' }}>Location</p>
-                    <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{user.location}</p>
+                   <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#4FACFE' }}>Location</p>
+                   <p className="text-lg font-semibold" style={{ color: '#000' }}>{user.location}</p>
                   </div>
                 </div>
               </motion.div>
@@ -280,40 +280,40 @@ export default function AboutTab({ user, isOwnProfile }) {
 
             {user.phone_number && (
               <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.45 }}
-                whileHover={{ scale: 1.02, y: -4 }}
-                className="glass-card p-6 rounded-2xl cursor-pointer"
-                style={{ transition: 'all 0.3s ease' }}
+               initial={{ opacity: 0, y: 10 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ delay: 0.45 }}
+               whileHover={{ scale: 1.02, y: -4 }}
+               className="p-6 rounded-2xl cursor-pointer"
+               style={{ transition: 'all 0.3s ease', background: '#F2F1F5', border: '1px solid #000' }}
               >
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg" style={{ background: 'linear-gradient(135deg, #A8EDEA 0%, #FED6E3 100%)' }}>
                     <Phone className="w-6 h-6" style={{ color: '#0A1628' }} />
                   </div>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#A8EDEA' }}>Phone</p>
-                    <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{user.phone_number}</p>
+                   <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#A8EDEA' }}>Phone</p>
+                   <p className="text-lg font-semibold" style={{ color: '#000' }}>{user.phone_number}</p>
                   </div>
                 </div>
               </motion.div>
             )}
 
             <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              whileHover={{ scale: 1.02, y: -4 }}
-              className="glass-card p-6 rounded-2xl cursor-pointer"
-              style={{ transition: 'all 0.3s ease' }}
+             initial={{ opacity: 0, y: 10 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ delay: 0.5 }}
+             whileHover={{ scale: 1.02, y: -4 }}
+             className="p-6 rounded-2xl cursor-pointer"
+             style={{ transition: 'all 0.3s ease', background: '#F2F1F5', border: '1px solid #000' }}
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg" style={{ background: 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)' }}>
                   <Mail className="w-6 h-6" style={{ color: '#E5EDFF' }} />
                 </div>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#667EEA' }}>Email</p>
-                  <p className="text-lg font-semibold break-all" style={{ color: '#E5EDFF' }}>{user.email}</p>
+                 <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#667EEA' }}>Email</p>
+                 <p className="text-lg font-semibold break-all" style={{ color: '#000' }}>{user.email}</p>
                 </div>
               </div>
             </motion.div>
@@ -328,20 +328,20 @@ export default function AboutTab({ user, isOwnProfile }) {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.55 }}
-              whileHover={{ scale: 1.02, y: -4 }}
-              className="glass-card p-6 rounded-2xl cursor-pointer"
-              style={{ transition: 'all 0.3s ease' }}
+             initial={{ opacity: 0, y: 10 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ delay: 0.55 }}
+             whileHover={{ scale: 1.02, y: -4 }}
+             className="p-6 rounded-2xl cursor-pointer"
+             style={{ transition: 'all 0.3s ease', background: '#F2F1F5', border: '1px solid #000' }}
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg" style={{ background: 'linear-gradient(135deg, #FCCB90 0%, #D57EEB 100%)' }}>
                   <Calendar className="w-6 h-6" style={{ color: '#E5EDFF' }} />
                 </div>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#FCCB90' }}>Member Since</p>
-                  <p className="text-lg font-semibold" style={{ color: '#E5EDFF' }}>{new Date(user.created_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                 <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#FCCB90' }}>Member Since</p>
+                 <p className="text-lg font-semibold" style={{ color: '#000' }}>{new Date(user.created_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
                 </div>
               </div>
             </motion.div>
