@@ -52,44 +52,42 @@ export default function VendorStatusSection({ vendorApp, isOwnProfile }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-card p-6 rounded-2xl mb-6"
+      className="p-6 rounded-2xl mb-6"
+      style={{ background: '#fff', border: '2px solid #000' }}
     >
       <div className="flex items-center gap-3 mb-4">
         <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg" style={{ background: config.bg }}>
           <Store className="w-6 h-6" style={{ color: config.color }} />
         </div>
         <div className="flex-1">
-          <h3 className="text-xl font-bold" style={{ color: '#E5EDFF' }}>
-            Vendor Status
-          </h3>
           <Badge className={config.badgeClass}>{config.text}</Badge>
         </div>
       </div>
 
       <div className="space-y-3">
-        <div className="flex items-center justify-between p-3 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
-          <span style={{ color: '#B6C4E0' }}>Business Name</span>
-          <span className="font-semibold" style={{ color: '#E5EDFF' }}>{vendorApp.business_name}</span>
+        <div className="flex items-center justify-between">
+          <span style={{ color: '#666' }}>Business Name</span>
+          <span className="font-semibold" style={{ color: '#3B82F6' }}>{vendorApp.business_name}</span>
         </div>
 
         {vendorApp.vendor_id && (
-          <div className="flex items-center justify-between p-3 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
-            <span style={{ color: '#B6C4E0' }}>Vendor ID</span>
+          <div className="flex items-center justify-between">
+            <span style={{ color: '#666' }}>Vendor ID</span>
             <span className="font-mono font-bold" style={{ color: config.color }}>{vendorApp.vendor_id}</span>
           </div>
         )}
 
         {vendorApp.category && (
-          <div className="flex items-center justify-between p-3 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
-            <span style={{ color: '#B6C4E0' }}>Category</span>
-            <span className="font-semibold" style={{ color: '#E5EDFF' }}>{vendorApp.category}</span>
+          <div className="flex items-center justify-between">
+            <span style={{ color: '#666' }}>Category</span>
+            <span className="font-semibold" style={{ color: '#000' }}>{vendorApp.category}</span>
           </div>
         )}
 
         {vendorApp.province && (
-          <div className="flex items-center justify-between p-3 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
-            <span style={{ color: '#B6C4E0' }}>Province</span>
-            <span className="font-semibold" style={{ color: '#E5EDFF' }}>{vendorApp.province}</span>
+          <div className="flex items-center justify-between">
+            <span style={{ color: '#666' }}>Province</span>
+            <span className="font-semibold" style={{ color: '#000' }}>{vendorApp.province}</span>
           </div>
         )}
       </div>

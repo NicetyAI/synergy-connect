@@ -24,7 +24,8 @@ export default function AdCampaignsSection({ campaigns, pendingAdApps, isOwnProf
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 }}
-      className="glass-card p-6 rounded-2xl mb-6"
+      className="p-6 rounded-2xl mb-6"
+      style={{ background: '#fff', border: '2px solid #000' }}
     >
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -32,17 +33,14 @@ export default function AdCampaignsSection({ campaigns, pendingAdApps, isOwnProf
             <BarChart3 className="w-6 h-6" style={{ color: '#fff' }} />
           </div>
           <div>
-            <h3 className="text-xl font-bold" style={{ color: '#E5EDFF' }}>
-              Ad Campaigns
-            </h3>
-            <p className="text-sm" style={{ color: '#7A8BA6' }}>
+            <p className="text-sm" style={{ color: '#666' }}>
               {activeCampaigns.length} active, {expiredCampaigns.length} expired
             </p>
           </div>
         </div>
         {isOwnProfile && (
           <Link to={createPageUrl('AdCampaigns')}>
-            <Button className="rounded-lg flex items-center gap-2" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#fff' }}>
+            <Button className="rounded-lg flex items-center gap-2" style={{ background: '#3B82F6', color: '#fff' }}>
               Manage Campaigns
               <ArrowRight className="w-4 h-4" />
             </Button>
@@ -68,7 +66,7 @@ export default function AdCampaignsSection({ campaigns, pendingAdApps, isOwnProf
       {/* Active Campaigns */}
       {activeCampaigns.length > 0 && (
         <div className="mb-4">
-          <h4 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: '#B6C4E0' }}>
+          <h4 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: '#000' }}>
             <CheckCircle className="w-4 h-4" style={{ color: '#22C55E' }} />
             Active Campaigns
           </h4>
@@ -83,18 +81,15 @@ export default function AdCampaignsSection({ campaigns, pendingAdApps, isOwnProf
                 <div 
                   key={campaign.id}
                   className="p-3 rounded-xl flex items-center justify-between" 
-                  style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                  style={{ background: '#F2F1F5', border: '1px solid #ddd' }}
                 >
                   <div className="flex-1">
-                    <p className="font-semibold mb-1" style={{ color: '#E5EDFF' }}>
-                      {campaign.business_name}
-                    </p>
-                    <p className="text-xs" style={{ color: '#7A8BA6' }}>
-                      {campaign.package}
+                    <p className="font-semibold mb-1" style={{ color: '#000' }}>
+                      {campaign.package} - ${campaign.budget || 0}/month
                     </p>
                   </div>
                   {daysRemaining !== null && (
-                    <Badge className={isExpiringSoon ? 'bg-orange-500/20 text-orange-300' : 'bg-green-500/20 text-green-300'}>
+                    <Badge style={{ background: '#D4F4DD', color: '#22C55E', border: '1px solid #22C55E' }}>
                       {daysRemaining} days left
                     </Badge>
                   )}
@@ -103,7 +98,7 @@ export default function AdCampaignsSection({ campaigns, pendingAdApps, isOwnProf
             })}
           </div>
           {activeCampaigns.length > 3 && (
-            <p className="text-xs mt-2" style={{ color: '#7A8BA6' }}>
+            <p className="text-xs mt-2" style={{ color: '#666' }}>
               +{activeCampaigns.length - 3} more active campaign{activeCampaigns.length - 3 > 1 ? 's' : ''}
             </p>
           )}
