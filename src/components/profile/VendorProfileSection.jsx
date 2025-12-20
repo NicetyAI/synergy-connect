@@ -72,42 +72,42 @@ export default function VendorProfileSection({ userEmail }) {
           {/* Tagline */}
           {vendorProfile.tagline && (
             <div>
-              <label className="text-sm font-medium mb-1 block" style={{ color: '#B6C4E0' }}>Tagline</label>
-              <p style={{ color: '#E5EDFF' }}>"{vendorProfile.tagline}"</p>
+              <label className="text-sm font-medium mb-1 block" style={{ color: '#666' }}>Tagline</label>
+              <p style={{ color: '#000' }}>"{vendorProfile.tagline}"</p>
             </div>
           )}
 
           {/* Description */}
           {vendorProfile.description && (
             <div>
-              <label className="text-sm font-medium mb-1 block" style={{ color: '#B6C4E0' }}>About</label>
-              <p className="text-sm" style={{ color: '#E5EDFF' }}>{vendorProfile.description}</p>
+              <label className="text-sm font-medium mb-1 block" style={{ color: '#666' }}>About</label>
+              <p className="text-sm" style={{ color: '#000' }}>{vendorProfile.description}</p>
             </div>
           )}
 
           {/* Unique Value */}
           {vendorProfile.unique_value && (
             <div>
-              <label className="text-sm font-medium mb-1 block" style={{ color: '#B6C4E0' }}>Why Choose Us</label>
-              <p className="text-sm" style={{ color: '#E5EDFF' }}>{vendorProfile.unique_value}</p>
+              <label className="text-sm font-medium mb-1 block" style={{ color: '#666' }}>Why Choose Us</label>
+              <p className="text-sm" style={{ color: '#000' }}>{vendorProfile.unique_value}</p>
             </div>
           )}
 
           {/* Years Experience */}
           {vendorProfile.years_experience && (
             <div>
-              <label className="text-sm font-medium mb-1 block" style={{ color: '#B6C4E0' }}>Years in Business</label>
-              <p style={{ color: '#E5EDFF' }}>{vendorProfile.years_experience} years</p>
+              <label className="text-sm font-medium mb-1 block" style={{ color: '#666' }}>Years in Business</label>
+              <p style={{ color: '#000' }}>{vendorProfile.years_experience} years</p>
             </div>
           )}
 
           {/* Specialties */}
           {vendorProfile.specialties && vendorProfile.specialties.length > 0 && (
             <div>
-              <label className="text-sm font-medium mb-2 block" style={{ color: '#B6C4E0' }}>Specialties</label>
+              <label className="text-sm font-medium mb-2 block" style={{ color: '#666' }}>Specialties</label>
               <div className="flex flex-wrap gap-2">
                 {vendorProfile.specialties.map((specialty, idx) => (
-                  <span key={idx} className="px-3 py-1 rounded-full text-sm" style={{ background: 'rgba(216, 161, 31, 0.2)', color: '#D8A11F' }}>
+                  <span key={idx} className="px-3 py-1 rounded-full text-sm font-medium" style={{ background: '#FFF4E0', color: '#D8A11F', border: '1px solid #D8A11F' }}>
                     {specialty}
                   </span>
                 ))}
@@ -118,7 +118,7 @@ export default function VendorProfileSection({ userEmail }) {
           {/* Client Types */}
           {vendorProfile.client_types && vendorProfile.client_types.length > 0 && (
             <div>
-              <label className="text-sm font-medium mb-2 block" style={{ color: '#B6C4E0' }}>Client Types</label>
+              <label className="text-sm font-medium mb-2 block" style={{ color: '#666' }}>Client Types</label>
               <div className="flex flex-wrap gap-2">
                 {vendorProfile.client_types.map((type, idx) => (
                   <span key={idx} className="px-3 py-1 rounded-full text-sm" style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#3B82F6' }}>
@@ -132,10 +132,10 @@ export default function VendorProfileSection({ userEmail }) {
           {/* Certifications */}
           {vendorProfile.certifications && vendorProfile.certifications.length > 0 && (
             <div>
-              <label className="text-sm font-medium mb-2 block" style={{ color: '#B6C4E0' }}>Certifications & Awards</label>
+              <label className="text-sm font-medium mb-2 block" style={{ color: '#666' }}>Certifications & Awards</label>
               <div className="space-y-1">
                 {vendorProfile.certifications.map((cert, idx) => (
-                  <div key={idx} className="text-sm" style={{ color: '#E5EDFF' }}>• {cert}</div>
+                  <div key={idx} className="text-sm" style={{ color: '#000' }}>• {cert}</div>
                 ))}
               </div>
             </div>
@@ -144,7 +144,7 @@ export default function VendorProfileSection({ userEmail }) {
           {/* Website */}
           {vendorProfile.website && (
             <div>
-              <label className="text-sm font-medium mb-1 block" style={{ color: '#B6C4E0' }}>Website</label>
+              <label className="text-sm font-medium mb-1 block" style={{ color: '#666' }}>Website</label>
               <a href={vendorProfile.website} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline" style={{ color: '#3B82F6' }}>
                 {vendorProfile.website}
               </a>
