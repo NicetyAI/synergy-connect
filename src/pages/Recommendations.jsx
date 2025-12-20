@@ -184,29 +184,29 @@ export default function Recommendations() {
   });
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen">
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto" style={{ minHeight: 'calc(100vh - 73px)', background: '#F2F1F5' }}>
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto" style={{ minHeight: 'calc(100vh - 73px)', background: '#F2F1F5' }}>
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-3">
-              <Sparkles className="w-8 h-8" style={{ color: '#3B82F6' }} />
-              <h1 className="text-3xl md:text-4xl font-bold" style={{ color: '#000' }}>
-                AI-Powered Recommendations
+          <div className="mb-6 sm:mb-8">
+            <div className="flex items-center gap-2 sm:gap-3 mb-3">
+              <Sparkles className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: '#3B82F6' }} />
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold" style={{ color: '#000' }}>
+                AI Recommendations
               </h1>
             </div>
-            <p style={{ color: '#000' }}>
+            <p className="text-sm sm:text-base" style={{ color: '#000' }}>
               Based on your profile and goals, we've found potential partners and opportunities.
             </p>
           </div>
 
           {/* AI Insights */}
           {aiRecommendations?.success && aiRecommendations.recommendations.forumTopics?.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
               {aiRecommendations.recommendations.forumTopics.slice(0, 2).map((topic, idx) => (
                 <div key={idx} className="glass-card p-4" style={{ background: '#192234' }}>
                   <div className="flex items-start gap-3">
@@ -224,10 +224,10 @@ export default function Recommendations() {
           )}
 
           {/* Tabs */}
-          <div className="flex gap-3 mb-8">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-6 sm:mb-8">
             <Button
               onClick={() => setActiveTab("connections")}
-              className={`flex-1 px-6 py-4 rounded-xl font-semibold text-sm transition-all duration-300 ${
+              className={`flex-1 px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 touch-target ${
                 activeTab === "connections" ? 'shadow-lg' : ''
               }`}
               style={
@@ -236,12 +236,13 @@ export default function Recommendations() {
                   : { background: 'rgba(255, 255, 255, 0.08)', color: '#B6C4E0', border: '1px solid rgba(255, 255, 255, 0.1)' }
               }
             >
-              <Users className="w-5 h-5 mr-2" />
-              Potential Connections (20)
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+              <span className="hidden sm:inline">Potential Connections (20)</span>
+              <span className="sm:hidden">Connections (20)</span>
             </Button>
             <Button
               onClick={() => setActiveTab("opportunities")}
-              className={`flex-1 px-6 py-4 rounded-xl font-semibold text-sm transition-all duration-300 ${
+              className={`flex-1 px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 touch-target ${
                 activeTab === "opportunities" ? 'shadow-lg' : ''
               }`}
               style={
@@ -250,14 +251,15 @@ export default function Recommendations() {
                   : { background: 'rgba(255, 255, 255, 0.08)', color: '#B6C4E0', border: '1px solid rgba(255, 255, 255, 0.1)' }
               }
             >
-              <Briefcase className="w-5 h-5 mr-2" />
-              Top Opportunities (120)
+              <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+              <span className="hidden sm:inline">Top Opportunities (120)</span>
+              <span className="sm:hidden">Opportunities (120)</span>
             </Button>
           </div>
 
           {/* Content */}
           {activeTab === "connections" ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {connectionsData.map((connection, index) => (
                 <ConnectionCard key={connection.id} connection={connection} index={index} />
               ))}
@@ -266,27 +268,27 @@ export default function Recommendations() {
             <>
               {loadingAI ? (
                 <div className="text-center py-12">
-                  <p style={{ color: '#000' }}>Loading AI recommendations...</p>
+                  <p className="text-sm sm:text-base" style={{ color: '#000' }}>Loading AI recommendations...</p>
                 </div>
               ) : aiRecommendations?.success && aiRecommendations.recommendations.opportunities?.length > 0 && (
-                <div className="space-y-4 mb-8">
+                <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                   <div className="flex items-center gap-2 mb-4">
-                    <Sparkles className="w-5 h-5" style={{ color: '#7C3AED' }} />
-                    <h3 className="text-lg font-bold" style={{ color: '#000' }}>AI-Recommended for You</h3>
+                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: '#7C3AED' }} />
+                    <h3 className="text-base sm:text-lg font-bold" style={{ color: '#000' }}>AI-Recommended for You</h3>
                   </div>
                   {aiRecommendations.recommendations.opportunities.map((opp, idx) => (
-                    <div key={idx} className="glass-card glass-card-hover p-6">
-                      <h3 className="text-xl font-bold mb-2" style={{ color: '#000' }}>{opp.title}</h3>
-                      <p className="mb-3" style={{ color: '#000' }}>{opp.description}</p>
+                    <div key={idx} className="glass-card glass-card-hover p-4 sm:p-6">
+                      <h3 className="text-lg sm:text-xl font-bold mb-2" style={{ color: '#000' }}>{opp.title}</h3>
+                      <p className="mb-3 text-sm sm:text-base" style={{ color: '#000' }}>{opp.description}</p>
                       <div className="flex items-start gap-2 p-3 rounded-lg" style={{ background: 'rgba(124, 58, 237, 0.1)' }}>
-                        <Sparkles className="w-4 h-4 mt-0.5" style={{ color: '#7C3AED' }} />
-                        <p className="text-sm" style={{ color: '#000' }}>{opp.relevanceReason}</p>
+                        <Sparkles className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#7C3AED' }} />
+                        <p className="text-xs sm:text-sm" style={{ color: '#000' }}>{opp.relevanceReason}</p>
                       </div>
                     </div>
                   ))}
                 </div>
               )}
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {opportunitiesData.map((opportunity, index) => (
                   <OpportunityRecommendationCard key={opportunity.id} opportunity={opportunity} index={index} />
                 ))}
