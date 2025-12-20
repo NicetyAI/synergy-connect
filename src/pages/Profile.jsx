@@ -46,17 +46,17 @@ export default function Profile() {
 
   if (!profileUser) {
     return (
-      <div className="flex min-h-screen bg-gradient-main">
+      <div className="flex min-h-screen" style={{ background: '#F2F1F5' }}>
         <Sidebar />
         <div className="flex-1 flex items-center justify-center">
-          <p style={{ color: '#7A8BA6' }}>Loading profile...</p>
+          <p style={{ color: '#000' }}>Loading profile...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-main">
+    <div className="flex min-h-screen" style={{ background: '#F2F1F5' }}>
       <Sidebar />
       <div className="flex-1 overflow-y-auto">
         <ProfileHeader user={profileUser} isOwnProfile={isOwnProfile} currentUser={currentUser} />
@@ -64,42 +64,39 @@ export default function Profile() {
         <div className="max-w-6xl mx-auto px-8 py-8">
           {isOwnProfile && <VendorProfileSection userEmail={profileUser.email} />}
           <Tabs defaultValue="about" className="w-full">
-            <TabsList className="glass-card mb-8 p-2 rounded-2xl" style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+            <TabsList className="mb-8 p-2 rounded-2xl" style={{ background: '#fff', border: '1px solid #000' }}>
               <TabsTrigger 
                 value="about" 
-                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:shadow-lg" 
-                style={{ 
-                  color: '#B6C4E0'
-                }}
-                data-state-active-style={{ background: 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)', color: '#fff' }}
+                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" 
+                style={{ color: '#000' }}
               >
                 About
               </TabsTrigger>
               <TabsTrigger 
                 value="interest" 
-                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:shadow-lg"
-                style={{ color: '#B6C4E0' }}
+                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white"
+                style={{ color: '#000' }}
               >
                 Interest
               </TabsTrigger>
               <TabsTrigger 
                 value="connection" 
-                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:shadow-lg"
-                style={{ color: '#B6C4E0' }}
+                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white"
+                style={{ color: '#000' }}
               >
                 Connection
               </TabsTrigger>
               <TabsTrigger 
                 value="opportunity" 
-                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:shadow-lg"
-                style={{ color: '#B6C4E0' }}
+                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white"
+                style={{ color: '#000' }}
               >
                 Opportunity
               </TabsTrigger>
               <TabsTrigger 
                 value="activity" 
-                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:shadow-lg"
-                style={{ color: '#B6C4E0' }}
+                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white"
+                style={{ color: '#000' }}
               >
                 Activity
               </TabsTrigger>
