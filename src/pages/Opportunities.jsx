@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import React, { useState, useEffect, useMemo } from "react";
 import OpportunityCard from "@/components/opportunities/OpportunityCard";
+import OpportunitiesFilter from "@/components/opportunities/OpportunitiesFilter";
+import OpportunitiesPagination from "@/components/opportunities/OpportunitiesPagination";
 import Sidebar from "@/components/partnerships/Sidebar";
-import { Search, Sparkles, TrendingUp } from "lucide-react";
+import { Sparkles, TrendingUp } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import SEO from "@/components/seo/SEO";
@@ -137,11 +136,29 @@ export default function Opportunities() {
   const metadata = pageMetadata.Opportunities;
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("all");
+  const [investmentRange, setInvestmentRange] = useState([0, 2000000]);
+  const [selectedInterests, setSelectedInterests] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [currentUser, setCurrentUser] = useState(null);
+  const itemsPerPage = 12;
 
   useEffect(() => {
     base44.auth.me().then(user => setCurrentUser(user)).catch(() => setCurrentUser(null));
   }, []);
+
+  // Fetch database opportunities
+  const { data: dbOpportunities = [] } = useQuery({
+    queryKey: ['dbOpportunities'],
+    queryFn: () => base44.entities.Opportunity.list('-created_date'),
+    enabled: !!currentUser,
+  });
+
+  // Fetch user interests for filtering
+  const { data: userInterests = [] } = useQuery({
+    queryKey: ['userInterests'],
+    queryFn: () => base44.entities.Interest.list(),
+    enabled: !!currentUser,
+  });
 
   const { data: aiMatches, isLoading } = useQuery({
     queryKey: ['personalizedOpportunities'],
@@ -161,23 +178,118 @@ export default function Opportunities() {
     enabled: !!currentUser,
   });
 
-  // Combine static data with real estate API data
-  const allOpportunities = [
-    ...opportunitiesData,
-    ...(realEstateData?.opportunities || [])
-  ];
+  // Combine all opportunity sources
+  const allOpportunities = useMemo(() => {
+    const combined = [
+      ...opportunitiesData.map(opp => ({
+        ...opp,
+        source: 'static',
+        investmentMin: parseInvestmentRange(opp.investment).min,
+        investmentMax: parseInvestmentRange(opp.investment).max,
+        category: opp.type
+      })),
+      ...(realEstateData?.opportunities || []).map(opp => ({
+        ...opp,
+        source: 'api',
+        investmentMin: parseInvestmentRange(opp.investment).min,
+        investmentMax: parseInvestmentRange(opp.investment).max,
+        category: opp.type
+      })),
+      ...dbOpportunities.map(opp => ({
+        ...opp,
+        source: 'db',
+        investmentMin: opp.investment_min || 0,
+        investmentMax: opp.investment_max || 0,
+        type: opp.category,
+        investment: formatInvestment(opp.investment_min, opp.investment_max)
+      }))
+    ];
+    return combined;
+  }, [realEstateData, dbOpportunities]);
 
-  const filteredOpportunities = allOpportunities.filter((opp) => {
-    const matchesSearch = opp.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         opp.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = category === "all" || opp.type === category;
-    return matchesSearch && matchesCategory;
-  });
+  // Helper function to parse investment range
+  function parseInvestmentRange(investmentStr) {
+    if (!investmentStr) return { min: 0, max: 0 };
+    const matches = investmentStr.match(/\$?([\d,]+)/g);
+    if (!matches) return { min: 0, max: 0 };
+    const values = matches.map(m => parseInt(m.replace(/[$,]/g, '')));
+    return { min: values[0] || 0, max: values[1] || values[0] || 0 };
+  }
+
+  function formatInvestment(min, max) {
+    if (!min && !max) return 'Contact for details';
+    if (min === max) return `$${min.toLocaleString()}`;
+    return `$${min.toLocaleString()} - $${max.toLocaleString()}`;
+  }
+
+  // Get all unique interests for filtering
+  const availableInterests = useMemo(() => {
+    const interests = new Set();
+    dbOpportunities.forEach(opp => {
+      if (opp.related_interests && Array.isArray(opp.related_interests)) {
+        opp.related_interests.forEach(interest => interests.add(interest));
+      }
+    });
+    return Array.from(interests).sort();
+  }, [dbOpportunities]);
+
+  // Filter opportunities
+  const filteredOpportunities = useMemo(() => {
+    return allOpportunities.filter((opp) => {
+      // Search filter
+      const matchesSearch = !searchQuery || 
+        opp.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        opp.description?.toLowerCase().includes(searchQuery.toLowerCase());
+
+      // Category filter
+      const matchesCategory = category === "all" || 
+        opp.category === category || 
+        opp.type === category;
+
+      // Investment range filter
+      const oppMin = opp.investmentMin || 0;
+      const oppMax = opp.investmentMax || oppMin;
+      const matchesInvestment = 
+        (oppMin >= investmentRange[0] && oppMin <= investmentRange[1]) ||
+        (oppMax >= investmentRange[0] && oppMax <= investmentRange[1]) ||
+        (oppMin <= investmentRange[0] && oppMax >= investmentRange[1]);
+
+      // Interests filter
+      const matchesInterests = selectedInterests.length === 0 || (
+        opp.related_interests && Array.isArray(opp.related_interests) &&
+        opp.related_interests.some(interest => selectedInterests.includes(interest))
+      );
+
+      return matchesSearch && matchesCategory && matchesInvestment && matchesInterests;
+    });
+  }, [allOpportunities, searchQuery, category, investmentRange, selectedInterests]);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredOpportunities.length / itemsPerPage);
+  const paginatedOpportunities = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredOpportunities.slice(startIndex, endIndex);
+  }, [filteredOpportunities, currentPage]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, category, investmentRange, selectedInterests]);
 
   const clearFilters = () => {
     setSearchQuery("");
     setCategory("all");
+    setInvestmentRange([0, 2000000]);
+    setSelectedInterests([]);
+    setCurrentPage(1);
   };
+
+  const activeFiltersCount = 
+    (searchQuery ? 1 : 0) +
+    (category !== "all" ? 1 : 0) +
+    (investmentRange[0] !== 0 || investmentRange[1] !== 2000000 ? 1 : 0) +
+    selectedInterests.length;
 
   return (
     <div className="flex">
@@ -208,55 +320,19 @@ export default function Opportunities() {
         </div>
 
         {/* Filters */}
-        <div className="p-6 mb-8 rounded-2xl" style={{ background: '#fff', border: '1px solid #000' }}>
-          <div className="grid md:grid-cols-3 gap-4">
-            {/* Search */}
-            <div className="md:col-span-1">
-              <label className="block text-sm font-medium mb-2" style={{ color: '#000' }}>
-                Search
-              </label>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#666' }} />
-                <Input
-                  placeholder="Search by title or description..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 rounded-xl"
-                  style={{ color: '#000', background: '#F9FAFB', border: '1px solid #000' }}
-                />
-              </div>
-            </div>
-
-            {/* Category */}
-            <div className="md:col-span-1">
-              <label className="block text-sm font-medium mb-2" style={{ color: '#000' }}>
-                Category
-              </label>
-              <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="rounded-xl" style={{ color: '#000', background: '#F9FAFB', border: '1px solid #000' }}>
-                  <SelectValue placeholder="All Categories" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  <SelectItem value="Real Estate">Real Estate</SelectItem>
-                  <SelectItem value="Franchise">Franchise</SelectItem>
-                  <SelectItem value="Business">Business</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Clear Filters */}
-            <div className="md:col-span-1 flex items-end">
-              <Button
-                onClick={clearFilters}
-                className="w-full rounded-lg"
-                style={{ background: '#fff', color: '#000', border: '1px solid #000' }}
-              >
-                Clear Filters
-              </Button>
-            </div>
-          </div>
-        </div>
+        <OpportunitiesFilter
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          category={category}
+          setCategory={setCategory}
+          investmentRange={investmentRange}
+          setInvestmentRange={setInvestmentRange}
+          selectedInterests={selectedInterests}
+          setSelectedInterests={setSelectedInterests}
+          availableInterests={availableInterests}
+          clearFilters={clearFilters}
+          activeFiltersCount={activeFiltersCount}
+        />
 
         {/* AI-Matched Opportunities */}
         {isLoading ? (
@@ -364,20 +440,45 @@ export default function Opportunities() {
               </div>
             )}
 
-            {/* Fallback to original opportunities */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredOpportunities.map((opportunity, index) => (
-                <OpportunityCard key={opportunity.id} opportunity={opportunity} index={index} />
-              ))}
-            </div>
-
-            {filteredOpportunities.length === 0 && (
-              <div className="text-center py-16">
-                <p className="text-lg" style={{ color: '#666' }}>
-                  No opportunities found matching your filters
-                </p>
+            {/* Filtered Opportunities with Pagination */}
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold" style={{ color: '#000' }}>
+                  All Opportunities
+                  <span className="ml-2 text-sm font-normal" style={{ color: '#666' }}>
+                    ({filteredOpportunities.length} results)
+                  </span>
+                </h2>
               </div>
-            )}
+
+              {paginatedOpportunities.length > 0 ? (
+                <>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {paginatedOpportunities.map((opportunity, index) => (
+                      <OpportunityCard 
+                        key={`${opportunity.source}-${opportunity.id}`} 
+                        opportunity={opportunity} 
+                        index={index} 
+                      />
+                    ))}
+                  </div>
+
+                  <OpportunitiesPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                    totalItems={filteredOpportunities.length}
+                    itemsPerPage={itemsPerPage}
+                  />
+                </>
+              ) : (
+                <div className="text-center py-16">
+                  <p className="text-lg" style={{ color: '#666' }}>
+                    No opportunities found matching your filters
+                  </p>
+                </div>
+              )}
+            </div>
           </>
         )}
         </div>
