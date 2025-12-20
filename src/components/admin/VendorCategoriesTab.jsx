@@ -105,20 +105,22 @@ export default function VendorCategoriesTab() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-card p-6 rounded-2xl"
+        className="p-6 rounded-2xl"
+        style={{ background: '#fff', border: '2px solid #000' }}
       >
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold" style={{ color: '#E5EDFF' }}>
+            <h2 className="text-2xl font-bold" style={{ color: '#000' }}>
               Vendor Categories
             </h2>
-            <p className="text-sm mt-1" style={{ color: '#7A8BA6' }}>
+            <p className="text-sm mt-1" style={{ color: '#666' }}>
               Manage categories for vendor applications
             </p>
           </div>
           <Button
             onClick={() => handleOpenDialog()}
-            className="bg-[#3B82F6] hover:bg-[#2563EB]"
+            style={{ background: '#D8A11F', color: '#fff' }}
+            className="hover:opacity-80"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Category
@@ -129,23 +131,23 @@ export default function VendorCategoriesTab() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead style={{ color: '#B6C4E0' }}>Name</TableHead>
-                <TableHead style={{ color: '#B6C4E0' }}>Description</TableHead>
-                <TableHead style={{ color: '#B6C4E0' }}>Icon</TableHead>
-                <TableHead style={{ color: '#B6C4E0' }}>Status</TableHead>
-                <TableHead style={{ color: '#B6C4E0' }}>Actions</TableHead>
+                <TableHead style={{ color: '#000', fontWeight: 600 }}>Name</TableHead>
+                <TableHead style={{ color: '#000', fontWeight: 600 }}>Description</TableHead>
+                <TableHead style={{ color: '#000', fontWeight: 600 }}>Icon</TableHead>
+                <TableHead style={{ color: '#000', fontWeight: 600 }}>Status</TableHead>
+                <TableHead style={{ color: '#000', fontWeight: 600 }}>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {categories.map((category) => (
                 <TableRow key={category.id}>
-                  <TableCell style={{ color: '#E5EDFF' }} className="font-medium">
+                  <TableCell style={{ color: '#000' }} className="font-medium">
                     {category.name}
                   </TableCell>
-                  <TableCell style={{ color: '#B6C4E0' }}>
+                  <TableCell style={{ color: '#000' }}>
                     {category.description || '—'}
                   </TableCell>
-                  <TableCell style={{ color: '#B6C4E0' }}>
+                  <TableCell style={{ color: '#000' }}>
                     {category.icon || '—'}
                   </TableCell>
                   <TableCell>
