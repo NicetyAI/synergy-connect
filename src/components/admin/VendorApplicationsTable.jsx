@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, XCircle, Clock, Eye, Search, Star, Award, Briefcase, Users, Globe, ExternalLink } from "lucide-react";
+import { CheckCircle, XCircle, Clock, Eye, Search, Star, Award, Briefcase, Users, Globe, ExternalLink, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -60,6 +60,15 @@ export default function VendorApplicationsTable() {
       base44.entities.VendorApplication.update(appId, { featured }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vendorApplications'] });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (applicationId) =>
+      base44.entities.VendorApplication.delete(applicationId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vendorApplications'] });
+      setSelectedApplication(null);
     },
   });
 
@@ -186,6 +195,20 @@ export default function VendorApplicationsTable() {
                               <XCircle className="w-4 h-4" />
                             </Button>
                           </>
+                        )}
+                        {(app.status === 'approved' || app.status === 'rejected') && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              if (confirm(`Are you sure you want to delete ${app.business_name}? This action cannot be undone.`)) {
+                                deleteMutation.mutate(app.id);
+                              }
+                            }}
+                            className="text-red-500 hover:text-red-600 hover:bg-red-500/10"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
                         )}
                       </div>
                     </TableCell>
@@ -424,25 +447,41 @@ export default function VendorApplicationsTable() {
               </div>
 
               {/* Actions */}
-              {selectedApplication.status === 'pending' && (
-                <div className="flex gap-3 pt-4">
+              <div className="flex gap-3 pt-4">
+                {selectedApplication.status === 'pending' && (
+                  <>
+                    <Button
+                      onClick={() => approveMutation.mutate(selectedApplication.id)}
+                      className="flex-1 bg-green-600 hover:bg-green-700"
+                    >
+                      <CheckCircle className="w-4 h-4 mr-2" />
+                      Approve Application
+                    </Button>
+                    <Button
+                      onClick={() => rejectMutation.mutate(selectedApplication.id)}
+                      variant="destructive"
+                      className="flex-1"
+                    >
+                      <XCircle className="w-4 h-4 mr-2" />
+                      Reject Application
+                    </Button>
+                  </>
+                )}
+                {(selectedApplication.status === 'approved' || selectedApplication.status === 'rejected') && (
                   <Button
-                    onClick={() => approveMutation.mutate(selectedApplication.id)}
-                    className="flex-1 bg-green-600 hover:bg-green-700"
-                  >
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                    Approve Application
-                  </Button>
-                  <Button
-                    onClick={() => rejectMutation.mutate(selectedApplication.id)}
+                    onClick={() => {
+                      if (confirm(`Are you sure you want to delete ${selectedApplication.business_name}? This action cannot be undone.`)) {
+                        deleteMutation.mutate(selectedApplication.id);
+                      }
+                    }}
                     variant="destructive"
                     className="flex-1"
                   >
-                    <XCircle className="w-4 h-4 mr-2" />
-                    Reject Application
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Delete Vendor
                   </Button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           )}
         </DialogContent>
