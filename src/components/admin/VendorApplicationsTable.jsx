@@ -196,6 +196,15 @@ export default function VendorApplicationsTable() {
                             </Button>
                           </>
                         )}
+                        {app.status === 'rejected' && (
+                          <Button
+                            size="sm"
+                            onClick={() => approveMutation.mutate(app.id)}
+                            className="bg-green-600 hover:bg-green-700"
+                          >
+                            <CheckCircle className="w-4 h-4" />
+                          </Button>
+                        )}
                         {(app.status === 'approved' || app.status === 'rejected') && (
                           <Button
                             size="sm"
@@ -467,7 +476,30 @@ export default function VendorApplicationsTable() {
                     </Button>
                   </>
                 )}
-                {(selectedApplication.status === 'approved' || selectedApplication.status === 'rejected') && (
+                {selectedApplication.status === 'rejected' && (
+                  <>
+                    <Button
+                      onClick={() => approveMutation.mutate(selectedApplication.id)}
+                      className="flex-1 bg-green-600 hover:bg-green-700"
+                    >
+                      <CheckCircle className="w-4 h-4 mr-2" />
+                      Approve Application
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        if (confirm(`Are you sure you want to delete ${selectedApplication.business_name}? This action cannot be undone.`)) {
+                          deleteMutation.mutate(selectedApplication.id);
+                        }
+                      }}
+                      variant="destructive"
+                      className="flex-1"
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Delete Vendor
+                    </Button>
+                  </>
+                )}
+                {selectedApplication.status === 'approved' && (
                   <Button
                     onClick={() => {
                       if (confirm(`Are you sure you want to delete ${selectedApplication.business_name}? This action cannot be undone.`)) {
