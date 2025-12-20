@@ -261,7 +261,7 @@ export default function ProfileHeader({ user, isOwnProfile, currentUser }) {
                   </h1>
                   
                   {user.bio && (
-                    <p className="text-lg mb-4 max-w-2xl" style={{ color: '#B6C4E0' }}>
+                    <p className="text-lg mb-4 max-w-2xl" style={{ color: '#000' }}>
                       {user.bio}
                     </p>
                   )}
