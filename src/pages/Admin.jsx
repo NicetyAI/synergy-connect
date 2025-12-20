@@ -42,53 +42,53 @@ export default function Admin() {
       });
   }, []);
 
-  // Fetch all data
+  // Fetch all data based on permissions
   const { data: users = [] } = useQuery({
     queryKey: ['allUsers'],
     queryFn: () => base44.entities.User.list(),
-    enabled: currentUser?.role === 'admin',
+    enabled: !!currentUser && hasPermission(currentUser.role, 'canManageUsers'),
   });
 
   const { data: opportunities = [] } = useQuery({
     queryKey: ['allOpportunities'],
     queryFn: () => base44.entities.Opportunity.list(),
-    enabled: currentUser?.role === 'admin',
+    enabled: !!currentUser && canAccessAdmin(currentUser.role),
   });
 
   const { data: connections = [] } = useQuery({
     queryKey: ['allConnections'],
     queryFn: () => base44.entities.Connection.list(),
-    enabled: currentUser?.role === 'admin',
+    enabled: !!currentUser && canAccessAdmin(currentUser.role),
   });
 
   const { data: interests = [] } = useQuery({
     queryKey: ['allInterests'],
     queryFn: () => base44.entities.Interest.list(),
-    enabled: currentUser?.role === 'admin',
+    enabled: !!currentUser && canAccessAdmin(currentUser.role),
   });
 
   const { data: groups = [] } = useQuery({
     queryKey: ['allGroups'],
     queryFn: () => base44.entities.GroupChat.list(),
-    enabled: currentUser?.role === 'admin',
+    enabled: !!currentUser && canAccessAdmin(currentUser.role),
   });
 
   const { data: activities = [] } = useQuery({
     queryKey: ['allActivities'],
     queryFn: () => base44.entities.Activity.list(),
-    enabled: currentUser?.role === 'admin',
+    enabled: !!currentUser && hasPermission(currentUser.role, 'canViewAnalytics'),
   });
 
   const { data: adCampaigns = [] } = useQuery({
     queryKey: ['allAdCampaigns'],
     queryFn: () => base44.entities.AdvertiseApplication.list(),
-    enabled: currentUser?.role === 'admin',
+    enabled: !!currentUser && hasPermission(currentUser.role, 'canManageAdvertisements'),
   });
 
   const { data: adMetrics = [] } = useQuery({
     queryKey: ['allAdMetrics'],
     queryFn: () => base44.entities.AdMetrics.list(),
-    enabled: currentUser?.role === 'admin',
+    enabled: !!currentUser && hasPermission(currentUser.role, 'canManageAdvertisements'),
   });
 
   // Calculate metrics
@@ -212,7 +212,7 @@ export default function Admin() {
           {/* Tabs */}
           <Tabs defaultValue="dashboard" className="w-full">
             <TabsList 
-              className="p-2 rounded-2xl mb-8"
+              className="p-2 rounded-2xl mb-8 flex-wrap justify-start"
               style={{ 
                 background: '#fff',
                 border: '2px solid #000',
@@ -222,42 +222,58 @@ export default function Admin() {
               <TabsTrigger value="dashboard" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Dashboard
               </TabsTrigger>
-              <TabsTrigger value="users" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
-                Users
-              </TabsTrigger>
+              {hasPermission(currentUser.role, 'canManageUsers') && (
+                <TabsTrigger value="users" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                  Users
+                </TabsTrigger>
+              )}
               <TabsTrigger value="partner" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Partner
               </TabsTrigger>
-              <TabsTrigger value="opportunity" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
-                Opportunity
-              </TabsTrigger>
+              {hasPermission(currentUser.role, 'canManageOpportunities') && (
+                <TabsTrigger value="opportunity" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                  Opportunity
+                </TabsTrigger>
+              )}
               <TabsTrigger value="interest" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Interest
               </TabsTrigger>
-              <TabsTrigger value="vendor" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
-                Vendor
-              </TabsTrigger>
-              <TabsTrigger value="ad-campaigns" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
-                Ad Campaigns
-              </TabsTrigger>
-              <TabsTrigger value="category" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
-                Category
-              </TabsTrigger>
-              <TabsTrigger value="forum" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
-                Forum
-              </TabsTrigger>
+              {hasPermission(currentUser.role, 'canManageVendors') && (
+                <TabsTrigger value="vendor" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                  Vendor
+                </TabsTrigger>
+              )}
+              {hasPermission(currentUser.role, 'canManageAdvertisements') && (
+                <TabsTrigger value="ad-campaigns" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                  Ad Campaigns
+                </TabsTrigger>
+              )}
+              {hasPermission(currentUser.role, 'canManageContent') && (
+                <TabsTrigger value="category" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                  Category
+                </TabsTrigger>
+              )}
+              {hasPermission(currentUser.role, 'canManageForum') && (
+                <TabsTrigger value="forum" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                  Forum
+                </TabsTrigger>
+              )}
               <TabsTrigger value="profession" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Profession
               </TabsTrigger>
-              <TabsTrigger value="activity" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
-                Activity
-              </TabsTrigger>
+              {hasPermission(currentUser.role, 'canViewAnalytics') && (
+                <TabsTrigger value="activity" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                  Activity
+                </TabsTrigger>
+              )}
               <TabsTrigger value="contact" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Contact
               </TabsTrigger>
-              <TabsTrigger value="roles" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
-                Roles
-              </TabsTrigger>
+              {currentUser.role === 'admin' && (
+                <TabsTrigger value="roles" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                  Roles
+                </TabsTrigger>
+              )}
             </TabsList>
 
             <TabsContent value="dashboard" className="space-y-8">
@@ -304,9 +320,11 @@ export default function Admin() {
               </motion.div>
             </TabsContent>
 
-            <TabsContent value="users">
-              <UsersTable users={users} />
-            </TabsContent>
+            {hasPermission(currentUser.role, 'canManageUsers') && (
+              <TabsContent value="users">
+                <UsersTable users={users} />
+              </TabsContent>
+            )}
 
             <TabsContent value="partner">
               <div className="p-8 rounded-2xl text-center" style={{ background: '#fff', border: '2px solid #000' }}>
@@ -314,11 +332,13 @@ export default function Admin() {
               </div>
             </TabsContent>
 
-            <TabsContent value="opportunity">
-              <div className="p-8 rounded-2xl text-center" style={{ background: '#fff', border: '2px solid #000' }}>
-                <p style={{ color: '#666' }}>Opportunity management coming soon...</p>
-              </div>
-            </TabsContent>
+            {hasPermission(currentUser.role, 'canManageOpportunities') && (
+              <TabsContent value="opportunity">
+                <div className="p-8 rounded-2xl text-center" style={{ background: '#fff', border: '2px solid #000' }}>
+                  <p style={{ color: '#666' }}>Opportunity management coming soon...</p>
+                </div>
+              </TabsContent>
+            )}
 
             <TabsContent value="interest">
               <div className="p-8 rounded-2xl text-center" style={{ background: '#fff', border: '2px solid #000' }}>
@@ -326,32 +346,40 @@ export default function Admin() {
               </div>
             </TabsContent>
 
-            <TabsContent value="vendor" className="space-y-6">
-              <div className="mb-6">
-                <h3 className="text-xl font-bold mb-2" style={{ color: '#000' }}>Vendor Applications</h3>
-                <p className="text-sm mb-4" style={{ color: '#666' }}>Review and approve vendor applications</p>
-                <VendorApplicationsTable />
-              </div>
-              <div className="mt-8">
-                <VendorCategoriesTab />
-              </div>
-            </TabsContent>
+            {hasPermission(currentUser.role, 'canManageVendors') && (
+              <TabsContent value="vendor" className="space-y-6">
+                <div className="mb-6">
+                  <h3 className="text-xl font-bold mb-2" style={{ color: '#000' }}>Vendor Applications</h3>
+                  <p className="text-sm mb-4" style={{ color: '#666' }}>Review and approve vendor applications</p>
+                  <VendorApplicationsTable />
+                </div>
+                <div className="mt-8">
+                  <VendorCategoriesTab />
+                </div>
+              </TabsContent>
+            )}
 
-            <TabsContent value="ad-campaigns" className="space-y-6">
-              <div className="mb-6">
-                <h3 className="text-xl font-bold mb-2" style={{ color: '#000' }}>Ad Campaign Applications</h3>
-                <p className="text-sm mb-4" style={{ color: '#666' }}>Review and approve ad campaign applications</p>
-              </div>
-              <AdCampaignApplicationsTable />
-            </TabsContent>
+            {hasPermission(currentUser.role, 'canManageAdvertisements') && (
+              <TabsContent value="ad-campaigns" className="space-y-6">
+                <div className="mb-6">
+                  <h3 className="text-xl font-bold mb-2" style={{ color: '#000' }}>Ad Campaign Applications</h3>
+                  <p className="text-sm mb-4" style={{ color: '#666' }}>Review and approve ad campaign applications</p>
+                </div>
+                <AdCampaignApplicationsTable />
+              </TabsContent>
+            )}
 
-            <TabsContent value="category">
-              <CategoryManagementTab />
-            </TabsContent>
+            {hasPermission(currentUser.role, 'canManageContent') && (
+              <TabsContent value="category">
+                <CategoryManagementTab />
+              </TabsContent>
+            )}
 
-            <TabsContent value="forum">
-              <ForumCategoriesManagementTab />
-            </TabsContent>
+            {hasPermission(currentUser.role, 'canManageForum') && (
+              <TabsContent value="forum">
+                <ForumCategoriesManagementTab />
+              </TabsContent>
+            )}
 
             <TabsContent value="profession">
               <div className="p-8 rounded-2xl text-center" style={{ background: '#fff', border: '2px solid #000' }}>
@@ -359,17 +387,21 @@ export default function Admin() {
               </div>
             </TabsContent>
 
-            <TabsContent value="activity">
-              <SystemActivityFeed />
-            </TabsContent>
+            {hasPermission(currentUser.role, 'canViewAnalytics') && (
+              <TabsContent value="activity">
+                <SystemActivityFeed />
+              </TabsContent>
+            )}
 
             <TabsContent value="contact">
               <ContactManagementTab />
             </TabsContent>
 
-            <TabsContent value="roles">
-              <RolesManagementTab />
-            </TabsContent>
+            {currentUser.role === 'admin' && (
+              <TabsContent value="roles">
+                <RolesManagementTab />
+              </TabsContent>
+            )}
           </Tabs>
         </div>
       </div>
