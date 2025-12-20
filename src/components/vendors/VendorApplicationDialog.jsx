@@ -139,7 +139,8 @@ export default function VendorApplicationDialog({ open, onOpenChange }) {
     },
   });
 
-  const handleNext = () => {
+  const handleNext = (e) => {
+    e?.preventDefault();
     if (currentStep === 1 && (!formData.businessName || !formData.category || !formData.description)) {
       toast({
         title: "Required Fields",
@@ -164,7 +165,9 @@ export default function VendorApplicationDialog({ open, onOpenChange }) {
       });
       return;
     }
-    setCurrentStep(prev => Math.min(prev + 1, totalSteps));
+    if (currentStep < totalSteps) {
+      setCurrentStep(prev => prev + 1);
+    }
   };
 
   const handleBack = () => {
