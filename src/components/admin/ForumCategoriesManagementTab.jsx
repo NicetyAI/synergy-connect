@@ -118,14 +118,14 @@ export default function ForumCategoriesManagementTab() {
       >
         <div className="flex items-center gap-3">
           <div className="w-2 h-8 rounded-full" style={{ background: 'linear-gradient(180deg, #7C3AED 0%, #3B82F6 100%)' }} />
-          <h2 className="text-2xl font-bold" style={{ color: '#E5EDFF' }}>
+          <h2 className="text-2xl font-bold" style={{ color: '#000' }}>
             Forum Categories
           </h2>
         </div>
         <Button
           onClick={() => setIsCreateDialogOpen(true)}
-          style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}
-          className="gap-2"
+          style={{ background: '#D8A11F', color: '#fff' }}
+          className="gap-2 hover:opacity-80"
         >
           <Plus className="w-4 h-4" />
           Create New Category
@@ -137,16 +137,17 @@ export default function ForumCategoriesManagementTab() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.1 }}
-        className="glass-card p-4 rounded-2xl"
+        className="p-4 rounded-2xl"
+        style={{ background: '#fff', border: '1px solid #ddd' }}
       >
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#7A8BA6' }} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#666' }} />
           <Input
             placeholder="Search categories..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 glass-input"
-            style={{ color: '#E5EDFF' }}
+            className="pl-10"
+            style={{ background: '#fff', border: '1px solid #ddd', color: '#000' }}
           />
         </div>
       </motion.div>
@@ -156,30 +157,31 @@ export default function ForumCategoriesManagementTab() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
-        className="glass-card rounded-2xl overflow-hidden"
+        className="rounded-2xl overflow-hidden"
+        style={{ background: '#fff', border: '2px solid #000' }}
       >
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead style={{ background: 'rgba(59, 130, 246, 0.1)' }}>
+            <thead style={{ background: '#F2F1F5' }}>
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#B6C4E0' }}>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#000' }}>
                   Icon
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#B6C4E0' }}>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#000' }}>
                   Name
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#B6C4E0' }}>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#000' }}>
                   Description
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#B6C4E0' }}>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#000' }}>
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
+            <tbody className="divide-y" style={{ borderColor: '#ddd' }}>
               {filteredCategories.length === 0 ? (
                 <tr>
-                  <td colSpan="4" className="px-6 py-8 text-center" style={{ color: '#7A8BA6' }}>
+                  <td colSpan="4" className="px-6 py-8 text-center" style={{ color: '#666' }}>
                     No categories found
                   </td>
                 </tr>
@@ -192,20 +194,20 @@ export default function ForumCategoriesManagementTab() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className="hover:bg-white/5 transition-colors"
+                      className="hover:bg-gray-50 transition-colors"
                     >
                       <td className="px-6 py-4">
-                        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(59, 130, 246, 0.2)' }}>
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: '#F2F1F5', border: '1px solid #ddd' }}>
                           <IconComponent className="w-5 h-5" style={{ color: '#3B82F6' }} />
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="font-medium" style={{ color: '#E5EDFF' }}>
+                        <span className="font-medium" style={{ color: '#000' }}>
                           {category.name}
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="text-sm" style={{ color: '#B6C4E0' }}>
+                        <span className="text-sm" style={{ color: '#000' }}>
                           {category.description || '-'}
                         </span>
                       </td>
@@ -214,14 +216,16 @@ export default function ForumCategoriesManagementTab() {
                           <Button
                             size="sm"
                             onClick={() => handleEdit(category)}
-                            style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#E5EDFF' }}
+                            style={{ background: '#3B82F6', color: '#fff' }}
+                            className="hover:opacity-80"
                           >
                             Edit
                           </Button>
                           <Button
                             size="sm"
                             onClick={() => deleteMutation.mutate(category.id)}
-                            style={{ background: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)', color: '#fff' }}
+                            style={{ background: '#EF4444', color: '#fff' }}
+                            className="hover:opacity-80"
                           >
                             Delete
                           </Button>
