@@ -48,6 +48,7 @@ export default function Vendors() {
     queryFn: async () => {
       const vendors = await base44.entities.VendorApplication.filter({ status: 'approved' });
       return vendors.map(vendor => ({
+        ...vendor,
         id: vendor.id,
         name: vendor.business_name,
         category: vendor.category,
@@ -200,7 +201,7 @@ export default function Vendors() {
                 </p>
               </div>
             ) : filteredVendors.length > 0 ? (
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredVendors.map((vendor, index) => (
                   <VendorCard key={vendor.id} vendor={vendor} index={index} />
                 ))}
