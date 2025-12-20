@@ -348,14 +348,17 @@ export default function ForumCategoriesManagementTab() {
               onClick={() => setIsCreateDialogOpen(false)}
               variant="outline"
               style={{ border: '1px solid #000', color: '#000', background: '#fff' }}
+              disabled={createMutation.isPending}
             >
               Cancel
             </Button>
             <Button
               onClick={handleCreate}
+              disabled={!formData.name.trim() || createMutation.isPending}
               style={{ background: '#D8A11F', color: '#fff' }}
+              className="hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create
+              {createMutation.isPending ? 'Creating...' : 'Create'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -425,14 +428,17 @@ export default function ForumCategoriesManagementTab() {
               onClick={() => setIsEditDialogOpen(false)}
               variant="outline"
               style={{ border: '1px solid #000', color: '#000', background: '#fff' }}
+              disabled={updateMutation.isPending}
             >
               Cancel
             </Button>
             <Button
               onClick={handleUpdate}
+              disabled={!formData.name.trim() || updateMutation.isPending}
               style={{ background: '#D8A11F', color: '#fff' }}
+              className="hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Update
+              {updateMutation.isPending ? 'Updating...' : 'Update'}
             </Button>
           </DialogFooter>
         </DialogContent>
