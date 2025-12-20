@@ -81,7 +81,7 @@ export default function SystemActivityFeed() {
       >
         <div className="flex items-center gap-3 mb-6">
           <div className="w-2 h-8 rounded-full" style={{ background: 'linear-gradient(180deg, #3B82F6 0%, #7C3AED 100%)' }} />
-          <h2 className="text-2xl font-bold" style={{ color: '#E5EDFF' }}>
+          <h2 className="text-2xl font-bold" style={{ color: '#000' }}>
             System Activity Feed
           </h2>
         </div>
@@ -92,21 +92,22 @@ export default function SystemActivityFeed() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.1 }}
-        className="glass-card p-6 rounded-2xl"
+        className="p-6 rounded-2xl"
+        style={{ background: '#fff', border: '1px solid #ddd' }}
       >
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#7A8BA6' }} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#666' }} />
             <Input
               placeholder="Search activities..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 glass-input"
-              style={{ color: '#E5EDFF' }}
+              className="pl-10"
+              style={{ background: '#fff', border: '1px solid #ddd', color: '#000' }}
             />
           </div>
           <Select value={entityTypeFilter} onValueChange={setEntityTypeFilter}>
-            <SelectTrigger className="w-[200px] glass-input" style={{ color: '#E5EDFF' }}>
+            <SelectTrigger className="w-[200px]" style={{ background: '#fff', border: '1px solid #ddd', color: '#000' }}>
               <SelectValue placeholder="Entity Type" />
             </SelectTrigger>
             <SelectContent>
@@ -118,7 +119,7 @@ export default function SystemActivityFeed() {
             </SelectContent>
           </Select>
           <Select value={actionTypeFilter} onValueChange={setActionTypeFilter}>
-            <SelectTrigger className="w-[200px] glass-input" style={{ color: '#E5EDFF' }}>
+            <SelectTrigger className="w-[200px]" style={{ background: '#fff', border: '1px solid #ddd', color: '#000' }}>
               <SelectValue placeholder="Action Type" />
             </SelectTrigger>
             <SelectContent>
@@ -137,36 +138,37 @@ export default function SystemActivityFeed() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
-        className="glass-card rounded-2xl overflow-hidden"
+        className="rounded-2xl overflow-hidden"
+        style={{ background: '#fff', border: '2px solid #000' }}
       >
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead style={{ background: 'rgba(59, 130, 246, 0.1)' }}>
+            <thead style={{ background: '#F2F1F5' }}>
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#B6C4E0' }}>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#000' }}>
                   Type
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#B6C4E0' }}>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#000' }}>
                   Message
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#B6C4E0' }}>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#000' }}>
                   Entity Type
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#B6C4E0' }}>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#000' }}>
                   Owner
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#B6C4E0' }}>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#000' }}>
                   Created At
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#B6C4E0' }}>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#000' }}>
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
+            <tbody className="divide-y" style={{ borderColor: '#ddd' }}>
               {filteredLogs.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="px-6 py-8 text-center" style={{ color: '#7A8BA6' }}>
+                  <td colSpan="6" className="px-6 py-8 text-center" style={{ color: '#666' }}>
                     No activities found
                   </td>
                 </tr>
@@ -177,37 +179,37 @@ export default function SystemActivityFeed() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    className="hover:bg-white/5 transition-colors"
+                    className="hover:bg-gray-50 transition-colors"
                   >
                     <td className="px-6 py-4">
                       <Badge 
-                        className={`${getTypeColor(log.type)} border text-xs font-medium`}
+                        className="bg-blue-100 text-blue-800 border-blue-200 border text-xs font-medium"
                       >
                         {log.type?.replace(/_/g, ' ')}
                       </Badge>
                     </td>
                     <td className="px-6 py-4 max-w-md">
-                      <p className="text-sm" style={{ color: '#E5EDFF' }}>
+                      <p className="text-sm" style={{ color: '#000' }}>
                         {log.message}
                       </p>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-sm" style={{ color: '#B6C4E0' }}>
+                      <span className="text-sm" style={{ color: '#000' }}>
                         {log.entity_type}
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm" style={{ color: '#B6C4E0' }}>
-                        <div className="font-medium" style={{ color: '#E5EDFF' }}>
+                      <div className="text-sm">
+                        <div className="font-medium" style={{ color: '#000' }}>
                           {log.user_name || 'System'}
                         </div>
-                        <div className="text-xs" style={{ color: '#7A8BA6' }}>
+                        <div className="text-xs" style={{ color: '#666' }}>
                           {log.user_email}
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-sm" style={{ color: '#B6C4E0' }}>
+                      <span className="text-sm" style={{ color: '#000' }}>
                         {formatDistanceToNow(new Date(log.created_date), { addSuffix: true })}
                       </span>
                     </td>
@@ -216,7 +218,7 @@ export default function SystemActivityFeed() {
                         variant="ghost"
                         size="sm"
                         onClick={() => deleteMutation.mutate(log.id)}
-                        className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -234,10 +236,11 @@ export default function SystemActivityFeed() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
-        className="glass-card p-6 rounded-2xl"
+        className="p-6 rounded-2xl"
+        style={{ background: '#fff', border: '1px solid #ddd' }}
       >
         <div className="flex items-center justify-between text-sm">
-          <span style={{ color: '#B6C4E0' }}>
+          <span style={{ color: '#000' }}>
             Showing {filteredLogs.length} of {logs.length} activities
           </span>
           {(searchQuery || entityTypeFilter !== 'all' || actionTypeFilter !== 'all') && (
