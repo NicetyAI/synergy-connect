@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Search, Plus, Edit, Trash2, MessageSquare, Sparkles, TrendingUp, Users, Briefcase, Building2, Lightbulb, Zap, Target, Rocket, Award, HeartHandshake, TrendingDown, BarChart3, Globe, Settings } from "lucide-react";
+import { Search, Plus, Edit, Trash2, MessageSquare, Sparkles, TrendingUp, Users, Briefcase, Building2, Lightbulb, Zap, Target, Rocket, Award, HeartHandshake, TrendingDown, BarChart3, Globe, Settings, Film, Music, Store, Utensils, Coffee, ShoppingBag, Tv, Home, Car, Plane, Heart, Gift, Camera, Palette } from "lucide-react";
 import { motion } from "framer-motion";
 
 // Icon mapping for forum categories
@@ -26,6 +26,20 @@ const ICON_MAP = {
   'BarChart3': BarChart3,
   'Globe': Globe,
   'Settings': Settings,
+  'Film': Film,
+  'Music': Music,
+  'Store': Store,
+  'Utensils': Utensils,
+  'Coffee': Coffee,
+  'ShoppingBag': ShoppingBag,
+  'Tv': Tv,
+  'Home': Home,
+  'Car': Car,
+  'Plane': Plane,
+  'Heart': Heart,
+  'Gift': Gift,
+  'Camera': Camera,
+  'Palette': Palette,
 };
 
 const AVAILABLE_ICONS = [
@@ -41,6 +55,20 @@ const AVAILABLE_ICONS = [
   { name: 'Rocket', icon: Rocket },
   { name: 'Award', icon: Award },
   { name: 'HeartHandshake', icon: HeartHandshake },
+  { name: 'Film', icon: Film },
+  { name: 'Music', icon: Music },
+  { name: 'Tv', icon: Tv },
+  { name: 'Store', icon: Store },
+  { name: 'ShoppingBag', icon: ShoppingBag },
+  { name: 'Utensils', icon: Utensils },
+  { name: 'Coffee', icon: Coffee },
+  { name: 'Home', icon: Home },
+  { name: 'Car', icon: Car },
+  { name: 'Plane', icon: Plane },
+  { name: 'Heart', icon: Heart },
+  { name: 'Gift', icon: Gift },
+  { name: 'Camera', icon: Camera },
+  { name: 'Palette', icon: Palette },
   { name: 'TrendingDown', icon: TrendingDown },
   { name: 'BarChart3', icon: BarChart3 },
   { name: 'Globe', icon: Globe },
