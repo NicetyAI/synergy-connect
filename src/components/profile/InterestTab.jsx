@@ -187,17 +187,17 @@ export default function InterestTab({ user, isOwnProfile }) {
 
   return (
     <>
-      <div className="glass-card p-8">
+      <div className="p-8 rounded-2xl" style={{ background: '#fff', border: '2px solid #000' }}>
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-3xl font-bold mb-2" style={{ color: '#E5EDFF' }}>Interests</h2>
-            <p className="text-sm" style={{ color: '#7A8BA6' }}>Manage your interests and preferences</p>
+            <h2 className="text-3xl font-bold mb-2" style={{ color: '#000' }}>Interests</h2>
+            <p className="text-sm" style={{ color: '#666' }}>Manage your interests and preferences</p>
           </div>
           {isOwnProfile && (
             <Button
               onClick={() => setShowAddDialog(true)}
               className="gap-2 px-6 py-2 rounded-xl"
-              style={{ background: 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)', color: '#fff' }}
+              style={{ background: '#D8A11F', color: '#fff' }}
             >
               <Plus className="w-4 h-4" />
               Add Interest
@@ -206,17 +206,17 @@ export default function InterestTab({ user, isOwnProfile }) {
         </div>
 
         <Tabs defaultValue="my-interests" className="w-full">
-          <TabsList className="glass-card mb-8 p-2 rounded-2xl" style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-            <TabsTrigger value="my-interests" className="rounded-xl px-5 py-3 font-semibold text-sm transition-all data-[state=active]:shadow-lg data-[state=active]:bg-[#667EEA] data-[state=active]:text-white" style={{ color: '#B6C4E0' }}>
+          <TabsList className="mb-8 p-2 rounded-2xl" style={{ background: '#F2F1F5', border: '1px solid #000' }}>
+            <TabsTrigger value="my-interests" className="rounded-xl px-5 py-3 font-semibold text-sm transition-all data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
               My Interests
             </TabsTrigger>
-            <TabsTrigger value="pending" className="rounded-xl px-5 py-3 font-semibold text-sm transition-all data-[state=active]:shadow-lg data-[state=active]:bg-[#667EEA] data-[state=active]:text-white" style={{ color: '#B6C4E0' }}>
+            <TabsTrigger value="pending" className="rounded-xl px-5 py-3 font-semibold text-sm transition-all data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
               Pending
             </TabsTrigger>
-            <TabsTrigger value="rejected" className="rounded-xl px-5 py-3 font-semibold text-sm transition-all data-[state=active]:shadow-lg data-[state=active]:bg-[#667EEA] data-[state=active]:text-white" style={{ color: '#B6C4E0' }}>
+            <TabsTrigger value="rejected" className="rounded-xl px-5 py-3 font-semibold text-sm transition-all data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
               Rejected
             </TabsTrigger>
-            <TabsTrigger value="available" className="rounded-xl px-5 py-3 font-semibold text-sm transition-all data-[state=active]:shadow-lg data-[state=active]:bg-[#667EEA] data-[state=active]:text-white" style={{ color: '#B6C4E0' }}>
+            <TabsTrigger value="available" className="rounded-xl px-5 py-3 font-semibold text-sm transition-all data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
               Available
             </TabsTrigger>
           </TabsList>

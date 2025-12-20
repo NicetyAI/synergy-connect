@@ -260,13 +260,13 @@ export default function ConnectionTab({ userEmail, isOwnProfile }) {
   );
 
   return (
-    <div className="glass-card p-8">
+    <div className="p-8 rounded-2xl" style={{ background: '#fff', border: '2px solid #000' }}>
       <Tabs defaultValue="my-connections" className="w-full">
-        <TabsList className="glass-card mb-8 p-2 rounded-2xl" style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+        <TabsList className="mb-8 p-2 rounded-2xl" style={{ background: '#F2F1F5', border: '1px solid #000' }}>
           <TabsTrigger 
             value="my-connections" 
-            className="rounded-xl px-5 py-3 font-semibold text-sm transition-all data-[state=active]:shadow-lg data-[state=active]:bg-[#3B82F6] data-[state=active]:text-white" 
-            style={{ color: '#B6C4E0' }}
+            className="rounded-xl px-5 py-3 font-semibold text-sm transition-all data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" 
+            style={{ color: '#000' }}
           >
             My Connections
             {connectedUsers.length > 0 && (

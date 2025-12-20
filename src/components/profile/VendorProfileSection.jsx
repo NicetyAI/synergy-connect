@@ -35,15 +35,15 @@ export default function VendorProfileSection({ userEmail }) {
 
   return (
     <>
-      <div className="glass-card p-6 rounded-2xl">
+      <div className="p-6 rounded-2xl mb-6" style={{ background: '#fff', border: '2px solid #000' }}>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: '#D8A11F' }}>
               <Store className="w-6 h-6" style={{ color: '#fff' }} />
             </div>
             <div>
-              <h3 className="text-xl font-bold" style={{ color: '#E5EDFF' }}>Vendor Profile</h3>
-              <p className="text-sm" style={{ color: '#7A8BA6' }}>{vendorProfile.business_name}</p>
+              <h3 className="text-xl font-bold" style={{ color: '#000' }}>Vendor Profile</h3>
+              <p className="text-sm" style={{ color: '#666' }}>{vendorProfile.business_name}</p>
             </div>
           </div>
           <Button
@@ -60,12 +60,12 @@ export default function VendorProfileSection({ userEmail }) {
           {/* Category & Location */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium mb-1 block" style={{ color: '#B6C4E0' }}>Category</label>
-              <p style={{ color: '#E5EDFF' }}>{vendorProfile.category}</p>
+              <label className="text-sm font-medium mb-1 block" style={{ color: '#666' }}>Category</label>
+              <p style={{ color: '#000' }}>{vendorProfile.category}</p>
             </div>
             <div>
-              <label className="text-sm font-medium mb-1 block" style={{ color: '#B6C4E0' }}>Location</label>
-              <p style={{ color: '#E5EDFF' }}>{vendorProfile.province}, Canada</p>
+              <label className="text-sm font-medium mb-1 block" style={{ color: '#666' }}>Location</label>
+              <p style={{ color: '#000' }}>{vendorProfile.province}, Canada</p>
             </div>
           </div>
 

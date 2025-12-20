@@ -39,13 +39,13 @@ export default function OpportunityTab({ userEmail }) {
   });
 
   return (
-    <div className="glass-card p-8 rounded-2xl">
+    <div className="p-8 rounded-2xl" style={{ background: '#fff', border: '2px solid #000' }}>
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
           <Briefcase className="w-8 h-8" style={{ color: '#3B82F6' }} />
           <div>
-            <h2 className="text-2xl font-bold" style={{ color: '#E5EDFF' }}>Opportunities</h2>
-            <p className="text-sm" style={{ color: '#7A8BA6' }}>
+            <h2 className="text-2xl font-bold" style={{ color: '#000' }}>Opportunities</h2>
+            <p className="text-sm" style={{ color: '#666' }}>
               Discover and manage business opportunities
             </p>
           </div>
@@ -53,7 +53,7 @@ export default function OpportunityTab({ userEmail }) {
         <Button
           onClick={() => setShowCreateDialog(true)}
           className="rounded-lg flex items-center gap-2"
-          style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#fff' }}
+          style={{ background: '#D8A11F', color: '#fff' }}
         >
           <Plus className="w-4 h-4" />
           Create New Opportunity
@@ -61,11 +61,11 @@ export default function OpportunityTab({ userEmail }) {
       </div>
 
       <Tabs defaultValue="available" className="w-full">
-        <TabsList className="glass-card p-2 rounded-2xl mb-6" style={{ background: 'rgba(255, 255, 255, 0.08)' }}>
-          <TabsTrigger value="available" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+        <TabsList className="p-2 rounded-2xl mb-6" style={{ background: '#F2F1F5', border: '1px solid #000' }}>
+          <TabsTrigger value="available" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
             Available Opportunities ({availableOpportunities.length})
           </TabsTrigger>
-          <TabsTrigger value="created" className="rounded-xl px-6 py-3 font-semibold" style={{ color: '#B6C4E0' }}>
+          <TabsTrigger value="created" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
             My Created Opportunities ({myCreatedOpportunities.length})
           </TabsTrigger>
         </TabsList>

@@ -86,12 +86,12 @@ export default function ActivityTab({ userEmail }) {
   };
 
   return (
-    <div className="glass-card p-8 rounded-2xl">
+    <div className="p-8 rounded-2xl" style={{ background: '#fff', border: '2px solid #000' }}>
       <div className="flex items-center gap-3 mb-8">
         <ActivityIcon className="w-8 h-8" style={{ color: '#3B82F6' }} />
         <div>
-          <h2 className="text-2xl font-bold" style={{ color: '#E5EDFF' }}>Activity Log</h2>
-          <p className="text-sm" style={{ color: '#7A8BA6' }}>
+          <h2 className="text-2xl font-bold" style={{ color: '#000' }}>Activity Log</h2>
+          <p className="text-sm" style={{ color: '#666' }}>
             Track all your activities and actions
           </p>
         </div>
@@ -99,18 +99,18 @@ export default function ActivityTab({ userEmail }) {
 
       {/* Table Header */}
       <div className="mb-4">
-        <div className="grid grid-cols-12 gap-4 px-4 py-3 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
+        <div className="grid grid-cols-12 gap-4 px-4 py-3 rounded-xl" style={{ background: '#F2F1F5' }}>
           <div className="col-span-1">
-            <span className="text-sm font-semibold" style={{ color: '#B6C4E0' }}>Status</span>
+            <span className="text-sm font-semibold" style={{ color: '#000' }}>Status</span>
           </div>
           <div className="col-span-2">
-            <span className="text-sm font-semibold" style={{ color: '#B6C4E0' }}>Type</span>
+            <span className="text-sm font-semibold" style={{ color: '#000' }}>Type</span>
           </div>
           <div className="col-span-6">
-            <span className="text-sm font-semibold" style={{ color: '#B6C4E0' }}>Message</span>
+            <span className="text-sm font-semibold" style={{ color: '#000' }}>Message</span>
           </div>
           <div className="col-span-3">
-            <span className="text-sm font-semibold" style={{ color: '#B6C4E0' }}>Created At</span>
+            <span className="text-sm font-semibold" style={{ color: '#000' }}>Created At</span>
           </div>
         </div>
       </div>
@@ -121,8 +121,8 @@ export default function ActivityTab({ userEmail }) {
           {currentActivities.map((activity) => (
             <div 
               key={activity.id}
-              className="grid grid-cols-12 gap-4 px-4 py-4 rounded-xl transition-all hover:bg-white/5"
-              style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)' }}
+              className="grid grid-cols-12 gap-4 px-4 py-4 rounded-xl transition-all hover:bg-gray-50"
+              style={{ background: '#fff', border: '1px solid #ddd' }}
             >
               <div className="col-span-1 flex items-center">
                 <div className="w-4 h-4 rounded-full border-2" style={{ borderColor: '#3B82F6' }}></div>
@@ -133,12 +133,12 @@ export default function ActivityTab({ userEmail }) {
                 </Badge>
               </div>
               <div className="col-span-6 flex items-center">
-                <p className="text-sm" style={{ color: '#E5EDFF' }}>
+                <p className="text-sm" style={{ color: '#000' }}>
                   {activity.description || activity.title}
                 </p>
               </div>
               <div className="col-span-3 flex items-center">
-                <p className="text-sm" style={{ color: '#7A8BA6' }}>
+                <p className="text-sm" style={{ color: '#666' }}>
                   {formatDistanceToNow(new Date(activity.created_date), { addSuffix: true })}
                 </p>
               </div>
