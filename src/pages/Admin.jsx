@@ -212,65 +212,65 @@ export default function Admin() {
           {/* Tabs */}
           <Tabs defaultValue="dashboard" className="w-full">
             <TabsList 
-              className="p-4 rounded-2xl mb-8 flex-wrap justify-start gap-2"
+              className="p-4 rounded-2xl mb-8 flex-wrap justify-start gap-1"
               style={{ 
                 background: '#fff',
                 border: '2px solid #000',
                 boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
               }}
             >
-              <TabsTrigger value="dashboard" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+              <TabsTrigger value="dashboard" className="rounded-xl px-4 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Dashboard
               </TabsTrigger>
               {hasPermission(currentUser.role, 'canManageUsers') && (
-                <TabsTrigger value="users" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                <TabsTrigger value="users" className="rounded-xl px-4 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                   Users
                 </TabsTrigger>
               )}
-              <TabsTrigger value="partner" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+              <TabsTrigger value="partner" className="rounded-xl px-4 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Partner
               </TabsTrigger>
               {hasPermission(currentUser.role, 'canManageOpportunities') && (
-                <TabsTrigger value="opportunity" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                <TabsTrigger value="opportunity" className="rounded-xl px-4 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                   Opportunity
                 </TabsTrigger>
               )}
-              <TabsTrigger value="interest" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+              <TabsTrigger value="interest" className="rounded-xl px-4 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Interest
               </TabsTrigger>
               {hasPermission(currentUser.role, 'canManageVendors') && (
-                <TabsTrigger value="vendor" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                <TabsTrigger value="vendor" className="rounded-xl px-4 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                   Vendor
                 </TabsTrigger>
               )}
               {hasPermission(currentUser.role, 'canManageAdvertisements') && (
-                <TabsTrigger value="ad-campaigns" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                <TabsTrigger value="ad-campaigns" className="rounded-xl px-4 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                   Ad Campaigns
                 </TabsTrigger>
               )}
               {hasPermission(currentUser.role, 'canManageContent') && (
-                <TabsTrigger value="category" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                <TabsTrigger value="category" className="rounded-xl px-4 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                   Category
                 </TabsTrigger>
               )}
               {hasPermission(currentUser.role, 'canManageForum') && (
-                <TabsTrigger value="forum" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                <TabsTrigger value="forum" className="rounded-xl px-4 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                   Forum
                 </TabsTrigger>
               )}
-              <TabsTrigger value="profession" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+              <TabsTrigger value="profession" className="rounded-xl px-4 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Profession
               </TabsTrigger>
               {hasPermission(currentUser.role, 'canViewAnalytics') && (
-                <TabsTrigger value="activity" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                <TabsTrigger value="activity" className="rounded-xl px-4 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                   Activity
                 </TabsTrigger>
               )}
-              <TabsTrigger value="contact" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+              <TabsTrigger value="contact" className="rounded-xl px-4 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                 Contact
               </TabsTrigger>
               {currentUser.role === 'admin' && (
-                <TabsTrigger value="roles" className="rounded-xl px-6 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
+                <TabsTrigger value="roles" className="rounded-xl px-4 py-3 font-semibold data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white" style={{ color: '#000' }}>
                   Roles
                 </TabsTrigger>
               )}
