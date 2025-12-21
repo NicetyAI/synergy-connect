@@ -19,6 +19,7 @@ import OpportunityDetail from './pages/OpportunityDetail';
 import Connections from './pages/Connections';
 import Projects from './pages/Projects';
 import ProjectDetail from './pages/ProjectDetail';
+import Onboarding from './pages/Onboarding';
 import __Layout from './Layout.jsx';
 
 
@@ -44,6 +45,7 @@ export const PAGES = {
     "Connections": Connections,
     "Projects": Projects,
     "ProjectDetail": ProjectDetail,
+    "Onboarding": Onboarding,
 }
 
 export const pagesConfig = {

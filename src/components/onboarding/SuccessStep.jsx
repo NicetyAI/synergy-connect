@@ -1,0 +1,195 @@
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Trophy, Sparkles, ArrowRight, TrendingUp, Users, Briefcase } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+import confetti from "canvas-confetti";
+
+export default function SuccessStep({ userData, currentUser }) {
+  const [saving, setSaving] = useState(false);
+  const navigate = useNavigate();
+
+  const { data: opportunities = [] } = useQuery({
+    queryKey: ['matchedOpportunities'],
+    queryFn: async () => {
+      const allOpps = await base44.entities.Opportunity.list();
+      // Simple matching based on interests
+      return allOpps
+        .filter(opp => userData.interests?.some(int => 
+          opp.category?.toLowerCase().includes(int.toLowerCase()) ||
+          opp.title?.toLowerCase().includes(int.toLowerCase())
+        ))
+        .slice(0, 3);
+    },
+  });
+
+  const saveProfile = async () => {
+    setSaving(true);
+    try {
+      // Update user profile
+      await base44.auth.updateMe({
+        full_name: userData.full_name,
+        title: userData.title,
+        bio: userData.bio,
+        location: userData.location,
+      });
+
+      // Create interest records
+      if (userData.interests?.length > 0) {
+        for (const interest of userData.interests) {
+          await base44.entities.Interest.create({
+            user_email: currentUser.email,
+            interest_name: interest,
+            status: "approved",
+          });
+        }
+      }
+
+      // Trigger confetti
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+
+      setTimeout(() => {
+        navigate(createPageUrl('Partnerships'));
+      }, 2000);
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      setSaving(false);
+    }
+  };
+
+  useEffect(() => {
+    saveProfile();
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      className="w-full max-w-4xl"
+    >
+      <div className="p-8 md:p-12 rounded-3xl text-center" style={{ background: '#fff', border: '2px solid #000' }}>
+        {/* Success Icon */}
+        <motion.div
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: "spring", duration: 0.8 }}
+          className="inline-flex items-center justify-center w-24 h-24 rounded-full mb-6"
+          style={{ background: 'linear-gradient(135deg, #D8A11F 0%, #F59E0B 100%)' }}
+        >
+          <Trophy className="w-12 h-12" style={{ color: '#fff' }} />
+        </motion.div>
+
+        {/* Success Message */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="text-4xl md:text-5xl font-bold mb-4"
+          style={{ color: '#000' }}
+        >
+          You're all set! 🎉
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="text-lg mb-8"
+          style={{ color: '#666' }}
+        >
+          Your profile is complete and we've found some opportunities that match your interests!
+        </motion.p>
+
+        {/* Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="grid grid-cols-3 gap-4 mb-8"
+        >
+          <div className="p-4 rounded-xl" style={{ background: '#f5f5f5', border: '1px solid #000' }}>
+            <TrendingUp className="w-8 h-8 mx-auto mb-2" style={{ color: '#D8A11F' }} />
+            <div className="font-bold text-2xl" style={{ color: '#000' }}>
+              {userData.interests?.length || 0}
+            </div>
+            <div className="text-sm" style={{ color: '#666' }}>Interests</div>
+          </div>
+          <div className="p-4 rounded-xl" style={{ background: '#f5f5f5', border: '1px solid #000' }}>
+            <Briefcase className="w-8 h-8 mx-auto mb-2" style={{ color: '#D8A11F' }} />
+            <div className="font-bold text-2xl" style={{ color: '#000' }}>
+              {opportunities.length}
+            </div>
+            <div className="text-sm" style={{ color: '#666' }}>Matches</div>
+          </div>
+          <div className="p-4 rounded-xl" style={{ background: '#f5f5f5', border: '1px solid #000' }}>
+            <Users className="w-8 h-8 mx-auto mb-2" style={{ color: '#D8A11F' }} />
+            <div className="font-bold text-2xl" style={{ color: '#000' }}>100%</div>
+            <div className="text-sm" style={{ color: '#666' }}>Complete</div>
+          </div>
+        </motion.div>
+
+        {/* Matched Opportunities Preview */}
+        {opportunities.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="mb-8"
+          >
+            <h3 className="text-xl font-bold mb-4 flex items-center justify-center gap-2" style={{ color: '#000' }}>
+              <Sparkles className="w-5 h-5" style={{ color: '#D8A11F' }} />
+              Opportunities Matched to You
+            </h3>
+            <div className="space-y-3">
+              {opportunities.map((opp, index) => (
+                <motion.div
+                  key={opp.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.7 + index * 0.1 }}
+                  className="p-4 rounded-xl text-left"
+                  style={{ background: '#f5f5f5', border: '1px solid #000' }}
+                >
+                  <div className="font-bold" style={{ color: '#000' }}>{opp.title}</div>
+                  <div className="text-sm" style={{ color: '#666' }}>{opp.description?.substring(0, 80)}...</div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.9 }}
+        >
+          {saving ? (
+            <div className="py-4">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-t-transparent" style={{ borderColor: '#D8A11F' }}></div>
+              <p className="mt-4" style={{ color: '#666' }}>Setting up your profile...</p>
+            </div>
+          ) : (
+            <Button
+              onClick={() => navigate(createPageUrl('Partnerships'))}
+              size="lg"
+              className="px-8 py-6 text-lg rounded-xl gap-2 hover:scale-105 transition-transform"
+              style={{ background: '#D8A11F', color: '#fff' }}
+            >
+              Start Exploring
+              <ArrowRight className="w-5 h-5" />
+            </Button>
+          )}
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
