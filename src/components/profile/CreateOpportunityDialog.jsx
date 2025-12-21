@@ -5,13 +5,17 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Plus, Upload, X } from "lucide-react";
+import { Plus, Upload, X, Sparkles, Loader2, Lightbulb } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function CreateOpportunityDialog({ open, onOpenChange, userEmail }) {
   const queryClient = useQueryClient();
   const [uploading, setUploading] = useState(false);
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [showAiHelper, setShowAiHelper] = useState(false);
+  const [aiSuggestions, setAiSuggestions] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -23,6 +27,11 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
     related_interests: []
   });
   const [uploadedFile, setUploadedFile] = useState(null);
+  const [aiInput, setAiInput] = useState({
+    goal: "",
+    industry: "",
+    budget: ""
+  });
 
   // Fetch user's approved interests
   const { data: userInterests = [] } = useQuery({
@@ -83,6 +92,54 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
     }));
   };
 
+  const handleAiGenerate = async () => {
+    if (!aiInput.goal && !aiInput.industry) {
+      return;
+    }
+
+    setAiGenerating(true);
+    try {
+      const response = await base44.functions.invoke('generateOpportunityDetails', {
+        title: aiInput.goal,
+        industry: aiInput.industry,
+        budget: aiInput.budget,
+        goal: aiInput.goal
+      });
+
+      if (response.data.success) {
+        setAiSuggestions(response.data);
+        
+        // Auto-fill form with AI suggestions
+        setFormData(prev => ({
+          ...prev,
+          title: aiInput.goal,
+          description: response.data.description,
+          category: response.data.category,
+        }));
+
+        // Parse investment range
+        if (response.data.investment_range) {
+          const rangeMatch = response.data.investment_range.match(/\$?([\d.]+)(K|M)?\s*-\s*\$?([\d.]+)(K|M)?/i);
+          if (rangeMatch) {
+            const parseAmount = (num, unit) => {
+              const multiplier = unit === 'K' ? 1000 : unit === 'M' ? 1000000 : 1;
+              return parseFloat(num) * multiplier;
+            };
+            setFormData(prev => ({
+              ...prev,
+              investment_min: parseAmount(rangeMatch[1], rangeMatch[2]).toString(),
+              investment_max: parseAmount(rangeMatch[3], rangeMatch[4]).toString()
+            }));
+          }
+        }
+      }
+    } catch (error) {
+      console.error('AI generation failed:', error);
+    } finally {
+      setAiGenerating(false);
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       title: "",
@@ -95,6 +152,9 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
       related_interests: []
     });
     setUploadedFile(null);
+    setShowAiHelper(false);
+    setAiSuggestions(null);
+    setAiInput({ goal: "", industry: "", budget: "" });
   };
 
   const handleSubmit = (e) => {
@@ -126,6 +186,142 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+          {/* AI Assistant Toggle */}
+          <div className="p-4 rounded-xl" style={{ background: 'rgba(216, 161, 31, 0.1)', border: '1px solid rgba(216, 161, 31, 0.3)' }}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Sparkles className="w-5 h-5" style={{ color: '#D8A11F' }} />
+                <div>
+                  <p className="font-semibold" style={{ color: '#E5EDFF' }}>AI Opportunity Assistant</p>
+                  <p className="text-xs" style={{ color: '#7A8BA6' }}>Let AI help you create a compelling opportunity</p>
+                </div>
+              </div>
+              <Button
+                type="button"
+                onClick={() => setShowAiHelper(!showAiHelper)}
+                size="sm"
+                style={{ background: showAiHelper ? '#D8A11F' : 'rgba(255, 255, 255, 0.1)', color: showAiHelper ? '#fff' : '#E5EDFF' }}
+              >
+                {showAiHelper ? 'Hide' : 'Use AI'}
+              </Button>
+            </div>
+
+            <AnimatePresence>
+              {showAiHelper && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mt-4 space-y-3"
+                >
+                  <div>
+                    <Label style={{ color: '#B6C4E0' }}>What's your goal? *</Label>
+                    <Input
+                      value={aiInput.goal}
+                      onChange={(e) => setAiInput({ ...aiInput, goal: e.target.value })}
+                      className="glass-input mt-2"
+                      style={{ color: '#E5EDFF' }}
+                      placeholder="e.g., Expand fitness franchise to new markets"
+                    />
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div>
+                      <Label style={{ color: '#B6C4E0' }}>Industry</Label>
+                      <Input
+                        value={aiInput.industry}
+                        onChange={(e) => setAiInput({ ...aiInput, industry: e.target.value })}
+                        className="glass-input mt-2"
+                        style={{ color: '#E5EDFF' }}
+                        placeholder="e.g., Fitness & Wellness"
+                      />
+                    </div>
+                    <div>
+                      <Label style={{ color: '#B6C4E0' }}>Rough Budget</Label>
+                      <Input
+                        value={aiInput.budget}
+                        onChange={(e) => setAiInput({ ...aiInput, budget: e.target.value })}
+                        className="glass-input mt-2"
+                        style={{ color: '#E5EDFF' }}
+                        placeholder="e.g., $500K - $1M"
+                      />
+                    </div>
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={handleAiGenerate}
+                    disabled={aiGenerating || !aiInput.goal}
+                    className="w-full gap-2"
+                    style={{ background: 'linear-gradient(135deg, #D8A11F 0%, #F59E0B 100%)', color: '#fff' }}
+                  >
+                    {aiGenerating ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        AI is working...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4" />
+                        Generate with AI
+                      </>
+                    )}
+                  </Button>
+
+                  {aiSuggestions && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-4 p-4 rounded-xl space-y-3"
+                      style={{ background: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.3)' }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Lightbulb className="w-5 h-5" style={{ color: '#22C55E' }} />
+                        <p className="font-semibold" style={{ color: '#E5EDFF' }}>AI Insights & Suggestions</p>
+                      </div>
+                      
+                      {aiSuggestions.market_insights && (
+                        <div>
+                          <p className="text-xs font-semibold mb-1" style={{ color: '#B6C4E0' }}>Market Insights:</p>
+                          <p className="text-sm" style={{ color: '#E5EDFF' }}>{aiSuggestions.market_insights}</p>
+                        </div>
+                      )}
+
+                      {aiSuggestions.strategic_alignments?.length > 0 && (
+                        <div>
+                          <p className="text-xs font-semibold mb-2" style={{ color: '#B6C4E0' }}>Strategic Alignments:</p>
+                          <div className="space-y-1">
+                            {aiSuggestions.strategic_alignments.map((alignment, i) => (
+                              <div key={i} className="flex items-start gap-2">
+                                <span className="text-xs" style={{ color: '#22C55E' }}>•</span>
+                                <p className="text-xs" style={{ color: '#E5EDFF' }}>{alignment}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {aiSuggestions.suggested_tags?.length > 0 && (
+                        <div>
+                          <p className="text-xs font-semibold mb-2" style={{ color: '#B6C4E0' }}>Suggested Tags:</p>
+                          <div className="flex flex-wrap gap-2">
+                            {aiSuggestions.suggested_tags.map((tag, i) => (
+                              <span
+                                key={i}
+                                className="px-2 py-1 rounded-lg text-xs"
+                                style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#E5EDFF', border: '1px solid rgba(59, 130, 246, 0.3)' }}
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           {/* Basic Information */}
           <div>
             <Label htmlFor="title" style={{ color: '#B6C4E0' }}>Opportunity Title *</Label>
