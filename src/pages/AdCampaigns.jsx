@@ -10,6 +10,7 @@ import PerformanceCards from "@/components/adcampaigns/PerformanceCards";
 import ExpiringAdsNotice from "@/components/adcampaigns/ExpiringAdsNotice";
 import AdvertiseBanner from "@/components/vendors/AdvertiseBanner";
 import AdvertiseApplicationDialog from "@/components/vendors/AdvertiseApplicationDialog";
+import AICampaignHelper from "@/components/adcampaigns/AICampaignHelper";
 
 export default function AdCampaigns() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -64,6 +65,9 @@ export default function AdCampaigns() {
               Monitor performance, manage campaigns, and optimize your advertising strategy
             </p>
           </div>
+
+          {/* AI Campaign Helper */}
+          <AICampaignHelper />
 
           {/* Apply to Advertise Banner */}
           <AdvertiseBanner onApplyClick={() => setIsAdvertiseDialogOpen(true)} />
