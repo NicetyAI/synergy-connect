@@ -175,10 +175,10 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" style={{ background: '#0F2744', border: '1px solid rgba(255, 255, 255, 0.18)' }}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" style={{ background: '#F2F1F5', border: '2px solid #000' }}>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-3 text-2xl" style={{ color: '#E5EDFF' }}>
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)' }}>
+          <DialogTitle className="flex items-center gap-3 text-2xl" style={{ color: '#000' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: '#D8A11F' }}>
               <Plus className="w-5 h-5" style={{ color: '#fff' }} />
             </div>
             Create New Opportunity
@@ -187,20 +187,20 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
 
         <form onSubmit={handleSubmit} className="space-y-6 mt-4">
           {/* AI Assistant Toggle */}
-          <div className="p-4 rounded-xl" style={{ background: 'rgba(216, 161, 31, 0.1)', border: '1px solid rgba(216, 161, 31, 0.3)' }}>
+          <div className="p-4 rounded-xl" style={{ background: 'rgba(216, 161, 31, 0.1)', border: '2px solid #D8A11F' }}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Sparkles className="w-5 h-5" style={{ color: '#D8A11F' }} />
                 <div>
-                  <p className="font-semibold" style={{ color: '#E5EDFF' }}>AI Opportunity Assistant</p>
-                  <p className="text-xs" style={{ color: '#7A8BA6' }}>Let AI help you create a compelling opportunity</p>
+                  <p className="font-semibold" style={{ color: '#000' }}>AI Opportunity Assistant</p>
+                  <p className="text-xs" style={{ color: '#666' }}>Let AI help you create a compelling opportunity</p>
                 </div>
               </div>
               <Button
                 type="button"
                 onClick={() => setShowAiHelper(!showAiHelper)}
                 size="sm"
-                style={{ background: showAiHelper ? '#D8A11F' : 'rgba(255, 255, 255, 0.1)', color: showAiHelper ? '#fff' : '#E5EDFF' }}
+                style={{ background: showAiHelper ? '#D8A11F' : '#fff', color: showAiHelper ? '#fff' : '#000', border: '2px solid #000' }}
               >
                 {showAiHelper ? 'Hide' : 'Use AI'}
               </Button>
@@ -215,33 +215,33 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
                   className="mt-4 space-y-3"
                 >
                   <div>
-                    <Label style={{ color: '#B6C4E0' }}>What's your goal? *</Label>
+                    <Label style={{ color: '#000' }}>What's your goal? *</Label>
                     <Input
                       value={aiInput.goal}
                       onChange={(e) => setAiInput({ ...aiInput, goal: e.target.value })}
-                      className="glass-input mt-2"
-                      style={{ color: '#E5EDFF' }}
+                      className="mt-2 rounded-xl"
+                      style={{ color: '#000', background: '#fff', border: '2px solid #000' }}
                       placeholder="e.g., Expand fitness franchise to new markets"
                     />
                   </div>
                   <div className="grid md:grid-cols-2 gap-3">
                     <div>
-                      <Label style={{ color: '#B6C4E0' }}>Industry</Label>
+                      <Label style={{ color: '#000' }}>Industry</Label>
                       <Input
                         value={aiInput.industry}
                         onChange={(e) => setAiInput({ ...aiInput, industry: e.target.value })}
-                        className="glass-input mt-2"
-                        style={{ color: '#E5EDFF' }}
+                        className="mt-2 rounded-xl"
+                        style={{ color: '#000', background: '#fff', border: '2px solid #000' }}
                         placeholder="e.g., Fitness & Wellness"
                       />
                     </div>
                     <div>
-                      <Label style={{ color: '#B6C4E0' }}>Rough Budget</Label>
+                      <Label style={{ color: '#000' }}>Rough Budget</Label>
                       <Input
                         value={aiInput.budget}
                         onChange={(e) => setAiInput({ ...aiInput, budget: e.target.value })}
-                        className="glass-input mt-2"
-                        style={{ color: '#E5EDFF' }}
+                        className="mt-2 rounded-xl"
+                        style={{ color: '#000', background: '#fff', border: '2px solid #000' }}
                         placeholder="e.g., $500K - $1M"
                       />
                     </div>
@@ -250,8 +250,8 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
                     type="button"
                     onClick={handleAiGenerate}
                     disabled={aiGenerating || !aiInput.goal}
-                    className="w-full gap-2"
-                    style={{ background: 'linear-gradient(135deg, #D8A11F 0%, #F59E0B 100%)', color: '#fff' }}
+                    className="w-full gap-2 rounded-xl"
+                    style={{ background: '#D8A11F', color: '#fff', border: '2px solid #000' }}
                   >
                     {aiGenerating ? (
                       <>
@@ -271,28 +271,28 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-4 p-4 rounded-xl space-y-3"
-                      style={{ background: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.3)' }}
+                      style={{ background: '#fff', border: '2px solid #000' }}
                     >
                       <div className="flex items-center gap-2">
-                        <Lightbulb className="w-5 h-5" style={{ color: '#22C55E' }} />
-                        <p className="font-semibold" style={{ color: '#E5EDFF' }}>AI Insights & Suggestions</p>
+                        <Lightbulb className="w-5 h-5" style={{ color: '#D8A11F' }} />
+                        <p className="font-semibold" style={{ color: '#000' }}>AI Insights & Suggestions</p>
                       </div>
                       
                       {aiSuggestions.market_insights && (
                         <div>
-                          <p className="text-xs font-semibold mb-1" style={{ color: '#B6C4E0' }}>Market Insights:</p>
-                          <p className="text-sm" style={{ color: '#E5EDFF' }}>{aiSuggestions.market_insights}</p>
+                          <p className="text-xs font-semibold mb-1" style={{ color: '#666' }}>Market Insights:</p>
+                          <p className="text-sm" style={{ color: '#000' }}>{aiSuggestions.market_insights}</p>
                         </div>
                       )}
 
                       {aiSuggestions.strategic_alignments?.length > 0 && (
                         <div>
-                          <p className="text-xs font-semibold mb-2" style={{ color: '#B6C4E0' }}>Strategic Alignments:</p>
+                          <p className="text-xs font-semibold mb-2" style={{ color: '#666' }}>Strategic Alignments:</p>
                           <div className="space-y-1">
                             {aiSuggestions.strategic_alignments.map((alignment, i) => (
                               <div key={i} className="flex items-start gap-2">
-                                <span className="text-xs" style={{ color: '#22C55E' }}>•</span>
-                                <p className="text-xs" style={{ color: '#E5EDFF' }}>{alignment}</p>
+                                <span className="text-xs" style={{ color: '#D8A11F' }}>•</span>
+                                <p className="text-xs" style={{ color: '#000' }}>{alignment}</p>
                               </div>
                             ))}
                           </div>
@@ -301,13 +301,13 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
 
                       {aiSuggestions.suggested_tags?.length > 0 && (
                         <div>
-                          <p className="text-xs font-semibold mb-2" style={{ color: '#B6C4E0' }}>Suggested Tags:</p>
+                          <p className="text-xs font-semibold mb-2" style={{ color: '#666' }}>Suggested Tags:</p>
                           <div className="flex flex-wrap gap-2">
                             {aiSuggestions.suggested_tags.map((tag, i) => (
                               <span
                                 key={i}
                                 className="px-2 py-1 rounded-lg text-xs"
-                                style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#E5EDFF', border: '1px solid rgba(59, 130, 246, 0.3)' }}
+                                style={{ background: '#FEF3C7', color: '#000', border: '1px solid #D8A11F' }}
                               >
                                 {tag}
                               </span>
@@ -324,36 +324,36 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
 
           {/* Basic Information */}
           <div>
-            <Label htmlFor="title" style={{ color: '#B6C4E0' }}>Opportunity Title *</Label>
+            <Label htmlFor="title" style={{ color: '#000' }}>Opportunity Title *</Label>
             <Input
               id="title"
               required
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="glass-input mt-2"
-              style={{ color: '#E5EDFF' }}
+              className="mt-2 rounded-xl"
+              style={{ color: '#000', background: '#fff', border: '2px solid #000' }}
               placeholder="e.g., 1-800-GOT-JUNK? Franchise Opportunity"
             />
           </div>
 
           <div>
-            <Label htmlFor="description" style={{ color: '#B6C4E0' }}>Description *</Label>
+            <Label htmlFor="description" style={{ color: '#000' }}>Description *</Label>
             <Textarea
               id="description"
               required
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="glass-input mt-2 h-24"
-              style={{ color: '#E5EDFF' }}
+              className="mt-2 h-24 rounded-xl"
+              style={{ color: '#000', background: '#fff', border: '2px solid #000' }}
               placeholder="Describe the opportunity in detail..."
             />
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="category" style={{ color: '#B6C4E0' }}>Category *</Label>
+              <Label htmlFor="category" style={{ color: '#000' }}>Category *</Label>
               <Select required value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
-                <SelectTrigger className="glass-input mt-2" style={{ color: '#E5EDFF' }}>
+                <SelectTrigger className="mt-2 rounded-xl" style={{ color: '#000', background: '#fff', border: '2px solid #000' }}>
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -368,14 +368,14 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
             </div>
 
             <div>
-              <Label htmlFor="source_url" style={{ color: '#B6C4E0' }}>Source URL</Label>
+              <Label htmlFor="source_url" style={{ color: '#000' }}>Source URL</Label>
               <Input
                 id="source_url"
                 type="url"
                 value={formData.source_url}
                 onChange={(e) => setFormData({ ...formData, source_url: e.target.value })}
-                className="glass-input mt-2"
-                style={{ color: '#E5EDFF' }}
+                className="mt-2 rounded-xl"
+                style={{ color: '#000', background: '#fff', border: '2px solid #000' }}
                 placeholder="https://example.com/franchise"
               />
             </div>
@@ -384,26 +384,26 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
           {/* Investment Range */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="investment_min" style={{ color: '#B6C4E0' }}>Minimum Investment ($)</Label>
+              <Label htmlFor="investment_min" style={{ color: '#000' }}>Minimum Investment ($)</Label>
               <Input
                 id="investment_min"
                 type="number"
                 value={formData.investment_min}
                 onChange={(e) => setFormData({ ...formData, investment_min: e.target.value })}
-                className="glass-input mt-2"
-                style={{ color: '#E5EDFF' }}
+                className="mt-2 rounded-xl"
+                style={{ color: '#000', background: '#fff', border: '2px solid #000' }}
                 placeholder="50000"
               />
             </div>
             <div>
-              <Label htmlFor="investment_max" style={{ color: '#B6C4E0' }}>Maximum Investment ($)</Label>
+              <Label htmlFor="investment_max" style={{ color: '#000' }}>Maximum Investment ($)</Label>
               <Input
                 id="investment_max"
                 type="number"
                 value={formData.investment_max}
                 onChange={(e) => setFormData({ ...formData, investment_max: e.target.value })}
-                className="glass-input mt-2"
-                style={{ color: '#E5EDFF' }}
+                className="mt-2 rounded-xl"
+                style={{ color: '#000', background: '#fff', border: '2px solid #000' }}
                 placeholder="250000"
               />
             </div>
@@ -412,8 +412,8 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
           {/* Related Interests */}
           {userInterests.length > 0 && (
             <div>
-              <Label style={{ color: '#B6C4E0' }}>Related Interests (Optional)</Label>
-              <p className="text-xs mb-2" style={{ color: '#7A8BA6' }}>
+              <Label style={{ color: '#000' }}>Related Interests (Optional)</Label>
+              <p className="text-xs mb-2" style={{ color: '#666' }}>
                 Select interests this opportunity relates to
               </p>
               <div className="flex flex-wrap gap-2 mt-2">
@@ -425,12 +425,12 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
                     className="px-3 py-1 rounded-lg text-sm transition-all"
                     style={{
                       background: formData.related_interests.includes(interest.interest_name)
-                        ? 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)'
-                        : 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid ' + (formData.related_interests.includes(interest.interest_name)
-                        ? 'rgba(59, 130, 246, 0.5)'
-                        : 'rgba(255, 255, 255, 0.1)'),
-                      color: '#E5EDFF'
+                        ? '#FEF3C7'
+                        : '#fff',
+                      border: '2px solid ' + (formData.related_interests.includes(interest.interest_name)
+                        ? '#D8A11F'
+                        : '#000'),
+                      color: '#000'
                     }}
                   >
                     {interest.interest_name}
@@ -442,8 +442,8 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
 
           {/* Image Upload */}
           <div>
-            <Label htmlFor="image" style={{ color: '#B6C4E0' }}>Opportunity Image</Label>
-            <p className="text-xs mb-2" style={{ color: '#7A8BA6' }}>
+            <Label htmlFor="image" style={{ color: '#000' }}>Opportunity Image</Label>
+            <p className="text-xs mb-2" style={{ color: '#666' }}>
               Accepted formats: JPG, PNG (Max 5MB)
             </p>
             
@@ -451,11 +451,11 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
               <label
                 htmlFor="image"
                 className="flex flex-col items-center justify-center w-full h-32 rounded-xl border-2 border-dashed cursor-pointer transition-all hover:border-opacity-50"
-                style={{ borderColor: 'rgba(255, 255, 255, 0.18)', background: 'rgba(255, 255, 255, 0.03)' }}
+                style={{ borderColor: '#000', background: '#fff' }}
               >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <Upload className="w-8 h-8 mb-2" style={{ color: '#3B82F6' }} />
-                  <p className="text-sm" style={{ color: '#B6C4E0' }}>
+                  <Upload className="w-8 h-8 mb-2" style={{ color: '#D8A11F' }} />
+                  <p className="text-sm" style={{ color: '#000' }}>
                     Click to upload or drag and drop
                   </p>
                 </div>
@@ -470,17 +470,17 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
             ) : (
               <div 
                 className="flex items-center justify-between p-4 rounded-xl"
-                style={{ background: 'rgba(59, 130, 246, 0.15)', border: '1px solid rgba(59, 130, 246, 0.3)' }}
+                style={{ background: '#FEF3C7', border: '2px solid #D8A11F' }}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#3B82F6' }}>
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#D8A11F' }}>
                     <Upload className="w-5 h-5" style={{ color: '#fff' }} />
                   </div>
                   <div>
-                    <p className="text-sm font-medium" style={{ color: '#E5EDFF' }}>
+                    <p className="text-sm font-medium" style={{ color: '#000' }}>
                       {uploadedFile.name}
                     </p>
-                    <p className="text-xs" style={{ color: '#7A8BA6' }}>
+                    <p className="text-xs" style={{ color: '#666' }}>
                       {(uploadedFile.size / 1024 / 1024).toFixed(2)} MB
                     </p>
                   </div>
@@ -489,7 +489,7 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
                   type="button"
                   onClick={handleRemoveFile}
                   className="rounded-lg p-2"
-                  style={{ background: 'rgba(239, 68, 68, 0.15)', color: '#EF4444' }}
+                  style={{ background: '#EF4444', color: '#fff', border: '2px solid #000' }}
                 >
                   <X className="w-4 h-4" />
                 </Button>
@@ -498,23 +498,23 @@ export default function CreateOpportunityDialog({ open, onOpenChange, userEmail 
           </div>
 
           {/* Submit Buttons */}
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-3 pt-4" style={{ borderTop: '2px solid #000' }}>
             <Button
               type="button"
               onClick={() => {
                 resetForm();
                 onOpenChange(false);
               }}
-              className="flex-1 rounded-lg"
-              style={{ background: 'rgba(255, 255, 255, 0.1)', color: '#B6C4E0', border: '1px solid rgba(255, 255, 255, 0.18)' }}
+              className="flex-1 rounded-xl"
+              style={{ background: '#fff', color: '#000', border: '2px solid #000' }}
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={createOpportunityMutation.isPending || uploading}
-              className="flex-1 rounded-lg"
-              style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#fff' }}
+              className="flex-1 rounded-xl"
+              style={{ background: '#D8A11F', color: '#fff', border: '2px solid #000' }}
             >
               {createOpportunityMutation.isPending ? 'Creating...' : 'Create Opportunity'}
             </Button>
