@@ -10,11 +10,13 @@ import ConnectionTab from "@/components/profile/ConnectionTab";
 import OpportunityTab from "@/components/profile/OpportunityTab";
 import ActivityTab from "@/components/profile/ActivityTab";
 import VendorProfileSection from "@/components/profile/VendorProfileSection";
+import ProfileCompletionWizard from "@/components/profile/ProfileCompletionWizard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Profile() {
   const [currentUser, setCurrentUser] = useState(null);
   const [profileUser, setProfileUser] = useState(null);
+  const [activeTab, setActiveTab] = useState("about");
   const location = useLocation();
 
   const urlParams = new URLSearchParams(location.search);
@@ -62,8 +64,14 @@ export default function Profile() {
         <ProfileHeader user={profileUser} isOwnProfile={isOwnProfile} currentUser={currentUser} />
 
         <div className="max-w-6xl mx-auto px-8 py-8">
+          {isOwnProfile && (
+            <ProfileCompletionWizard 
+              user={profileUser} 
+              onNavigateToTab={(tab) => setActiveTab(tab)}
+            />
+          )}
           {isOwnProfile && <VendorProfileSection userEmail={profileUser.email} />}
-          <Tabs defaultValue="about" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="mb-8 p-2 rounded-2xl" style={{ background: '#fff', border: '1px solid #000' }}>
               <TabsTrigger 
                 value="about" 
@@ -111,7 +119,7 @@ export default function Profile() {
             </TabsContent>
 
             <TabsContent value="connection">
-              <ConnectionTab userEmail={profileUser.email} />
+              <ConnectionTab userEmail={profileUser.email} isOwnProfile={isOwnProfile} />
             </TabsContent>
 
             <TabsContent value="opportunity">
