@@ -5,13 +5,20 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Heart, UserPlus } from "lucide-react";
 
-export default function ConnectionCard({ connection, index, currentUserEmail }) {
+export default function ConnectionCard({ connection, index, onConnect }) {
+  const [currentUser, setCurrentUser] = React.useState(null);
   const queryClient = useQueryClient();
+
+  React.useEffect(() => {
+    base44.auth.me().then(user => setCurrentUser(user)).catch(() => setCurrentUser(null));
+  }, []);
 
   const sendConnectionRequestMutation = useMutation({
     mutationFn: async () => {
+      if (!currentUser) throw new Error('Not authenticated');
+      
       const newConnection = await base44.entities.Connection.create({
-        user1_email: currentUserEmail,
+        user1_email: currentUser.email,
         user2_email: connection.email,
         status: 'pending'
       });
@@ -21,8 +28,8 @@ export default function ConnectionCard({ connection, index, currentUserEmail }) 
         recipientEmail: connection.email,
         type: 'connection_request',
         title: '👋 New Connection Request',
-        message: `${connection.name} wants to connect with you`,
-        link: `/Profile?email=${currentUserEmail}`,
+        message: `${currentUser.full_name} wants to connect with you`,
+        link: `/Profile?email=${currentUser.email}`,
         sendEmail: true
       });
 
