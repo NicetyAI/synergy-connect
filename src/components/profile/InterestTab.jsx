@@ -107,7 +107,7 @@ export default function InterestTab({ user, isOwnProfile }) {
               <Sparkles className="w-5 h-5" style={{ color: '#E5EDFF' }} />
             </div>
             <div className="flex-1">
-              <h4 className="font-bold text-lg mb-1" style={{ color: '#E5EDFF' }}>{interest.interest_name}</h4>
+              <h4 className="font-bold text-lg mb-1" style={{ color: '#000' }}>{interest.interest_name}</h4>
               {interest.status === "approved" && (
                 <Badge className="text-xs font-semibold px-3 py-1" style={{ background: 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)', color: '#fff', boxShadow: '0 2px 8px rgba(34, 197, 94, 0.3)' }}>
                   <CheckCircle className="w-3 h-3 mr-1.5" />
@@ -129,7 +129,7 @@ export default function InterestTab({ user, isOwnProfile }) {
             </div>
           </div>
           {interest.description && (
-            <p className="text-sm leading-relaxed ml-13 mb-3" style={{ color: '#B6C4E0' }}>{interest.description}</p>
+            <p className="text-sm leading-relaxed ml-13 mb-3" style={{ color: '#000' }}>{interest.description}</p>
           )}
           {interest.attachment_urls && interest.attachment_urls.length > 0 && (
             <div className="ml-13 flex flex-wrap gap-2">
