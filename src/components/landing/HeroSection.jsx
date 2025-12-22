@@ -179,7 +179,7 @@ export default function HeroSection() {
                   </div>
                   {!isAuthChecking && (
                     currentUser ? (
-                      <Link to={createPageUrl("Partnerships")}>
+                      <Link to={createPageUrl((!currentUser.bio || !currentUser.title) ? "Onboarding" : "Partnerships")}>
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
                           <Button className="w-full sm:w-auto px-8 py-6 rounded-xl font-bold text-lg shadow-2xl" style={{ background: '#D8A11F', color: '#fff' }}>
                             <span className="flex items-center">
@@ -192,7 +192,7 @@ export default function HeroSection() {
                     ) : (
                       <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
                         <Button 
-                          onClick={() => base44.auth.redirectToLogin()}
+                          onClick={() => base44.auth.redirectToLogin(createPageUrl('Onboarding'))}
                           className="w-full sm:w-auto px-8 py-6 rounded-xl font-bold text-lg shadow-2xl relative overflow-hidden group" 
                           style={{ background: '#D8A11F', color: '#fff' }}
                         >
