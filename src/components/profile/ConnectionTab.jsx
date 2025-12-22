@@ -53,18 +53,19 @@ export default function ConnectionTab({ userEmail, isOwnProfile }) {
 
   const connectedUsers = myConnections.map(c => {
     const connectedEmail = c.user1_email === userEmail ? c.user2_email : c.user1_email;
-    return { ...users.find(u => u.email === connectedEmail), connectionId: c.id };
-  }).filter(u => u.email);
+    const user = users.find(u => u.email === connectedEmail);
+    return user ? { ...user, connectionId: c.id } : null;
+  }).filter(u => u !== null);
 
-  const requestingUsers = incomingRequests.map(c => ({
-    ...users.find(u => u.email === c.user1_email),
-    connectionId: c.id
-  })).filter(u => u.email);
+  const requestingUsers = incomingRequests.map(c => {
+    const user = users.find(u => u.email === c.user1_email);
+    return user ? { ...user, connectionId: c.id } : null;
+  }).filter(u => u !== null);
 
-  const requestedUsers = outgoingRequests.map(c => ({
-    ...users.find(u => u.email === c.user2_email),
-    connectionId: c.id
-  })).filter(u => u.email);
+  const requestedUsers = outgoingRequests.map(c => {
+    const user = users.find(u => u.email === c.user2_email);
+    return user ? { ...user, connectionId: c.id } : null;
+  }).filter(u => u !== null);
 
   // Find potential connections (excluding already connected or pending)
   const allConnectionEmails = connections
