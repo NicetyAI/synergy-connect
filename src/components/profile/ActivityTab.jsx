@@ -1,22 +1,64 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { Activity as ActivityIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import { Activity as ActivityIcon, ChevronLeft, ChevronRight, Filter, Users, Briefcase, Heart, UserPlus } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-export default function ActivityTab({ userEmail }) {
+export default function ActivityTab({ userEmail, isOwnProfile }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [filterType, setFilterType] = useState("all");
+  const itemsPerPage = 12;
 
-  const { data: activities = [] } = useQuery({
-    queryKey: ['userActivities', userEmail],
-    queryFn: () => base44.entities.Activity.filter({ user_email: userEmail }),
+  // Fetch connections to identify network
+  const { data: connections = [] } = useQuery({
+    queryKey: ['connections'],
+    queryFn: () => base44.entities.Connection.list(),
   });
 
+  // Get connected user emails
+  const connectedEmails = connections
+    .filter(c => 
+      (c.user1_email === userEmail || c.user2_email === userEmail) && 
+      c.status === 'connected'
+    )
+    .map(c => c.user1_email === userEmail ? c.user2_email : c.user1_email);
+
+  // Fetch all activities from connections
+  const { data: activities = [] } = useQuery({
+    queryKey: ['networkActivities', userEmail],
+    queryFn: async () => {
+      if (!isOwnProfile || connectedEmails.length === 0) {
+        // Show user's own activities if not their profile or no connections
+        return await base44.entities.Activity.filter({ user_email: userEmail });
+      }
+      
+      // Fetch activities from all connections
+      const allActivities = await base44.entities.Activity.list();
+      return allActivities.filter(activity => 
+        connectedEmails.includes(activity.user_email)
+      );
+    },
+    enabled: connectedEmails !== undefined,
+  });
+
+  // Filter activities by type
+  const filteredActivities = filterType === "all" 
+    ? activities 
+    : activities.filter(a => a.type === filterType);
+
   // Sort by most recent first
-  const sortedActivities = [...activities].sort((a, b) => 
+  const sortedActivities = [...filteredActivities].sort((a, b) => 
     new Date(b.created_date) - new Date(a.created_date)
   );
 
@@ -26,32 +68,36 @@ export default function ActivityTab({ userEmail }) {
   const endIndex = startIndex + itemsPerPage;
   const currentActivities = sortedActivities.slice(startIndex, endIndex);
 
+  const getActivityIcon = (type) => {
+    const icons = {
+      connection: UserPlus,
+      post: ActivityIcon,
+      interest_approved: Heart,
+      opportunity: Briefcase,
+    };
+    return icons[type] || ActivityIcon;
+  };
+
   const getActivityTypeColor = (type) => {
     const colors = {
-      connection: 'bg-blue-500/20 text-blue-300',
-      post: 'bg-purple-500/20 text-purple-300',
-      comment: 'bg-green-500/20 text-green-300',
-      achievement: 'bg-yellow-500/20 text-yellow-300',
-      interest_approved: 'bg-teal-500/20 text-teal-300',
-      interest_created: 'bg-indigo-500/20 text-indigo-300',
-      user_login: 'bg-gray-500/20 text-gray-300',
-      admin_user_profile_update: 'bg-orange-500/20 text-orange-300',
-      admin_opening_updated: 'bg-pink-500/20 text-pink-300',
+      connection: 'bg-blue-100 text-blue-800',
+      post: 'bg-purple-100 text-purple-800',
+      comment: 'bg-green-100 text-green-800',
+      achievement: 'bg-yellow-100 text-yellow-800',
+      interest_approved: 'bg-pink-100 text-pink-800',
+      opportunity: 'bg-orange-100 text-orange-800',
     };
-    return colors[type] || 'bg-gray-500/20 text-gray-300';
+    return colors[type] || 'bg-gray-100 text-gray-800';
   };
 
   const getActivityTypeLabel = (type) => {
     const labels = {
-      connection: 'Connection',
-      post: 'Post',
+      connection: 'New Connection',
+      post: 'Forum Post',
       comment: 'Comment',
       achievement: 'Achievement',
-      interest_approved: 'Interest Approved',
-      interest_created: 'Interest Created',
-      user_login: 'User Login',
-      admin_user_profile_update: 'Admin User Profile Update',
-      admin_opening_updated: 'Admin Opening Updated',
+      interest_approved: 'Interest Added',
+      opportunity: 'Opportunity Posted',
     };
     return labels[type] || type.replace(/_/g, ' ');
   };
@@ -87,68 +133,120 @@ export default function ActivityTab({ userEmail }) {
 
   return (
     <div className="p-8 rounded-2xl" style={{ background: '#fff', border: '2px solid #000' }}>
-      <div className="flex items-center gap-3 mb-8">
-        <ActivityIcon className="w-8 h-8" style={{ color: '#3B82F6' }} />
-        <div>
-          <h2 className="text-2xl font-bold" style={{ color: '#000' }}>Activity Log</h2>
-          <p className="text-sm" style={{ color: '#666' }}>
-            Track all your activities and actions
-          </p>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)' }}>
+            <Users className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold" style={{ color: '#000' }}>
+              {isOwnProfile ? 'Network Activity Feed' : 'Activity Log'}
+            </h2>
+            <p className="text-sm" style={{ color: '#666' }}>
+              {isOwnProfile 
+                ? `Updates from your ${connectedEmails.length} connections` 
+                : 'Recent activity history'}
+            </p>
+          </div>
+        </div>
+
+        {/* Filter */}
+        <div className="flex items-center gap-2">
+          <Filter className="w-5 h-5" style={{ color: '#666' }} />
+          <Select value={filterType} onValueChange={(value) => {
+            setFilterType(value);
+            setCurrentPage(1);
+          }}>
+            <SelectTrigger className="w-[180px] rounded-xl" style={{ borderColor: '#ddd' }}>
+              <SelectValue placeholder="Filter by type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Activities</SelectItem>
+              <SelectItem value="connection">Connections</SelectItem>
+              <SelectItem value="interest_approved">Interests</SelectItem>
+              <SelectItem value="opportunity">Opportunities</SelectItem>
+              <SelectItem value="post">Forum Posts</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
-      {/* Table Header */}
-      <div className="mb-4">
-        <div className="grid grid-cols-12 gap-4 px-4 py-3 rounded-xl" style={{ background: '#F2F1F5' }}>
-          <div className="col-span-1">
-            <span className="text-sm font-semibold" style={{ color: '#000' }}>Status</span>
-          </div>
-          <div className="col-span-2">
-            <span className="text-sm font-semibold" style={{ color: '#000' }}>Type</span>
-          </div>
-          <div className="col-span-6">
-            <span className="text-sm font-semibold" style={{ color: '#000' }}>Message</span>
-          </div>
-          <div className="col-span-3">
-            <span className="text-sm font-semibold" style={{ color: '#000' }}>Created At</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Activity List */}
+      {/* Activity Cards */}
       {currentActivities.length > 0 ? (
-        <div className="space-y-2 mb-6">
-          {currentActivities.map((activity) => (
-            <div 
-              key={activity.id}
-              className="grid grid-cols-12 gap-4 px-4 py-4 rounded-xl transition-all hover:bg-gray-50"
-              style={{ background: '#fff', border: '1px solid #ddd' }}
-            >
-              <div className="col-span-1 flex items-center">
-                <div className="w-4 h-4 rounded-full border-2" style={{ borderColor: '#3B82F6' }}></div>
+        <div className="grid gap-4 mb-6">
+          {currentActivities.map((activity) => {
+            const Icon = getActivityIcon(activity.type);
+            return (
+              <div 
+                key={activity.id}
+                className="p-5 rounded-2xl transition-all hover:shadow-md"
+                style={{ background: '#fff', border: '1px solid #ddd' }}
+              >
+                <div className="flex items-start gap-4">
+                  {/* Icon */}
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" 
+                    style={{ background: 'linear-gradient(135deg, #D8A11F 0%, #F59E0B 100%)' }}>
+                    <Icon className="w-6 h-6 text-white" />
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Link 
+                        to={createPageUrl('Profile') + `?email=${activity.user_email}`}
+                        className="font-bold hover:underline"
+                        style={{ color: '#000' }}
+                      >
+                        {activity.user_name}
+                      </Link>
+                      <Badge className={getActivityTypeColor(activity.type)}>
+                        {getActivityTypeLabel(activity.type)}
+                      </Badge>
+                    </div>
+                    
+                    <p className="text-sm mb-2" style={{ color: '#333' }}>
+                      {activity.title}
+                    </p>
+                    
+                    {activity.description && (
+                      <p className="text-sm mb-2" style={{ color: '#666' }}>
+                        {activity.description}
+                      </p>
+                    )}
+
+                    <div className="flex items-center gap-4">
+                      <p className="text-xs" style={{ color: '#888' }}>
+                        {formatDistanceToNow(new Date(activity.created_date), { addSuffix: true })}
+                      </p>
+                      
+                      {activity.link && (
+                        <Link 
+                          to={activity.link}
+                          className="text-xs font-semibold hover:underline"
+                          style={{ color: '#3B82F6' }}
+                        >
+                          View Details →
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="col-span-2 flex items-center">
-                <Badge className={getActivityTypeColor(activity.type)}>
-                  {getActivityTypeLabel(activity.type)}
-                </Badge>
-              </div>
-              <div className="col-span-6 flex items-center">
-                <p className="text-sm" style={{ color: '#000' }}>
-                  {activity.description || activity.title}
-                </p>
-              </div>
-              <div className="col-span-3 flex items-center">
-                <p className="text-sm" style={{ color: '#666' }}>
-                  {formatDistanceToNow(new Date(activity.created_date), { addSuffix: true })}
-                </p>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
-        <div className="text-center py-12">
-          <ActivityIcon className="w-16 h-16 mx-auto mb-4" style={{ color: '#7A8BA6' }} />
-          <p style={{ color: '#7A8BA6' }}>No activities to display</p>
+        <div className="text-center py-16 rounded-xl" style={{ background: '#F9FAFB', border: '1px solid #E5E7EB' }}>
+          <Users className="w-16 h-16 mx-auto mb-4" style={{ color: '#9CA3AF' }} />
+          <p className="text-lg font-semibold mb-2" style={{ color: '#374151' }}>
+            {isOwnProfile ? 'No network activity yet' : 'No activities to display'}
+          </p>
+          <p className="text-sm" style={{ color: '#6B7280' }}>
+            {isOwnProfile 
+              ? 'Connect with more people to see their updates here' 
+              : 'Activity will appear here as it happens'}
+          </p>
         </div>
       )}
 
@@ -178,9 +276,10 @@ export default function ActivityTab({ userEmail }) {
                 className="rounded-lg w-10 h-10"
                 style={{ 
                   background: currentPage === page 
-                    ? 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)' 
-                    : 'rgba(255, 255, 255, 0.1)',
-                  color: currentPage === page ? '#fff' : '#B6C4E0'
+                    ? '#D8A11F' 
+                    : '#fff',
+                  color: currentPage === page ? '#fff' : '#000',
+                  border: '1px solid #ddd'
                 }}
               >
                 {page}
