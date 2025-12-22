@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "@/components/partnerships/Sidebar";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Users, Briefcase, Store } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Sparkles, Users, Briefcase, Store, Heart, UserPlus, Loader2 } from "lucide-react";
 import ConnectionCard from "@/components/recommendations/ConnectionCard";
 import OpportunityRecommendationCard from "@/components/recommendations/OpportunityRecommendationCard";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 const connectionsData = [
   {
@@ -169,6 +170,8 @@ const opportunitiesData = [
 export default function Recommendations() {
   const [activeTab, setActiveTab] = useState("connections");
   const [currentUser, setCurrentUser] = useState(null);
+  const [loadingAiMatches, setLoadingAiMatches] = useState(false);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     base44.auth.me().then(user => setCurrentUser(user)).catch(() => setCurrentUser(null));
@@ -181,6 +184,36 @@ export default function Recommendations() {
       return response.data;
     },
     enabled: !!currentUser,
+  });
+
+  // Fetch AI-matched connections
+  const { data: aiMatches, isLoading: loadingAiMatchesQuery, refetch: refetchAiMatches } = useQuery({
+    queryKey: ['aiMatches', currentUser?.email],
+    queryFn: async () => {
+      const response = await base44.functions.invoke('aiMatchmaker', {});
+      return response.data;
+    },
+    enabled: false, // Don't auto-fetch, user triggers it
+  });
+
+  const handleGenerateAiMatches = async () => {
+    setLoadingAiMatches(true);
+    await refetchAiMatches();
+    setLoadingAiMatches(false);
+  };
+
+  // Connection mutation
+  const connectMutation = useMutation({
+    mutationFn: async (targetEmail) => {
+      return await base44.entities.Connection.create({
+        user1_email: currentUser.email,
+        user2_email: targetEmail,
+        status: 'pending'
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['connections'] });
+    },
   });
 
   return (
@@ -259,11 +292,119 @@ export default function Recommendations() {
 
           {/* Content */}
           {activeTab === "connections" ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {connectionsData.map((connection, index) => (
-                <ConnectionCard key={connection.id} connection={connection} index={index} />
-              ))}
-            </div>
+            <>
+              {/* AI Matchmaker Section */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #D8A11F 0%, #F59E0B 100%)' }}>
+                      <Sparkles className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold" style={{ color: '#000' }}>
+                        AI Recommended Connections
+                      </h2>
+                      <p className="text-sm" style={{ color: '#666' }}>
+                        Generated based on your profile, business goals, and interests
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={handleGenerateAiMatches}
+                    disabled={loadingAiMatches || loadingAiMatchesQuery}
+                    className="gap-2 rounded-xl"
+                    style={{ background: '#D8A11F', color: '#fff' }}
+                  >
+                    {loadingAiMatches || loadingAiMatchesQuery ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4" />
+                        Generate Matches
+                      </>
+                    )}
+                  </Button>
+                </div>
+
+                {aiMatches?.success && aiMatches.matches?.length > 0 ? (
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    {aiMatches.matches.map((match, idx) => (
+                      <div
+                        key={idx}
+                        className="rounded-2xl p-6 flex flex-col items-center"
+                        style={{ background: '#1E293B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                      >
+                        <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-4" style={{ borderColor: '#334155' }}>
+                          <img
+                            src={match.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(match.name)}&size=200&background=random`}
+                            alt={match.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        
+                        <h3 className="text-xl font-bold mb-2 text-center" style={{ color: '#fff' }}>
+                          {match.name}
+                        </h3>
+                        
+                        <Badge className="mb-3" style={{ background: 'rgba(99, 102, 241, 0.2)', color: '#A5B4FC', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
+                          {match.role || 'General User'}
+                        </Badge>
+                        
+                        <p className="text-sm text-center mb-4 min-h-[40px]" style={{ color: '#CBD5E1' }}>
+                          {match.bio || match.overview || 'No bio available.'}
+                        </p>
+                        
+                        <div className="flex items-center gap-2 mb-4">
+                          <Heart className="w-4 h-4" style={{ color: '#EF4444' }} />
+                          <span className="font-semibold" style={{ color: '#EF4444' }}>
+                            {match.match_score}% Match
+                          </span>
+                        </div>
+                        
+                        <Button
+                          onClick={() => connectMutation.mutate(match.email)}
+                          disabled={connectMutation.isPending}
+                          className="w-full rounded-xl gap-2 font-semibold"
+                          style={{ background: '#D8A11F', color: '#1E293B' }}
+                        >
+                          <UserPlus className="w-4 h-4" />
+                          Connect
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                ) : aiMatches && !aiMatches.success ? (
+                  <div className="text-center py-8 rounded-xl" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+                    <p style={{ color: '#EF4444' }}>{aiMatches.error || 'Failed to generate AI matches'}</p>
+                  </div>
+                ) : !aiMatches ? (
+                  <div className="text-center py-12 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                    <Sparkles className="w-12 h-12 mx-auto mb-4" style={{ color: '#D8A11F' }} />
+                    <p className="text-lg font-semibold mb-2" style={{ color: '#000' }}>
+                      Discover Your Perfect Connections
+                    </p>
+                    <p className="text-sm" style={{ color: '#666' }}>
+                      Click "Generate Matches" to find AI-recommended connections based on your profile
+                    </p>
+                  </div>
+                ) : null}
+              </div>
+
+              {/* Potential Connections Section */}
+              <div>
+                <h2 className="text-xl font-bold mb-6" style={{ color: '#000' }}>
+                  All Potential Connections
+                </h2>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                  {connectionsData.map((connection, index) => (
+                    <ConnectionCard key={connection.id} connection={connection} index={index} />
+                  ))}
+                </div>
+              </div>
+            </>
           ) : (
             <>
               {loadingAI ? (
