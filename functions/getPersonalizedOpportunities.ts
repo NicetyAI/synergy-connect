@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
+import OpenAI from 'npm:openai';
 
 Deno.serve(async (req) => {
   try {
@@ -125,31 +126,14 @@ For each opportunity, provide:
 
 Return ONLY the top 10 best matches, sorted by score.`;
 
-    const aiResponse = await base44.integrations.Core.InvokeLLM({
-      prompt,
-      response_json_schema: {
-        type: "object",
-        properties: {
-          matches: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                opportunityIndex: { type: "number" },
-                matchScore: { type: "number" },
-                explanation: { type: "string" },
-                keyReasons: {
-                  type: "array",
-                  items: { type: "string" }
-                },
-                riskAssessment: { type: "string" }
-              }
-            }
-          }
-        },
-        required: ["matches"]
-      }
+    const openai = new OpenAI({ apiKey: Deno.env.get('OPENAI_API_KEY') });
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      response_format: { type: 'json_object' },
+      temperature: 0.7
     });
+    const aiResponse = JSON.parse(response.choices[0].message.content);
 
     // Combine opportunities with AI scores
     const scoredOpportunities = aiResponse.matches.map(match => {

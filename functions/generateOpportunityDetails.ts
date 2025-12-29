@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
+import OpenAI from 'npm:openai';
 
 Deno.serve(async (req) => {
   try {
@@ -32,8 +33,12 @@ Deno.serve(async (req) => {
     };
 
     // Use AI to generate comprehensive opportunity details
-    const aiResponse = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an expert business opportunity consultant. A user wants to create a new opportunity listing and needs your help to make it compelling and complete.
+    const openai = new OpenAI({ apiKey: Deno.env.get('OPENAI_API_KEY') });
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [{
+        role: 'user',
+        content: `You are an expert business opportunity consultant. A user wants to create a new opportunity listing and needs your help to make it compelling and complete.
 
 User Profile:
 ${JSON.stringify(userContext, null, 2)}
@@ -63,26 +68,12 @@ Your Task:
 
 6. Suggest a partnership type (e.g., "Joint Venture", "Acquisition", "Investment", "Strategic Partnership", "Merger")
 
-Make the opportunity sound professional, exciting, and actionable while remaining realistic and credible.`,
-      response_json_schema: {
-        type: "object",
-        properties: {
-          description: { type: "string" },
-          category: { type: "string" },
-          investment_range: { type: "string" },
-          suggested_tags: {
-            type: "array",
-            items: { type: "string" }
-          },
-          strategic_alignments: {
-            type: "array",
-            items: { type: "string" }
-          },
-          partnership_type: { type: "string" },
-          market_insights: { type: "string" }
-        }
-      }
+Make the opportunity sound professional, exciting, and actionable while remaining realistic and credible.`
+      }],
+      response_format: { type: 'json_object' },
+      temperature: 0.7
     });
+    const aiResponse = JSON.parse(response.choices[0].message.content);
 
     return Response.json({
       success: true,

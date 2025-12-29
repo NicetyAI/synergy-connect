@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
+import OpenAI from 'npm:openai';
 
 Deno.serve(async (req) => {
   try {
@@ -51,58 +52,14 @@ User Profile:
 
 Provide specific, actionable recommendations tailored to this user's profile and activity.`;
 
-    const aiResponse = await base44.integrations.Core.InvokeLLM({
-      prompt,
-      add_context_from_internet: false,
-      response_json_schema: {
-        type: "object",
-        properties: {
-          opportunities: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                title: { type: "string" },
-                description: { type: "string" },
-                relevanceReason: { type: "string" }
-              }
-            }
-          },
-          vendors: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                category: { type: "string" },
-                description: { type: "string" },
-                whyRecommended: { type: "string" }
-              }
-            }
-          },
-          forumTopics: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                topic: { type: "string" },
-                reason: { type: "string" }
-              }
-            }
-          },
-          connections: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                profileType: { type: "string" },
-                reason: { type: "string" }
-              }
-            }
-          }
-        },
-        required: ["opportunities", "vendors", "forumTopics", "connections"]
-      }
+    const openai = new OpenAI({ apiKey: Deno.env.get('OPENAI_API_KEY') });
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      response_format: { type: 'json_object' },
+      temperature: 0.7
     });
+    const aiResponse = JSON.parse(response.choices[0].message.content);
 
     return Response.json({
       success: true,

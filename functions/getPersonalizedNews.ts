@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
+import OpenAI from 'npm:openai';
 
 Deno.serve(async (req) => {
   try {
@@ -45,23 +46,14 @@ Return a JSON object with:
 
 Focus on matching articles to user interests, professional context, and reading history.`;
 
-    const aiResponse = await base44.integrations.Core.InvokeLLM({
-      prompt,
-      response_json_schema: {
-        type: "object",
-        properties: {
-          rankedIndices: {
-            type: "array",
-            items: { type: "number" }
-          },
-          recommendations: {
-            type: "array",
-            items: { type: "string" }
-          }
-        },
-        required: ["rankedIndices", "recommendations"]
-      }
+    const openai = new OpenAI({ apiKey: Deno.env.get('OPENAI_API_KEY') });
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      response_format: { type: 'json_object' },
+      temperature: 0.7
     });
+    const aiResponse = JSON.parse(response.choices[0].message.content);
 
     // Reorder articles based on AI ranking
     const rankedArticles = aiResponse.rankedIndices

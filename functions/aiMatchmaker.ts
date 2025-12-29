@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
+import OpenAI from 'npm:openai';
 
 Deno.serve(async (req) => {
   try {
@@ -34,8 +35,12 @@ Deno.serve(async (req) => {
     };
 
     // Use AI to analyze and match opportunities
-    const opportunityMatches = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an expert business matchmaker. Analyze this user profile and the list of opportunities, then identify the top 5 most relevant matches.
+    const openai = new OpenAI({ apiKey: Deno.env.get('OPENAI_API_KEY') });
+    const opportunityResponse = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [{
+        role: 'user',
+        content: `You are an expert business matchmaker. Analyze this user profile and the list of opportunities, then identify the top 5 most relevant matches.
 
 User Profile:
 ${JSON.stringify(userProfile, null, 2)}
@@ -50,32 +55,19 @@ ${JSON.stringify(opportunities.map(o => ({
   location: o.location
 })), null, 2)}
 
-Return the top 5 matches with confidence scores and explanations.`,
-      response_json_schema: {
-        type: "object",
-        properties: {
-          matches: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                opportunity_id: { type: "string" },
-                confidence_score: { type: "number" },
-                reasoning: { type: "string" },
-                key_alignments: {
-                  type: "array",
-                  items: { type: "string" }
-                }
-              }
-            }
-          }
-        }
-      }
+Return the top 5 matches with confidence scores and explanations.`
+      }],
+      response_format: { type: 'json_object' },
+      temperature: 0.7
     });
+    const opportunityMatches = JSON.parse(opportunityResponse.choices[0].message.content);
 
     // Use AI to find compatible partners
-    const partnerMatches = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an expert business matchmaker. Analyze this user profile and find the top 5 most compatible potential partners from the user list.
+    const partnerResponse = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [{
+        role: 'user',
+        content: `You are an expert business matchmaker. Analyze this user profile and find the top 5 most compatible potential partners from the user list.
 
 User Profile:
 ${JSON.stringify(userProfile, null, 2)}
@@ -91,28 +83,12 @@ ${JSON.stringify(otherUsers.map(u => ({
   business_name: u.business_name
 })).slice(0, 50), null, 2)}
 
-Return the top 5 partner matches with confidence scores and explanations.`,
-      response_json_schema: {
-        type: "object",
-        properties: {
-          matches: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                partner_email: { type: "string" },
-                confidence_score: { type: "number" },
-                reasoning: { type: "string" },
-                synergy_points: {
-                  type: "array",
-                  items: { type: "string" }
-                }
-              }
-            }
-          }
-        }
-      }
+Return the top 5 partner matches with confidence scores and explanations.`
+      }],
+      response_format: { type: 'json_object' },
+      temperature: 0.7
     });
+    const partnerMatches = JSON.parse(partnerResponse.choices[0].message.content);
 
     // Filter high-confidence matches (>70%)
     const highConfidenceOpportunities = opportunityMatches.matches

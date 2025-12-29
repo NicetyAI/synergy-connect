@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
+import OpenAI from 'npm:openai';
 
 Deno.serve(async (req) => {
   try {
@@ -35,8 +36,12 @@ Deno.serve(async (req) => {
     };
 
     // Use AI to generate comprehensive campaign details
-    const aiResponse = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an expert digital advertising strategist. Help create a compelling ad campaign for this business.
+    const openai = new OpenAI({ apiKey: Deno.env.get('OPENAI_API_KEY') });
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [{
+        role: 'user',
+        content: `You are an expert digital advertising strategist. Help create a compelling ad campaign for this business.
 
 Campaign Context:
 ${JSON.stringify(campaignContext, null, 2)}
@@ -70,60 +75,12 @@ Your Task:
 
 6. Suggest key performance indicators (KPIs) to track
 
-Make recommendations data-driven, professional, and actionable.`,
-      response_json_schema: {
-        type: "object",
-        properties: {
-          campaign_description: { type: "string" },
-          ad_copy_variations: {
-            type: "object",
-            properties: {
-              emotion_focused: { type: "string" },
-              feature_focused: { type: "string" },
-              urgency_focused: { type: "string" }
-            }
-          },
-          targeting_parameters: {
-            type: "object",
-            properties: {
-              age_range: { type: "string" },
-              geographic_focus: { type: "string" },
-              interest_categories: {
-                type: "array",
-                items: { type: "string" }
-              },
-              behavioral_targeting: {
-                type: "array",
-                items: { type: "string" }
-              },
-              device_preferences: {
-                type: "array",
-                items: { type: "string" }
-              }
-            }
-          },
-          roi_estimate: {
-            type: "object",
-            properties: {
-              estimated_reach: { type: "string" },
-              estimated_conversions: { type: "string" },
-              estimated_roi_percentage: { type: "string" },
-              break_even_timeline: { type: "string" }
-            }
-          },
-          recommended_package: { type: "string" },
-          package_reasoning: { type: "string" },
-          key_kpis: {
-            type: "array",
-            items: { type: "string" }
-          },
-          optimization_tips: {
-            type: "array",
-            items: { type: "string" }
-          }
-        }
-      }
+Make recommendations data-driven, professional, and actionable.`
+      }],
+      response_format: { type: 'json_object' },
+      temperature: 0.7
     });
+    const aiResponse = JSON.parse(response.choices[0].message.content);
 
     return Response.json({
       success: true,

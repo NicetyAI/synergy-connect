@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
+import OpenAI from 'npm:openai';
 
 Deno.serve(async (req) => {
   try {
@@ -47,8 +48,12 @@ Deno.serve(async (req) => {
     };
 
     // Use AI to find compatible partners
-    const aiRecommendations = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an expert business matchmaker specializing in strategic partnerships. Analyze this user's profile and recommend the top 5 most compatible potential partners who would benefit from a business connection.
+    const openai = new OpenAI({ apiKey: Deno.env.get('OPENAI_API_KEY') });
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [{
+        role: 'user',
+        content: `You are an expert business matchmaker specializing in strategic partnerships. Analyze this user's profile and recommend the top 5 most compatible potential partners who would benefit from a business connection.
 
 User Profile:
 ${JSON.stringify(userProfile, null, 2)}
@@ -73,30 +78,12 @@ Focus on:
 - Potential for mutual value creation
 - Industry synergies
 
-Return the top 5 partner recommendations with detailed reasoning.`,
-      response_json_schema: {
-        type: "object",
-        properties: {
-          recommendations: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                partner_email: { type: "string" },
-                match_score: { type: "number" },
-                headline: { type: "string" },
-                reasoning: { type: "string" },
-                synergy_factors: {
-                  type: "array",
-                  items: { type: "string" }
-                },
-                potential_collaboration: { type: "string" }
-              }
-            }
-          }
-        }
-      }
+Return the top 5 partner recommendations with detailed reasoning.`
+      }],
+      response_format: { type: 'json_object' },
+      temperature: 0.7
     });
+    const aiRecommendations = JSON.parse(response.choices[0].message.content);
 
     // Enrich recommendations with full user data
     const enrichedRecommendations = aiRecommendations.recommendations.map(rec => ({
