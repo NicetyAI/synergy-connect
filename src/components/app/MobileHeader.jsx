@@ -30,10 +30,11 @@ export default function MobileHeader() {
         </button>
 
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)' }}>
-            <Building2 className="w-4 h-4" style={{ color: '#E5EDFF' }} />
-          </div>
-          <span className="text-lg font-bold" style={{ color: '#E5EDFF' }}>BuyersAlike</span>
+          <img 
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/693d02907efe4593497f9496/a8044f835_Onna.png" 
+            alt="BuyersAlike"
+            className="h-8 w-auto"
+          />
         </div>
 
         {currentUser && <NotificationBell currentUser={currentUser} />}

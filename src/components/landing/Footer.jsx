@@ -33,14 +33,11 @@ export default function Footer() {
               viewport={{ once: true }}
             >
               <div className="flex items-center gap-3 mb-6">
-                <motion.div
-                  whileHover={{ rotate: [0, -10, 10, 0] }}
-                  transition={{ duration: 0.5 }}
-                  className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center shadow-xl"
-                >
-                  <Handshake className="w-6 h-6 text-white" />
-                </motion.div>
-                <span className="text-2xl font-bold text-white">BuyersAlike</span>
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/693d02907efe4593497f9496/a8044f835_Onna.png" 
+                  alt="BuyersAlike"
+                  className="h-12 w-auto"
+                />
               </div>
               <p className="text-white/60 mb-6 max-w-sm text-base leading-relaxed">
                 Connecting like-minded professionals for business partnerships, acquisitions, and ventures. 

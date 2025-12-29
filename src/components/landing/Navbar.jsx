@@ -75,26 +75,11 @@ export default function Navbar() {
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <motion.div
-                whileHover={{ rotate: [0, -10, 10, 0] }}
-                transition={{ duration: 0.5 }}
-                className="w-11 h-11 rounded-xl flex items-center justify-center relative" 
-                style={{ background: '#D8A11F' }}
-              >
-                <motion.div
-                  animate={{
-                    boxShadow: [
-                      '0 0 20px rgba(59, 130, 246, 0.4)',
-                      '0 0 30px rgba(59, 130, 246, 0.6)',
-                      '0 0 20px rgba(59, 130, 246, 0.4)',
-                    ],
-                  }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="absolute inset-0 rounded-xl"
-                />
-                <Handshake className="w-6 h-6 relative z-10" style={{ color: '#E5EDFF' }} />
-              </motion.div>
-              <span className="text-xl font-bold" style={{ color: '#E5EDFF' }}>BuyersAlike</span>
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/693d02907efe4593497f9496/a8044f835_Onna.png" 
+                alt="BuyersAlike"
+                className="h-10 w-auto"
+              />
             </motion.div>
 
             {/* Desktop Navigation */}
