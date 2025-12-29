@@ -11,7 +11,7 @@ const AdSliderColumn = ({ ads, delay = 0 }) => {
     
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % ads.length);
-    }, 6000 + delay); // Different timing per column for visual interest
+    }, 8000); // All columns change at the same time
 
     return () => clearInterval(interval);
   }, [ads, delay]);
@@ -174,8 +174,8 @@ export default function VendorAdsSection() {
         {hasAds ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {column1.length > 0 && <AdSliderColumn ads={column1} delay={0} />}
-            {column2.length > 0 && <AdSliderColumn ads={column2} delay={500} />}
-            {column3.length > 0 && <AdSliderColumn ads={column3} delay={1000} />}
+            {column2.length > 0 && <AdSliderColumn ads={column2} delay={0} />}
+            {column3.length > 0 && <AdSliderColumn ads={column3} delay={0} />}
           </div>
         ) : (
           <div className="text-center py-12">
