@@ -37,7 +37,7 @@ Deno.serve(async (req) => {
     // Use AI to analyze and match opportunities
     const openai = new OpenAI({ apiKey: Deno.env.get('OPENAI_API_KEY') });
     const opportunityResponse = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4.1-mini',
       messages: [{
         role: 'user',
         content: `You are an expert business matchmaker. Analyze this user profile and the list of opportunities, then identify the top 5 most relevant matches.
@@ -64,7 +64,7 @@ Return the top 5 matches with confidence scores and explanations.`
 
     // Use AI to find compatible partners
     const partnerResponse = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4.1-mini',
       messages: [{
         role: 'user',
         content: `You are an expert business matchmaker. Analyze this user profile and find the top 5 most compatible potential partners from the user list.

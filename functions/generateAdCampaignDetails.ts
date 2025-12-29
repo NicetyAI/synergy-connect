@@ -38,7 +38,7 @@ Deno.serve(async (req) => {
     // Use AI to generate comprehensive campaign details
     const openai = new OpenAI({ apiKey: Deno.env.get('OPENAI_API_KEY') });
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4.1-mini',
       messages: [{
         role: 'user',
         content: `You are an expert digital advertising strategist. Help create a compelling ad campaign for this business.

@@ -50,7 +50,7 @@ Deno.serve(async (req) => {
     // Use AI to find compatible partners
     const openai = new OpenAI({ apiKey: Deno.env.get('OPENAI_API_KEY') });
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4.1-mini',
       messages: [{
         role: 'user',
         content: `You are an expert business matchmaker specializing in strategic partnerships. Analyze this user's profile and recommend the top 5 most compatible potential partners who would benefit from a business connection.

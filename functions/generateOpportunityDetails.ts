@@ -35,7 +35,7 @@ Deno.serve(async (req) => {
     // Use AI to generate comprehensive opportunity details
     const openai = new OpenAI({ apiKey: Deno.env.get('OPENAI_API_KEY') });
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4.1-mini',
       messages: [{
         role: 'user',
         content: `You are an expert business opportunity consultant. A user wants to create a new opportunity listing and needs your help to make it compelling and complete.
