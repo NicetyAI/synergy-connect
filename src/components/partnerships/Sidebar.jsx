@@ -71,10 +71,11 @@ export default function Sidebar() {
         {/* Logo */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)' }}>
-              <Building2 className="w-5 h-5" style={{ color: '#E5EDFF' }} />
-            </div>
-            <span className="text-xl font-bold" style={{ color: '#E5EDFF' }}>BuyersAlike</span>
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/693d02907efe4593497f9496/a8044f835_Onna.png" 
+              alt="BuyersAlike"
+              className="h-10 w-auto"
+            />
           </div>
           {currentUser && <NotificationBell currentUser={currentUser} />}
         </div>
