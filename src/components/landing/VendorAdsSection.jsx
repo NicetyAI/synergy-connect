@@ -11,7 +11,7 @@ const AdSliderColumn = ({ ads, delay = 0 }) => {
     
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % ads.length);
-    }, 3000 + delay); // Different timing per column for visual interest
+    }, 6000 + delay); // Different timing per column for visual interest
 
     return () => clearInterval(interval);
   }, [ads, delay]);
