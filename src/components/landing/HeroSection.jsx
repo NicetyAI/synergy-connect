@@ -192,7 +192,7 @@ export default function HeroSection() {
                     ) : (
                       <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
                         <Button 
-                          onClick={() => base44.auth.redirectToLogin()}
+                          onClick={() => base44.auth.redirectToLogin(window.location.origin + '/Onboarding')}
                           className="w-full sm:w-auto px-8 py-6 rounded-xl font-bold text-lg shadow-2xl relative overflow-hidden group" 
                           style={{ background: '#D8A11F', color: '#fff' }}
                         >
