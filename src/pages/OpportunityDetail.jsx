@@ -42,15 +42,81 @@ export default function OpportunityDetail() {
       if (!currentUser) {
         throw new Error("Please log in to express interest");
       }
-      return await base44.entities.Interest.create({
+
+      // Check if a group already exists for this opportunity
+      const existingGroups = await base44.entities.PartnershipGroup.filter({
+        opportunity_id: opportunity.id || opportunity.title,
+      });
+
+      let groupId = null;
+      let groupName = null;
+      let status = "intent_created";
+
+      if (existingGroups.length > 0) {
+        // Group exists - add to pending members
+        const group = existingGroups[0];
+        groupId = group.id;
+        groupName = group.name;
+        status = "pending_group_join";
+
+        // Add to pending members
+        const pendingMembers = group.pending_members || [];
+        pendingMembers.push({
+          email: currentUser.email,
+          name: currentUser.full_name,
+          requested_date: new Date().toISOString()
+        });
+
+        await base44.entities.PartnershipGroup.update(group.id, {
+          pending_members: pendingMembers
+        });
+      } else {
+        // First person - create new group
+        const newGroup = await base44.entities.PartnershipGroup.create({
+          name: `Group for "${opportunity.title}"`,
+          opportunity_id: opportunity.id || opportunity.title,
+          opportunity_name: opportunity.title,
+          opportunity_description: opportunity.description,
+          creator_email: currentUser.email,
+          members: [{
+            email: currentUser.email,
+            name: currentUser.full_name,
+            joined_date: new Date().toISOString(),
+            status: "active"
+          }],
+          status: "forming"
+        });
+        groupId = newGroup.id;
+        groupName = newGroup.name;
+        status = "accepted_into_group";
+      }
+
+      // Create Partnership Intent
+      return await base44.entities.PartnershipIntent.create({
         user_email: currentUser.email,
-        interest_name: opportunity.title,
-        status: "pending",
-        description: `Interested in ${opportunity.type}: ${opportunity.title}`,
+        user_name: currentUser.full_name,
+        opportunity_id: opportunity.id || opportunity.title,
+        opportunity_name: opportunity.title,
+        opportunity_description: opportunity.description,
+        current_status: status,
+        group_id: groupId,
+        group_name: groupName,
+        status_history: [{
+          status: status,
+          timestamp: new Date().toISOString(),
+          notes: status === "intent_created" 
+            ? "Created new partnership group" 
+            : "Joined existing partnership group as pending member"
+        }]
       });
     },
-    onSuccess: () => {
-      toast.success("Interest submitted successfully! We'll be in touch soon.");
+    onSuccess: (data) => {
+      if (data.current_status === "intent_created" || data.current_status === "accepted_into_group") {
+        toast.success("Partnership group created! You're the first member.");
+      } else {
+        toast.success("Interest submitted! Waiting for group approval.");
+      }
+      navigate(createPageUrl('ActivityFeed'));
     },
     onError: (error) => {
       toast.error(error.message || "Failed to submit interest");
