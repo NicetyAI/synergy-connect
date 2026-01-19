@@ -28,7 +28,7 @@ export default function Recommendations() {
   });
 
   // Fetch AI-recommended opportunities
-  const { data: aiOpportunities, isLoading: loadingAiOpportunities, refetch: refetchAiOpportunities } = useQuery({
+  const { data: aiOpportunities, refetch: refetchAiOpportunities } = useQuery({
     queryKey: ['aiOpportunities', currentUser?.email],
     queryFn: async () => {
       const response = await base44.functions.invoke('getAIRecommendedOpportunities', {});
@@ -497,10 +497,11 @@ export default function Recommendations() {
                   </p>
                 </div>
               )}
-            </div>
-          )}
-        </div>
-      </main>
-    </div>
-  );
-}
+              </div>
+              </div>
+              )}
+              </div>
+              </main>
+              </div>
+              );
+              }
