@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "@/components/partnerships/Sidebar";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MapPin, Calendar, Users, TrendingUp, Sparkles, Mail, Phone, Globe, DollarSign } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, Users, TrendingUp, Sparkles, Mail, Phone, Globe, DollarSign, CheckCircle, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
@@ -32,6 +32,8 @@ export default function OpportunityDetail() {
 
   const [selectedImage, setSelectedImage] = useState(additionalImages[0]);
   const [currentUser, setCurrentUser] = useState(null);
+  const [aiMatchData, setAiMatchData] = useState(null);
+  const [loadingAiMatch, setLoadingAiMatch] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(user => setCurrentUser(user)).catch(() => setCurrentUser(null));
@@ -217,6 +219,51 @@ export default function OpportunityDetail() {
 
             {/* Right Column - Details */}
             <div>
+              {/* AI Match Analysis */}
+              {aiMatchData && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-6 rounded-2xl mb-6"
+                  style={{ background: 'linear-gradient(135deg, rgba(216, 161, 31, 0.15) 0%, rgba(245, 158, 11, 0.15) 100%)', border: '2px solid #D8A11F' }}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #D8A11F 0%, #F59E0B 100%)' }}>
+                      <Sparkles className="w-7 h-7 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="text-lg font-bold" style={{ color: '#000' }}>
+                          AI Match Analysis
+                        </h3>
+                        <span className="px-3 py-1 rounded-full text-sm font-bold" style={{ background: '#D8A11F', color: '#fff' }}>
+                          {aiMatchData.match_score}% Match
+                        </span>
+                      </div>
+                      <p className="mb-4 leading-relaxed text-sm" style={{ color: '#000' }}>
+                        {aiMatchData.match_explanation}
+                      </p>
+                      <div className="space-y-2">
+                        <p className="font-semibold text-xs" style={{ color: '#000' }}>Key Alignment Factors:</p>
+                        {aiMatchData.alignment_factors?.map((factor, idx) => (
+                          <div key={idx} className="flex items-start gap-2">
+                            <CheckCircle className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#22C55E' }} />
+                            <span className="text-xs" style={{ color: '#000' }}>{factor}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {loadingAiMatch && (
+                <div className="p-4 rounded-2xl mb-6 flex items-center gap-3" style={{ background: '#fff', border: '1px solid #000' }}>
+                  <Loader2 className="w-5 h-5 animate-spin" style={{ color: '#D8A11F' }} />
+                  <span className="text-sm" style={{ color: '#666' }}>Analyzing match compatibility...</span>
+                </div>
+              )}
+
               {/* Header */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
