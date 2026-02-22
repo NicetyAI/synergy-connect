@@ -254,29 +254,29 @@ export default function OpportunitiesManagementTab() {
                           <Eye className="w-3 h-3" />
                         </Button>
                         {opp.status !== 'verified' && (
-                          <Button
-                            size="sm"
-                            onClick={() => updateStatusMutation.mutate({ id: opp.id, status: 'verified' })}
-                            disabled={updateStatusMutation.isPending}
-                            style={{ background: '#22C55E', color: '#fff' }}
-                            className="hover:opacity-80"
-                            title="Approve"
-                          >
-                            <CheckCircle className="w-3 h-3" />
-                          </Button>
-                        )}
-                        {opp.status !== 'unverified' && (
-                          <Button
-                            size="sm"
-                            onClick={() => updateStatusMutation.mutate({ id: opp.id, status: 'unverified' })}
-                            disabled={updateStatusMutation.isPending}
-                            style={{ background: '#EF4444', color: '#fff' }}
-                            className="hover:opacity-80"
-                            title="Reject"
-                          >
-                            <XCircle className="w-3 h-3" />
-                          </Button>
-                        )}
+                           <Button
+                             size="sm"
+                             onClick={(e) => { e.stopPropagation(); updateStatus(opp.id, 'verified'); }}
+                             disabled={updatingId === opp.id}
+                             style={{ background: '#22C55E', color: '#fff' }}
+                             className="hover:opacity-80"
+                             title="Approve"
+                           >
+                             <CheckCircle className="w-3 h-3" />
+                           </Button>
+                         )}
+                         {opp.status !== 'unverified' && (
+                           <Button
+                             size="sm"
+                             onClick={(e) => { e.stopPropagation(); updateStatus(opp.id, 'unverified'); }}
+                             disabled={updatingId === opp.id}
+                             style={{ background: '#EF4444', color: '#fff' }}
+                             className="hover:opacity-80"
+                             title="Reject"
+                           >
+                             <XCircle className="w-3 h-3" />
+                           </Button>
+                         )}
                         <Button
                           size="sm"
                           onClick={() => deleteMutation.mutate(opp.id)}
