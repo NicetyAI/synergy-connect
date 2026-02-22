@@ -161,11 +161,8 @@ export default function OpportunitiesManagementTab() {
                 </tr>
               ) : (
                 filteredOpportunities.map((opp, index) => (
-                  <motion.tr
+                  <tr
                     key={opp.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
                     className="hover:bg-gray-50 transition-colors"
                   >
                     <td className="px-6 py-4">
