@@ -29,8 +29,9 @@ export default function OpportunitiesManagementTab() {
 
   const updateStatusMutation = useMutation({
     mutationFn: ({ id, status }) => base44.asServiceRole.entities.Opportunity.update(id, { status }),
-    onSuccess: () => {
+    onSuccess: (_, { status }) => {
       queryClient.invalidateQueries({ queryKey: ['allOpportunities'] });
+      toast.success(`Opportunity ${status === 'verified' ? 'approved' : 'rejected'} successfully`);
     },
   });
 
