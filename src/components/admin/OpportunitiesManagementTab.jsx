@@ -27,13 +27,20 @@ export default function OpportunitiesManagementTab() {
     },
   });
 
-  const updateStatusMutation = useMutation({
-    mutationFn: ({ id, status }) => base44.asServiceRole.entities.Opportunity.update(id, { status }),
-    onSuccess: (_, { status }) => {
+  const [updatingId, setUpdatingId] = useState(null);
+
+  const updateStatus = async (id, status) => {
+    setUpdatingId(id);
+    try {
+      await base44.asServiceRole.entities.Opportunity.update(id, { status });
       queryClient.invalidateQueries({ queryKey: ['allOpportunities'] });
       toast.success(`Opportunity ${status === 'verified' ? 'approved' : 'rejected'} successfully`);
-    },
-  });
+    } catch (e) {
+      toast.error('Failed to update status');
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
   const getStatusColor = (status) => {
     switch (status) {
