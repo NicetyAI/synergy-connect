@@ -236,20 +236,46 @@ export default function OpportunitiesManagementTab() {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 flex-wrap">
                         <Button
                           size="sm"
                           onClick={() => handleViewDetails(opp)}
                           style={{ background: '#3B82F6', color: '#fff' }}
                           className="hover:opacity-80"
+                          title="View"
                         >
                           <Eye className="w-3 h-3" />
                         </Button>
+                        {opp.status !== 'verified' && (
+                          <Button
+                            size="sm"
+                            onClick={() => updateStatusMutation.mutate({ id: opp.id, status: 'verified' })}
+                            disabled={updateStatusMutation.isPending}
+                            style={{ background: '#22C55E', color: '#fff' }}
+                            className="hover:opacity-80"
+                            title="Approve"
+                          >
+                            <CheckCircle className="w-3 h-3" />
+                          </Button>
+                        )}
+                        {opp.status !== 'unverified' && (
+                          <Button
+                            size="sm"
+                            onClick={() => updateStatusMutation.mutate({ id: opp.id, status: 'unverified' })}
+                            disabled={updateStatusMutation.isPending}
+                            style={{ background: '#EF4444', color: '#fff' }}
+                            className="hover:opacity-80"
+                            title="Reject"
+                          >
+                            <XCircle className="w-3 h-3" />
+                          </Button>
+                        )}
                         <Button
                           size="sm"
                           onClick={() => deleteMutation.mutate(opp.id)}
-                          style={{ background: '#EF4444', color: '#fff' }}
+                          style={{ background: '#6B7280', color: '#fff' }}
                           className="hover:opacity-80"
+                          title="Delete"
                         >
                           <Trash2 className="w-3 h-3" />
                         </Button>
