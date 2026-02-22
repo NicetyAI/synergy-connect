@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Eye, Trash2, CheckCircle, XCircle } from "lucide-react";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
+// framer-motion not needed here
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function OpportunitiesManagementTab() {
