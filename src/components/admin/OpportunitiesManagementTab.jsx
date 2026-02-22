@@ -281,7 +281,7 @@ export default function OpportunitiesManagementTab() {
             </tbody>
           </table>
         </div>
-      </motion.div>
+      </div>
 
       {/* Detail Dialog */}
       <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
