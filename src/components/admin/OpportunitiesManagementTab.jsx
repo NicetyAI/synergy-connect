@@ -285,7 +285,7 @@ export default function OpportunitiesManagementTab() {
                         </Button>
                       </div>
                     </td>
-                  </motion.tr>
+                  </tr>
                 ))
               )}
             </tbody>
