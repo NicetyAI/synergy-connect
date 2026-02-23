@@ -301,7 +301,14 @@ export default function Opportunities() {
     } else if (sortBy === "highest_investment") {
       filtered = [...filtered].sort((a, b) => (b.investmentMax || 0) - (a.investmentMax || 0));
     }
-    // "most_recent" keeps default order (already sorted by API/source)
+    // "most_recent" — sort all by parsed date descending
+    if (sortBy === "most_recent" || !sortBy) {
+      filtered = [...filtered].sort((a, b) => {
+        const dateA = parsePostedDate(a.postedDate || a.created_date || "");
+        const dateB = parsePostedDate(b.postedDate || b.created_date || "");
+        return dateB - dateA;
+      });
+    }
 
     return filtered;
   }, [allOpportunities, searchQuery, category, investmentRange, selectedInterests, sortBy, franchiseCategory, propertyType]);
