@@ -1,5 +1,7 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
 
+const CACHE_TTL_DAYS = 30;
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -7,6 +9,24 @@ Deno.serve(async (req) => {
 
     if (!user) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Check for a valid cache first
+    const now = new Date();
+    const cacheRecords = await base44.asServiceRole.entities.RealEstateCache.list('-created_date', 1);
+    if (cacheRecords && cacheRecords.length > 0) {
+      const cache = cacheRecords[0];
+      const expiresAt = new Date(cache.expires_at);
+      if (now < expiresAt) {
+        return Response.json({
+          success: true,
+          opportunities: cache.opportunities,
+          count: cache.opportunities.length,
+          fetchedAt: cache.fetched_at,
+          cachedUntil: cache.expires_at,
+          source: 'cache',
+        });
+      }
     }
 
     const apiKey = Deno.env.get('RAPID_REAL_ESTATE_API');
