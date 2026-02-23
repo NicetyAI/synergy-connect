@@ -151,18 +151,18 @@ Deno.serve(async (req) => {
 
         const description = `${bedbathStr}${p.Property?.Type || 'Property'} at ${addressText}`;
 
-        // Date: try multiple possible field locations
+        // Date: InsertedDateUTC from Realtor.ca API is a .NET Ticks value
+        // .NET Ticks = 100-nanosecond intervals since Jan 1, 0001
+        // Unix epoch (Jan 1, 1970) in ticks = 621355968000000000
+        // Convert: (ticks - 621355968000000000) / 10000 = Unix ms
         let postedDate = null;
-        const dateRaw = p.InsertedDateUTC || p.Property?.InsertedDateUTC || p.ListingDate || p.Property?.ListingDate;
+        const dateRaw = p.InsertedDateUTC || p.Property?.InsertedDateUTC;
         if (dateRaw) {
-          let d;
-          if (typeof dateRaw === 'string') {
-            d = new Date(dateRaw);
-          } else if (typeof dateRaw === 'number') {
-            // Could be seconds or ms
-            d = new Date(dateRaw < 1e12 ? dateRaw * 1000 : dateRaw);
-          }
-          if (d && !isNaN(d.getTime())) {
+          const ticks = typeof dateRaw === 'string' ? BigInt(dateRaw) : BigInt(Math.round(dateRaw));
+          const epochTicks = BigInt('621355968000000000');
+          const unixMs = Number((ticks - epochTicks) / BigInt(10000));
+          const d = new Date(unixMs);
+          if (!isNaN(d.getTime()) && d.getFullYear() > 2000) {
             postedDate = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
           }
         }
