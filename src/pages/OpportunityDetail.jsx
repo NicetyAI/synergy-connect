@@ -440,7 +440,15 @@ export default function OpportunityDetail() {
                         </a>
                       </div>
                     )}
-                    {!opportunity.contact && (
+                    {opportunity.link && (
+                      <div className="flex items-center gap-3">
+                        <Globe className="w-5 h-5" style={{ color: '#D8A11F' }} />
+                        <a href={opportunity.link} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline" style={{ color: '#D8A11F' }}>
+                          View on FranchiseGator
+                        </a>
+                      </div>
+                    )}
+                    {!opportunity.contact && !opportunity.link && (
                       <p className="text-sm" style={{ color: '#666' }}>Contact information not available</p>
                     )}
                   </div>
