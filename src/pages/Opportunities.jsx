@@ -178,6 +178,15 @@ export default function Opportunities() {
     enabled: !!currentUser,
   });
 
+  const { data: franchiseData } = useQuery({
+    queryKey: ['franchiseOpportunities'],
+    queryFn: async () => {
+      const response = await base44.functions.invoke('fetchFranchiseOpportunities', {});
+      return response.data;
+    },
+    enabled: !!currentUser,
+  });
+
   // Combine all opportunity sources
   const allOpportunities = useMemo(() => {
     const combined = [
