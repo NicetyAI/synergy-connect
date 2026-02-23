@@ -225,6 +225,7 @@ export default function Opportunities() {
     (sortBy !== "most_recent" ? 1 : 0);
 
   return (
+    <CompareProvider>
     <div className="flex">
       <SEO 
         title={metadata.title}
