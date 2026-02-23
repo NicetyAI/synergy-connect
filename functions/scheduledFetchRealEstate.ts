@@ -63,10 +63,11 @@ Deno.serve(async (req) => {
       if (city) descParts.push(city);
       if (province) descParts.push(province);
 
-      const photo = listing.Property?.Photo?.[0]?.HighResPath
-        || listing.Property?.Photo?.[0]?.MedResPath
-        || listing.Property?.Photo?.[0]?.LowResPath
-        || null;
+      const photos = (listing.Property?.Photo || []).map(p =>
+        p.HighResPath || p.MedResPath || p.LowResPath
+      ).filter(Boolean);
+
+      const photo = photos[0] || null;
 
       let postedDate = 'Recently listed';
       const ticks = listing.InsertedDateUTC;
