@@ -424,6 +424,7 @@ export default function Opportunities() {
         )}
         </div>
       </main>
+    </div>
     <CompareDrawer />
     </>
     </CompareProvider>
