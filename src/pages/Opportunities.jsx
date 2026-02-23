@@ -317,7 +317,7 @@ export default function Opportunities() {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, category, investmentRange, selectedInterests]);
+  }, [searchQuery, category, investmentRange, selectedInterests, sortBy, franchiseCategory, propertyType]);
 
   const clearFilters = () => {
     setSearchQuery("");
