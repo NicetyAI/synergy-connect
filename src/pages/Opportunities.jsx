@@ -324,6 +324,9 @@ export default function Opportunities() {
     setCategory("all");
     setInvestmentRange([0, 2000000]);
     setSelectedInterests([]);
+    setSortBy("most_recent");
+    setFranchiseCategory("all");
+    setPropertyType("all");
     setCurrentPage(1);
   };
 
@@ -331,7 +334,10 @@ export default function Opportunities() {
     (searchQuery ? 1 : 0) +
     (category !== "all" ? 1 : 0) +
     (investmentRange[0] !== 0 || investmentRange[1] !== 2000000 ? 1 : 0) +
-    selectedInterests.length;
+    selectedInterests.length +
+    (franchiseCategory !== "all" ? 1 : 0) +
+    (propertyType !== "all" ? 1 : 0) +
+    (sortBy !== "most_recent" ? 1 : 0);
 
   return (
     <div className="flex">
