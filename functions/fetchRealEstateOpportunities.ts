@@ -186,10 +186,16 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Sort by most recent first
+    opportunities.sort((a, b) => b._sortDate - a._sortDate);
+    // Remove internal sort field
+    opportunities.forEach(o => delete o._sortDate);
+
     return Response.json({ 
       success: true, 
       opportunities,
-      count: opportunities.length 
+      count: opportunities.length,
+      fetchedAt: new Date().toISOString(),
     });
 
   } catch (error) {
