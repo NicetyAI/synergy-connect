@@ -1,9 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { DollarSign, Calendar, Users } from "lucide-react";
+import { DollarSign, Calendar, Users, GitCompareArrows } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { useCompare } from "./CompareContext";
 
 export default function OpportunityCard({ opportunity, index }) {
   const navigate = useNavigate();
