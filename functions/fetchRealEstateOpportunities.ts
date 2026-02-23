@@ -111,14 +111,9 @@ Deno.serve(async (req) => {
 
     const data = JSON.parse(text);
 
-    // Debug: log first result's raw date and price fields
+    // Return raw first result for debugging
     if (data?.Results?.[0]) {
-      const first = data.Results[0];
-      console.log('RAW FIRST RESULT keys:', JSON.stringify(Object.keys(first)));
-      console.log('RAW InsertedDateUTC:', first.InsertedDateUTC);
-      console.log('RAW Property.Price:', first.Property?.Price);
-      console.log('RAW Property.Type:', first.Property?.Type);
-      console.log('RAW Address.City:', first.Property?.Address?.City);
+      return Response.json({ debug: true, firstResult: data.Results[0] });
     }
 
     // Transform the data into opportunity format
