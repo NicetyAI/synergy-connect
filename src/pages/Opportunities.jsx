@@ -70,13 +70,6 @@ export default function Opportunities() {
   // Combine all opportunity sources
   const allOpportunities = useMemo(() => {
     const combined = [
-      ...opportunitiesData.map(opp => ({
-        ...opp,
-        source: 'static',
-        investmentMin: parseInvestmentRange(opp.investment).min,
-        investmentMax: parseInvestmentRange(opp.investment).max,
-        category: opp.type
-      })),
       ...(realEstateData?.opportunities || []).map(opp => ({
         ...opp,
         source: 'api',
