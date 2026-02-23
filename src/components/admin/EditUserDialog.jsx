@@ -70,7 +70,7 @@ export default function EditUserDialog({ user, open, onOpenChange }) {
   }, [user]);
 
   const updateUserMutation = useMutation({
-    mutationFn: (data) => base44.asServiceRole.entities.User.update(user.id, data),
+    mutationFn: (data) => base44.functions.invoke('updateUserAdmin', { userId: user.id, data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allUsers'] });
       onOpenChange(false);
