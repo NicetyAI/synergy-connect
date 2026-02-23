@@ -138,6 +138,9 @@ export default function Opportunities() {
   const [category, setCategory] = useState("all");
   const [investmentRange, setInvestmentRange] = useState([0, 2000000]);
   const [selectedInterests, setSelectedInterests] = useState([]);
+  const [sortBy, setSortBy] = useState("most_recent");
+  const [franchiseCategory, setFranchiseCategory] = useState("all");
+  const [propertyType, setPropertyType] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [currentUser, setCurrentUser] = useState(null);
   const itemsPerPage = 12;
