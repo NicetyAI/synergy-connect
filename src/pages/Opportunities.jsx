@@ -226,7 +226,7 @@ export default function Opportunities() {
 
   return (
     <CompareProvider>
-    <div className="flex">
+    <>
       <SEO 
         title={metadata.title}
         description={metadata.description}
