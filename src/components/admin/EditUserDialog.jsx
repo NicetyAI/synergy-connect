@@ -70,11 +70,18 @@ export default function EditUserDialog({ user, open, onOpenChange }) {
   }, [user]);
 
   const updateUserMutation = useMutation({
-    mutationFn: (data) => base44.functions.invoke('updateUserAdmin', { userId: user.id, data }),
+    mutationFn: async (data) => {
+      const res = await base44.functions.invoke('updateUserAdmin', { userId: user.id, data });
+      if (res.data?.error) throw new Error(res.data.error);
+      return res.data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allUsers'] });
       onOpenChange(false);
     },
+    onError: (err) => {
+      alert('Failed to save: ' + err.message);
+    }
   });
 
   const handleSubmit = (e) => {
