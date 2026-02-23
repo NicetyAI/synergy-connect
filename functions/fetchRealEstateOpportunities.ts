@@ -181,7 +181,7 @@ Deno.serve(async (req) => {
           image: photo,
           postedDate: postedDate || 'Not available',
           partners: `1/${partners} partners`,
-          rawDateDebug: dateRaw, // temporary debug field
+          _sortDate: postedDate ? new Date(postedDate).getTime() : 0,
         });
       });
     }
