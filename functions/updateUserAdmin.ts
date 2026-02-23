@@ -15,7 +15,17 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'userId is required' }, { status: 400 });
     }
 
-    await base44.asServiceRole.entities.User.update(userId, data);
+    const { role, ...profileData } = data;
+
+    // Update profile fields
+    if (Object.keys(profileData).length > 0) {
+      await base44.asServiceRole.entities.User.update(userId, profileData);
+    }
+
+    // Update role as a separate call since it's a built-in field
+    if (role !== undefined) {
+      await base44.asServiceRole.entities.User.update(userId, { role });
+    }
 
     return Response.json({ success: true });
   } catch (error) {
