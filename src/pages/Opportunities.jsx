@@ -204,6 +204,13 @@ export default function Opportunities() {
         investmentMax: parseInvestmentRange(opp.investment).max,
         category: opp.type
       })),
+      ...(franchiseData?.opportunities || []).map(opp => ({
+        ...opp,
+        source: 'franchise',
+        investmentMin: opp.investmentMin || parseInvestmentRange(opp.investment).min,
+        investmentMax: opp.investmentMax || parseInvestmentRange(opp.investment).max,
+        category: 'Franchise'
+      })),
       ...dbOpportunities.map(opp => ({
         ...opp,
         source: 'db',
