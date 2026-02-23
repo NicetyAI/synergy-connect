@@ -183,14 +183,8 @@ export default function InterestManagementTab() {
                   </td>
                 </tr>
               ) : (
-                filteredInterests.map((interest, index) => (
-                  <motion.tr
-                    key={interest.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
+                filteredInterests.map((interest) => (
+                  <tr key={interest.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4">
                       {interest.attachment_urls && interest.attachment_urls.length > 0 ? (
                         <img
