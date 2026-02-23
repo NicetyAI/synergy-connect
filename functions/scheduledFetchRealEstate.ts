@@ -93,6 +93,7 @@ Deno.serve(async (req) => {
         investment: price,
         description: descParts.join(', '),
         image: photo,
+        images: photos,
         postedDate,
         partners: `1/${maxPartners} partners`,
         _sortDate: listing.InsertedDateUTC
