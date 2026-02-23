@@ -223,44 +223,44 @@ export default function InterestManagementTab() {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          onClick={() => handleViewDetails(interest)}
-                          style={{ background: '#3B82F6', color: '#fff' }}
-                          className="hover:opacity-80"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => handleEdit(interest)}
-                          style={{ background: '#D8A11F', color: '#fff' }}
-                          className="hover:opacity-80"
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </Button>
-                        {interest.status !== 'approved' && (
-                          <Button
-                            size="sm"
-                            onClick={() => handleApprove(interest.id)}
-                            style={{ background: '#22C55E', color: '#fff' }}
-                            className="hover:opacity-80"
-                          >
-                            <Check className="w-4 h-4" />
-                          </Button>
-                        )}
-                        {interest.status !== 'rejected' && (
-                          <Button
-                            size="sm"
-                            onClick={() => handleReject(interest.id)}
-                            style={{ background: '#EF4444', color: '#fff' }}
-                            className="hover:opacity-80"
-                          >
-                            <X className="w-4 h-4" />
-                          </Button>
-                        )}
-                      </div>
+                     <div className="flex gap-2">
+                       <button
+                         type="button"
+                         onClick={() => handleViewDetails(interest)}
+                         className="p-2 rounded-lg hover:opacity-80 transition-opacity"
+                         style={{ background: '#3B82F6', color: '#fff' }}
+                       >
+                         <Eye className="w-4 h-4" />
+                       </button>
+                       <button
+                         type="button"
+                         onClick={() => handleEdit(interest)}
+                         className="p-2 rounded-lg hover:opacity-80 transition-opacity"
+                         style={{ background: '#D8A11F', color: '#fff' }}
+                       >
+                         <Pencil className="w-4 h-4" />
+                       </button>
+                       {interest.status !== 'approved' && (
+                         <button
+                           type="button"
+                           onClick={() => handleApprove(interest.id)}
+                           className="p-2 rounded-lg hover:opacity-80 transition-opacity"
+                           style={{ background: '#22C55E', color: '#fff' }}
+                         >
+                           <Check className="w-4 h-4" />
+                         </button>
+                       )}
+                       {interest.status !== 'rejected' && (
+                         <button
+                           type="button"
+                           onClick={() => handleReject(interest.id)}
+                           className="p-2 rounded-lg hover:opacity-80 transition-opacity"
+                           style={{ background: '#EF4444', color: '#fff' }}
+                         >
+                           <X className="w-4 h-4" />
+                         </button>
+                       )}
+                     </div>
                     </td>
                   </tr>
                 ))
