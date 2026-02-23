@@ -29,13 +29,15 @@ export default function InterestManagementTab() {
     queryFn: () => base44.asServiceRole.entities.Interest.list('-created_date'),
   });
 
+  const callManage = (payload) => base44.functions.invoke('manageInterest', payload).then(r => r.data);
+
   const updateStatusMutation = useMutation({
-    mutationFn: ({ id, status }) => base44.asServiceRole.entities.Interest.update(id, { status }),
+    mutationFn: ({ id, status }) => callManage({ action: 'update', id, data: { status } }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['allInterests'] }),
   });
 
   const updateInterestMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.asServiceRole.entities.Interest.update(id, data),
+    mutationFn: ({ id, data }) => callManage({ action: 'update', id, data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allInterests'] });
       setIsEditDialogOpen(false);
@@ -45,12 +47,17 @@ export default function InterestManagementTab() {
   });
 
   const createInterestMutation = useMutation({
-    mutationFn: (data) => base44.asServiceRole.entities.Interest.create(data),
+    mutationFn: (data) => callManage({ action: 'create', data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allInterests'] });
       setIsCreateDialogOpen(false);
       setEditFormData({ interest_name: "", description: "", user_email: "", status: "pending", message: "" });
     },
+  });
+
+  const deleteInterestMutation = useMutation({
+    mutationFn: (id) => callManage({ action: 'delete', id }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['allInterests'] }),
   });
 
   const handleViewDetails = (interest) => {
