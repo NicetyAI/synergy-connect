@@ -22,13 +22,12 @@ export default function OpportunityDetail() {
     "Investment": "#EF4444",
   };
 
-  // Mock additional images for real estate
-  const additionalImages = opportunity?.type === "Real Estate" ? [
-    opportunity.image,
-    "https://images.unsplash.com/photo-1560184897-ae75f418493e?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1556912173-3bb406ef7e77?w=800&h=600&fit=crop",
-  ] : opportunity?.image ? [opportunity.image] : [];
+  // Use actual listing photos if available, otherwise fall back to single image
+  const additionalImages = (() => {
+    if (opportunity?.images && opportunity.images.length > 0) return opportunity.images;
+    if (opportunity?.image) return [opportunity.image];
+    return [];
+  })();
 
   const [selectedImage, setSelectedImage] = useState(additionalImages[0]);
   const [currentUser, setCurrentUser] = useState(null);
