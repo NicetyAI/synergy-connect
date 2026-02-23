@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
       LatitudeMin: '41.6',
       LongitudeMin: '-141.0',
       CurrentPage: '1',
-      RecordsPerPage: '50',
+      RecordsPerPage: '200',
       SortBy: '6',
       SortOrder: 'D',
       PropertyTypeGroupID: '1',
