@@ -78,17 +78,34 @@ export default function OpportunityCard({ opportunity, index }) {
             </div>
           </div>
           
-          <Button 
-            onClick={(e) => {
-              e.stopPropagation();
-              handleCardClick();
-            }}
-            className="rounded-lg px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium touch-target" 
-            style={{ background: '#D8A11F', color: '#fff' }}
-          >
-            <span className="hidden sm:inline">View Details</span>
-            <span className="sm:hidden">View</span>
-          </Button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                inCompare ? removeFromCompare(opportunity.id) : addToCompare(opportunity);
+              }}
+              title={inCompare ? "Remove from compare" : "Add to compare"}
+              className="rounded-lg p-2 border transition-all touch-target"
+              style={{
+                background: inCompare ? '#D8A11F' : '#fff',
+                border: inCompare ? '1px solid #D8A11F' : '1px solid #000',
+                color: inCompare ? '#fff' : '#666'
+              }}
+            >
+              <GitCompareArrows className="w-4 h-4" />
+            </button>
+            <Button 
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCardClick();
+              }}
+              className="rounded-lg px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium touch-target" 
+              style={{ background: '#D8A11F', color: '#fff' }}
+            >
+              <span className="hidden sm:inline">View Details</span>
+              <span className="sm:hidden">View</span>
+            </Button>
+          </div>
         </div>
       </div>
     </motion.div>
