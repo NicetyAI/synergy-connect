@@ -262,7 +262,7 @@ export default function InterestManagementTab() {
                         )}
                       </div>
                     </td>
-                  </motion.tr>
+                  </tr>
                 ))
               )}
             </tbody>
