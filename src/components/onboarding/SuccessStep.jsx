@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Trophy, Sparkles, ArrowRight, TrendingUp, Users, Briefcase } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import confetti from "canvas-confetti";
 
 export default function SuccessStep({ userData, currentUser }) {
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving] = useState(true);
+  const [error, setError] = useState(null);
+  const savedRef = useRef(false);
   const navigate = useNavigate();
 
   const { data: opportunities = [] } = useQuery({
     queryKey: ['matchedOpportunities'],
     queryFn: async () => {
       const allOpps = await base44.entities.Opportunity.list();
-      // Simple matching based on interests
       return allOpps
-        .filter(opp => userData.interests?.some(int => 
+        .filter(opp => userData.interests?.some(int =>
           opp.category?.toLowerCase().includes(int.toLowerCase()) ||
           opp.title?.toLowerCase().includes(int.toLowerCase())
         ))
@@ -26,45 +27,55 @@ export default function SuccessStep({ userData, currentUser }) {
     },
   });
 
-  const saveProfile = async () => {
-    setSaving(true);
-    try {
-      // Update user profile
-      await base44.auth.updateMe({
-        full_name: userData.full_name,
-        title: userData.title,
-        bio: userData.bio,
-        location: userData.location,
-      });
-
-      // Create interest records
-      if (userData.interests?.length > 0) {
-        for (const interest of userData.interests) {
-          await base44.entities.Interest.create({
-            user_email: currentUser.email,
-            interest_name: interest,
-            status: "approved",
-          });
-        }
-      }
-
-      // Trigger confetti
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-
-      setTimeout(() => {
-        navigate(createPageUrl('Partnerships'));
-      }, 2000);
-    } catch (error) {
-      console.error('Error saving profile:', error);
-      setSaving(false);
-    }
-  };
-
   useEffect(() => {
+    // Guard against double-execution (StrictMode / remount)
+    if (savedRef.current) return;
+    savedRef.current = true;
+
+    const saveProfile = async () => {
+      setSaving(true);
+      setError(null);
+      try {
+        await base44.auth.updateMe({
+          full_name: userData.full_name,
+          title: userData.title,
+          bio: userData.bio,
+          location: userData.location,
+          investment_range: userData.investment_range,
+          partnership_goals: userData.partnership_goals,
+        });
+
+        // Deduplicate: fetch existing interests first
+        if (userData.interests?.length > 0) {
+          const existing = await base44.entities.Interest.filter({ user_email: currentUser.email });
+          const existingNames = new Set(existing.map(i => i.interest_name.toLowerCase()));
+
+          const newInterests = userData.interests.filter(
+            interest => !existingNames.has(interest.toLowerCase())
+          );
+
+          for (const interest of newInterests) {
+            await base44.entities.Interest.create({
+              user_email: currentUser.email,
+              interest_name: interest,
+              status: "approved",
+            });
+          }
+        }
+
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+
+        setTimeout(() => {
+          navigate(createPageUrl('Partnerships'));
+        }, 2500);
+      } catch (err) {
+        console.error('Error saving profile:', err);
+        setError('Something went wrong. Please try again.');
+        setSaving(false);
+        savedRef.current = false; // allow retry
+      }
+    };
+
     saveProfile();
   }, []);
 
@@ -87,7 +98,6 @@ export default function SuccessStep({ userData, currentUser }) {
           <Trophy className="w-12 h-12" style={{ color: '#fff' }} />
         </motion.div>
 
-        {/* Success Message */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -167,14 +177,22 @@ export default function SuccessStep({ userData, currentUser }) {
         )}
 
         {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.9 }}
-        >
-          {saving ? (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }}>
+          {error ? (
+            <div className="space-y-3">
+              <p className="text-sm" style={{ color: '#EF4444' }}>{error}</p>
+              <Button
+                onClick={() => { savedRef.current = false; saveProfile(); }}
+                size="lg"
+                className="px-8 py-6 text-lg rounded-xl gap-2"
+                style={{ background: '#D8A11F', color: '#fff' }}
+              >
+                Retry
+              </Button>
+            </div>
+          ) : saving ? (
             <div className="py-4">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-t-transparent" style={{ borderColor: '#D8A11F' }}></div>
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-t-transparent" style={{ borderColor: '#D8A11F', borderTopColor: 'transparent' }}></div>
               <p className="mt-4" style={{ color: '#666' }}>Setting up your profile...</p>
             </div>
           ) : (
