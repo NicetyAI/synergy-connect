@@ -49,6 +49,8 @@ export default function Opportunities() {
       return response.data;
     },
     enabled: !!currentUser,
+    staleTime: 5 * 60 * 1000,
+    keepPreviousData: true,
   });
 
   const { data: realEstateCache } = useQuery({
