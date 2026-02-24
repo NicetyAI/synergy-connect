@@ -109,6 +109,13 @@ export default function Profile() {
               >
                 Activity
               </TabsTrigger>
+              <TabsTrigger 
+                value="saved" 
+                className="rounded-xl px-6 py-3 font-semibold transition-all data-[state=active]:bg-[#D8A11F] data-[state=active]:text-white"
+                style={{ color: '#000' }}
+              >
+                Saved
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="about">
