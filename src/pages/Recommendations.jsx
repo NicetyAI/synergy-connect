@@ -45,24 +45,30 @@ export default function Recommendations() {
     setLoadingAiOpportunities(false);
   };
 
-  // Fetch opportunities matched to user interests (fallback)
+  // Fetch opportunities matched to user interests with real match scores
   const { data: matchedOpportunities = [], isLoading: loadingOpportunities } = useQuery({
-    queryKey: ['matchedOpportunities', currentUser?.email],
+    queryKey: ['matchedOpportunities', currentUser?.email, userInterests.length],
     queryFn: async () => {
-      const allOpportunities = await base44.entities.Opportunity.filter({ status: 'verified' });
+      const allOpportunities = await base44.entities.Opportunity.list();
       
-      // Filter opportunities that match user's interests
-      if (userInterests.length === 0) return allOpportunities.slice(0, 9);
+      if (userInterests.length === 0) {
+        // No interests — return all with 0% match
+        return allOpportunities.map(opp => ({ ...opp, matchPercentage: 0 }));
+      }
       
       const interestNames = userInterests.map(i => i.interest_name.toLowerCase());
       
-      const matched = allOpportunities.filter(opp => {
+      // Score each opportunity by how many of its related_interests match user interests
+      const scored = allOpportunities.map(opp => {
         const oppInterests = (opp.related_interests || []).map(i => i.toLowerCase());
-        return oppInterests.some(interest => interestNames.includes(interest));
+        const matchCount = oppInterests.filter(interest => interestNames.includes(interest)).length;
+        const totalRelevant = Math.max(oppInterests.length, interestNames.length);
+        const matchPercentage = totalRelevant > 0 ? Math.round((matchCount / totalRelevant) * 100) : 0;
+        return { ...opp, matchPercentage, matchCount };
       });
       
-      // If no matches, return all opportunities
-      return matched.length > 0 ? matched : allOpportunities.slice(0, 9);
+      // Sort by match score descending, show matched ones first
+      return scored.sort((a, b) => b.matchPercentage - a.matchPercentage);
     },
     enabled: !!currentUser && userInterests !== undefined,
   });
