@@ -9,6 +9,7 @@ import InterestTab from "@/components/profile/InterestTab";
 import ConnectionTab from "@/components/profile/ConnectionTab";
 import OpportunityTab from "@/components/profile/OpportunityTab";
 import ActivityTab from "@/components/profile/ActivityTab";
+import SavedListingsTab from "@/components/profile/SavedListingsTab";
 import VendorProfileSection from "@/components/profile/VendorProfileSection";
 import ProfileCompletionWizard from "@/components/profile/ProfileCompletionWizard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
