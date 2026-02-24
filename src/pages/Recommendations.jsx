@@ -186,8 +186,8 @@ export default function Recommendations() {
               }
             >
               <Users className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              <span className="hidden sm:inline">Potential Connections (20)</span>
-              <span className="sm:hidden">Connections (20)</span>
+              <span className="hidden sm:inline">Potential Connections ({matchedUsers.length})</span>
+              <span className="sm:hidden">Connections ({matchedUsers.length})</span>
             </Button>
             <Button
               onClick={() => setActiveTab("opportunities")}
@@ -201,8 +201,8 @@ export default function Recommendations() {
               }
             >
               <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              <span className="hidden sm:inline">Top Opportunities (120)</span>
-              <span className="sm:hidden">Opportunities (120)</span>
+              <span className="hidden sm:inline">Top Opportunities ({matchedOpportunities.length})</span>
+              <span className="sm:hidden">Opportunities ({matchedOpportunities.length})</span>
             </Button>
           </div>
 
