@@ -35,6 +35,14 @@ export default function Opportunities() {
     enabled: !!currentUser,
   });
 
+  // Fetch saved opportunities for the current user
+  const { data: savedOpportunities = [] } = useQuery({
+    queryKey: ['savedOpportunities', currentUser?.email],
+    queryFn: () => base44.entities.SavedOpportunity.filter({ user_email: currentUser.email }),
+    enabled: !!currentUser?.email,
+    staleTime: 30 * 1000,
+  });
+
   // Fetch user interests for filtering
   const { data: userInterests = [] } = useQuery({
     queryKey: ['userInterests'],
