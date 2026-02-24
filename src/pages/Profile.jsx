@@ -137,6 +137,10 @@ export default function Profile() {
             <TabsContent value="activity">
               <ActivityTab userEmail={profileUser.email} />
             </TabsContent>
+
+            <TabsContent value="saved">
+              <SavedListingsTab userEmail={profileUser.email} isOwnProfile={isOwnProfile} />
+            </TabsContent>
           </Tabs>
         </div>
       </div>
