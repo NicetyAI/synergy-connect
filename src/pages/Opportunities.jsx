@@ -286,11 +286,7 @@ export default function Opportunities() {
         />
 
         {/* AI-Matched Opportunities */}
-        {isLoading ? (
-          <div className="text-center py-12">
-            <p style={{ color: '#666' }}>Analyzing opportunities for you...</p>
-          </div>
-        ) : aiMatches?.success && aiMatches.opportunities?.length > 0 ? (
+        {aiMatches?.success && aiMatches.opportunities?.length > 0 ? (
           <>
             {/* Top 2 Matches */}
             <div className="mb-6 sm:mb-8">
