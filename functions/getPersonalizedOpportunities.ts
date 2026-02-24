@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 import OpenAI from 'npm:openai';
 
 Deno.serve(async (req) => {
@@ -10,199 +10,179 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get comprehensive user data
     const [
+      userProfileArr,
       userInterests,
       forumPosts,
-      forumComments,
       savedNews,
       connections,
-      opportunities,
-      partnerships
+      dbOpportunities,
+      realEstateCaches,
+      franchiseCaches,
+      partnershipIntents,
     ] = await Promise.all([
+      base44.entities.User.filter({ email: user.email }),
       base44.entities.Interest.filter({ user_email: user.email, status: 'approved' }),
       base44.entities.ForumPost.filter({ author_email: user.email }),
-      base44.entities.ForumComment.filter({ author_email: user.email }),
       base44.entities.SavedNews.filter({ user_email: user.email }),
-      base44.entities.Connection.filter({ 
-        $or: [
-          { user1_email: user.email, status: 'connected' },
-          { user2_email: user.email, status: 'connected' }
-        ]
-      }),
+      base44.entities.Connection.filter({ user1_email: user.email }),
       base44.entities.Opportunity.list('-created_date', 50),
-      base44.entities.Partnership.filter({ owner_email: user.email })
+      base44.entities.RealEstateCache.list('-created_date', 1),
+      base44.entities.FranchiseCache.list('-created_date', 1),
+      base44.entities.PartnershipIntent.filter({ user_email: user.email }),
     ]);
 
-    // Get all users for connection analysis
-    const allUsers = await base44.entities.User.list();
+    const userData = userProfileArr[0] || {};
 
-    // Analyze successful connections (users with similar profiles who connected)
-    const connectedUsers = connections.map(conn => 
-      conn.user1_email === user.email ? conn.user2_email : conn.user1_email
-    );
-    const connectedProfiles = allUsers.filter(u => connectedUsers.includes(u.email));
+    // Combine all opportunity sources
+    const realEstateOpps = (realEstateCaches[0]?.opportunities || []).slice(0, 30).map(opp => ({
+      id: opp.id || `re_${opp.title?.substring(0, 10)}`,
+      title: opp.title,
+      description: (opp.description || '').substring(0, 300),
+      category: opp.type || 'Real Estate',
+      investment: opp.investment,
+      location: opp.location || opp.address || '',
+      source: 'real_estate',
+    }));
 
-    // Build comprehensive user profile
-    const userProfile = {
+    const franchiseOpps = (franchiseCaches[0]?.opportunities || []).slice(0, 30).map(opp => ({
+      id: opp.id || `fr_${opp.title?.substring(0, 10)}`,
+      title: opp.title,
+      description: (opp.description || '').substring(0, 300),
+      category: 'Franchise',
+      investment: opp.investment,
+      location: opp.location || '',
+      source: 'franchise',
+    }));
+
+    const dbOpps = dbOpportunities.map(opp => ({
+      id: opp.id,
+      title: opp.title,
+      description: (opp.description || '').substring(0, 300),
+      category: opp.category,
+      investment: `$${(opp.investment_min || 0).toLocaleString()} - $${(opp.investment_max || 0).toLocaleString()}`,
+      investment_min: opp.investment_min || 0,
+      investment_max: opp.investment_max || 0,
+      related_interests: opp.related_interests || [],
+      location: opp.location || '',
+      source: 'db',
+    }));
+
+    const allOpportunities = [...dbOpps, ...realEstateOpps, ...franchiseOpps];
+
+    if (allOpportunities.length === 0) {
+      return Response.json({ success: false, opportunities: [], error: 'No opportunities available.' });
+    }
+
+    // Build rich user context
+    const userContext = {
+      name: user.full_name,
+      title: userData.title || user.title || '',
+      bio: userData.bio || user.bio || '',
+      location: userData.location || user.location || '',
+      investment_range: userData.investment_range || user.investment_range || 'Not specified',
+      partnership_goals: userData.partnership_goals || user.partnership_goals || '',
+      skills: userData.skills || user.skills || [],
       interests: userInterests.map(i => i.interest_name),
-      skills: user.skills || [],
-      industries: user.industries || [],
-      title: user.title || user.position || '',
-      location: user.location || user.state || '',
-      bio: user.bio || user.overview || '',
-      investmentHistory: user.investment_history || [],
-      forumTopics: forumPosts.map(p => p.title).slice(0, 10),
-      forumCategories: [...new Set(forumPosts.map(p => p.category_id))],
-      recentComments: forumComments.map(c => c.content).slice(0, 10),
-      savedNewsTopics: savedNews.map(n => n.article_title).slice(0, 10),
-      connectionCount: connections.length,
-      partnershipExperience: partnerships.map(p => ({
-        stage: p.stage,
-        industry: p.industry,
-        dealSize: p.deal_size
-      })),
-      connectedIndustries: connectedProfiles
-        .flatMap(cp => cp.industries || [])
-        .filter(Boolean),
-      connectedInterests: connectedProfiles
-        .flatMap(cp => cp.interests || [])
-        .filter(Boolean)
+      forum_topics: forumPosts.map(p => p.title).slice(0, 8),
+      saved_news_topics: savedNews.map(n => n.article_title).slice(0, 8),
+      connection_count: connections.length,
+      past_partnership_count: partnershipIntents.length,
     };
 
-    // Calculate investment preferences from history
-    const investmentPreferences = calculateInvestmentPreferences(userProfile.investmentHistory);
-
-    const prompt = `You are an advanced AI opportunity matching expert with deep understanding of business partnerships, investments, and professional networks.
-
-Analyze the user's comprehensive profile and score each opportunity based on multiple sophisticated factors:
+    const prompt = `You are an expert business partnership matchmaker. Score each opportunity for this user using a nuanced, weighted approach.
 
 USER PROFILE:
-- Professional Title: ${userProfile.title || 'Business Professional'}
-- Location: ${userProfile.location || 'Not specified'}
-- Skills: ${userProfile.skills.join(', ') || 'Not specified'}
-- Industries of Expertise: ${userProfile.industries.join(', ') || 'General business'}
-- Stated Interests: ${userProfile.interests.join(', ') || 'None'}
-- Bio: ${userProfile.bio || 'Not provided'}
+- Name: ${userContext.name}
+- Title: ${userContext.title || 'Professional'}
+- Location: ${userContext.location || 'Not specified'}
+- Investment Range: ${userContext.investment_range}
+- Partnership Goals: ${userContext.partnership_goals || 'Not specified'}
+- Skills: ${userContext.skills.join(', ') || 'Not specified'}
+- Stated Interests: ${userContext.interests.join(', ') || 'None listed'}
+- Bio: ${userContext.bio || 'Not provided'}
+- Forum engagement topics: ${userContext.forum_topics.join(', ') || 'None'}
+- Saved news topics: ${userContext.saved_news_topics.join(', ') || 'None'}
+- Network size: ${userContext.connection_count} connections
+- Past partnership attempts: ${userContext.past_partnership_count}
 
-INVESTMENT HISTORY ANALYSIS:
-- Total Past Investments: ${userProfile.investmentHistory.length}
-- Preferred Categories: ${investmentPreferences.categories.join(', ') || 'None'}
-- Typical Investment Range: ${investmentPreferences.range}
-- Success Rate: ${investmentPreferences.successRate}%
+SCORING RUBRIC (total = 100 points):
+1. Interest & Category Alignment (25 pts): How well does the opportunity's category/description match the user's stated interests?
+2. Investment Range Fit (25 pts): Does the opportunity's investment level match the user's stated investment range? Penalize heavily for mismatches outside ±50%.
+3. Partnership Goals Alignment (20 pts): Does this opportunity type help achieve what the user said they're looking for?
+4. Location Relevance (15 pts): Is the opportunity local/national/relevant to the user's location? Award full points only if same city/region, partial for same country.
+5. Profile & Bio Context (15 pts): Does the opportunity align with the user's professional background, bio, and forum/news engagement?
 
-NETWORK & CONNECTIONS:
-- Total Connections: ${userProfile.connectionCount}
-- Industries in Network: ${[...new Set(userProfile.connectedIndustries)].join(', ') || 'None'}
-- Common Interests in Network: ${[...new Set(userProfile.connectedInterests)].join(', ') || 'None'}
+AVAILABLE OPPORTUNITIES (evaluate the top 60 only):
+${JSON.stringify(allOpportunities.slice(0, 60).map((o, idx) => ({
+  index: idx,
+  id: o.id,
+  title: o.title,
+  description: o.description,
+  category: o.category,
+  investment: o.investment,
+  location: o.location,
+  related_interests: o.related_interests,
+  source: o.source,
+})), null, 2)}
 
-ACTIVITY & ENGAGEMENT:
-- Forum Topics Engaged: ${userProfile.forumTopics.join(', ') || 'None'}
-- Active Discussion Areas: ${userProfile.forumCategories.length} categories
-- News Reading Patterns: ${userProfile.savedNewsTopics.join(', ') || 'None'}
+Return the TOP 8 best matches. For each:
+- opportunity_index (number, from list above)
+- match_score (0-100, sum of all rubric categories — be precise, avoid round numbers like 75/80/85)
+- score_breakdown: { interest_alignment: n, investment_fit: n, goals_alignment: n, location_relevance: n, profile_context: n }
+- match_explanation (1-2 sentences explaining the PRIMARY reason this matches)
+- match_reasons (array of 2-3 concise bullet points, one per key rubric area that scored well)
 
-PARTNERSHIP EXPERIENCE:
-- Active Partnerships: ${userProfile.partnershipExperience.length}
-- Experience with: ${userProfile.partnershipExperience.map(p => p.industry).filter(Boolean).join(', ') || 'No prior partnerships'}
-
-OPPORTUNITIES TO EVALUATE:
-${opportunities.map((o, i) => `${i + 1}. ${o.title} (${o.category}, ${o.investment_min ? '$' + o.investment_min.toLocaleString() + '-$' + (o.investment_max || o.investment_min).toLocaleString() : 'Contact for details'})
-   Description: ${o.description}
-   Related Interests: ${o.related_interests?.join(', ') || 'None'}
-   Status: ${o.status}`).join('\n\n')}
-
-SCORING CRITERIA (weighted):
-1. Industry/Skills Alignment (30%): Match between opportunity requirements and user's expertise/skills
-2. Investment History Pattern (25%): Alignment with past successful investment categories and ranges
-3. Network Synergy (20%): Connection to industries/interests common in user's successful network
-4. Interest Relevance (15%): Match with user's stated interests and related opportunity tags
-5. Activity Patterns (10%): Alignment with forum engagement and news reading behavior
-
-For each opportunity, provide:
-1. Match score (0-100) considering ALL weighted factors
-2. Detailed explanation of the scoring
-3. Specific reasons highlighting which criteria contributed most
-4. Risk assessment based on investment history
-
-Return ONLY the top 10 best matches, sorted by score.`;
+Return ONLY valid JSON: { "recommendations": [ { "opportunity_index": n, "match_score": n, "score_breakdown": {...}, "match_explanation": "...", "match_reasons": ["...", "..."] } ] }`;
 
     const openai = new OpenAI({ apiKey: Deno.env.get('OPENAI_API_KEY') });
     const response = await openai.chat.completions.create({
-      model: 'gpt-4.1-mini',
-      messages: [{ role: 'user', content: prompt }],
+      model: 'gpt-4o-mini',
+      messages: [
+        { role: 'system', content: 'You are a professional partnership matchmaking AI. Always return valid JSON.' },
+        { role: 'user', content: prompt }
+      ],
       response_format: { type: 'json_object' },
-      temperature: 0.7
+      temperature: 0.6,
     });
-    const aiResponse = JSON.parse(response.choices[0].message.content);
 
-    // Combine opportunities with AI scores
-    const scoredOpportunities = aiResponse.matches.map(match => {
-      const opp = opportunities[match.opportunityIndex];
-      return {
-        ...opp,
-        matchScore: match.matchScore || 0,
-        matchExplanation: match.explanation || '',
-        matchReasons: match.keyReasons || [],
-        riskAssessment: match.riskAssessment || ''
-      };
-    }).filter(opp => opp.id); // Filter out any invalid matches
+    const aiResult = JSON.parse(response.choices[0].message.content);
 
-    // Sort by match score
-    scoredOpportunities.sort((a, b) => b.matchScore - a.matchScore);
+    const scoredOpportunities = (aiResult.recommendations || [])
+      .map(rec => {
+        const opp = allOpportunities[rec.opportunity_index];
+        if (!opp) return null;
+        return {
+          ...opp,
+          matchScore: Math.min(100, Math.max(0, Math.round(rec.match_score))),
+          matchExplanation: rec.match_explanation || '',
+          matchReasons: rec.match_reasons || [],
+          scoreBreakdown: rec.score_breakdown || {},
+          ai_recommended: true,
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => b.matchScore - a.matchScore)
+      .slice(0, 8);
 
     return Response.json({
       success: true,
-      opportunities: scoredOpportunities.slice(0, 10),
+      opportunities: scoredOpportunities,
       userProfile: {
-        hasInterests: userProfile.interests.length > 0,
-        hasActivity: forumPosts.length > 0 || savedNews.length > 0,
-        hasInvestmentHistory: userProfile.investmentHistory.length > 0,
-        networkSize: userProfile.connectionCount
+        hasInterests: userContext.interests.length > 0,
+        hasInvestmentRange: !!userData.investment_range || !!user.investment_range,
+        hasPartnershipGoals: !!userData.partnership_goals || !!user.partnership_goals,
+        hasLocation: !!userContext.location,
+        networkSize: userContext.connection_count,
       }
     });
 
   } catch (error) {
     console.error('Opportunity matching error:', error);
-    return Response.json({ 
+    return Response.json({
       error: error.message,
       success: false,
       opportunities: []
     }, { status: 500 });
   }
 });
-
-function calculateInvestmentPreferences(investmentHistory) {
-  if (!investmentHistory || investmentHistory.length === 0) {
-    return {
-      categories: [],
-      range: 'No history',
-      successRate: 0
-    };
-  }
-
-  // Get most common categories
-  const categoryCount = {};
-  investmentHistory.forEach(inv => {
-    categoryCount[inv.category] = (categoryCount[inv.category] || 0) + 1;
-  });
-  const topCategories = Object.entries(categoryCount)
-    .sort(([,a], [,b]) => b - a)
-    .slice(0, 3)
-    .map(([cat]) => cat);
-
-  // Calculate success rate
-  const successful = investmentHistory.filter(inv => inv.success).length;
-  const successRate = Math.round((successful / investmentHistory.length) * 100);
-
-  // Determine typical range
-  const ranges = investmentHistory.map(inv => inv.amount_range).filter(Boolean);
-  const mostCommonRange = ranges.length > 0 ? 
-    ranges.sort((a,b) => ranges.filter(v => v===a).length - ranges.filter(v => v===b).length).pop() :
-    'Varies';
-
-  return {
-    categories: topCategories,
-    range: mostCommonRange,
-    successRate
-  };
-}

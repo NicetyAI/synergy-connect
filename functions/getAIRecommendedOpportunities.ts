@@ -14,7 +14,6 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Fetch user's profile data and interests in parallel
     const [userProfile, interests, partnershipIntents, dbOpportunities, realEstateCaches, franchiseCaches] = await Promise.all([
       base44.entities.User.filter({ email: user.email }),
       base44.entities.Interest.filter({ user_email: user.email, status: 'approved' }),
@@ -26,35 +25,36 @@ Deno.serve(async (req) => {
 
     const userData = userProfile[0] || {};
 
-    // Combine all opportunity sources
     const realEstateOpps = (realEstateCaches[0]?.opportunities || []).map(opp => ({
       id: opp.id || `re_${Math.random().toString(36).substr(2, 9)}`,
       title: opp.title,
-      description: opp.description,
+      description: (opp.description || '').substring(0, 250),
       category: opp.type || 'Real Estate',
       investment: opp.investment,
-      image_url: opp.image,
+      location: opp.location || opp.address || '',
       source: 'real_estate',
     }));
 
     const franchiseOpps = (franchiseCaches[0]?.opportunities || []).map(opp => ({
       id: opp.id || `fr_${Math.random().toString(36).substr(2, 9)}`,
       title: opp.title,
-      description: opp.description,
+      description: (opp.description || '').substring(0, 250),
       category: 'Franchise',
       investment: opp.investment,
-      image_url: opp.image,
+      location: opp.location || '',
       source: 'franchise',
     }));
 
     const dbOpps = dbOpportunities.map(opp => ({
       id: opp.id,
       title: opp.title,
-      description: opp.description,
+      description: (opp.description || '').substring(0, 250),
       category: opp.category,
-      investment: `$${opp.investment_min || 0} - $${opp.investment_max || 0}`,
+      investment: `$${(opp.investment_min || 0).toLocaleString()} - $${(opp.investment_max || 0).toLocaleString()}`,
+      investment_min: opp.investment_min || 0,
+      investment_max: opp.investment_max || 0,
       related_interests: opp.related_interests || [],
-      image_url: opp.image_url,
+      location: opp.location || '',
       source: 'db',
     }));
 
@@ -64,13 +64,13 @@ Deno.serve(async (req) => {
       return Response.json({ success: false, error: 'No opportunities available to match against.' });
     }
 
-    // Build user context
     const userContext = {
       name: user.full_name,
       bio: userData.bio || '',
       title: userData.title || '',
       location: userData.location || '',
-      profession: userData.profession || '',
+      investment_range: userData.investment_range || 'Not specified',
+      partnership_goals: userData.partnership_goals || '',
       skills: userData.skills || [],
       interests: interests.map(i => i.interest_name),
       pastPartnerships: partnershipIntents.map(p => ({
@@ -79,35 +79,46 @@ Deno.serve(async (req) => {
       })),
     };
 
-    const aiPrompt = `You are an expert business partnership matchmaker. Analyze the user's profile and recommend the TOP 6 most relevant opportunities from the list provided.
+    const aiPrompt = `You are an expert business partnership matchmaker. Analyze the user's profile and recommend the TOP 6 most relevant opportunities.
 
 USER PROFILE:
-${JSON.stringify(userContext, null, 2)}
+- Name: ${userContext.name}
+- Title: ${userContext.title || 'Professional'}
+- Location: ${userContext.location || 'Not specified'}
+- Investment Range: ${userContext.investment_range}
+- Partnership Goals: ${userContext.partnership_goals || 'Not specified'}
+- Skills: ${userContext.skills.join(', ') || 'Not specified'}
+- Interests: ${userContext.interests.join(', ') || 'None listed'}
+- Bio: ${userContext.bio || 'Not provided'}
+- Past partnerships: ${userContext.pastPartnerships.length}
 
-AVAILABLE OPPORTUNITIES (pick the best matches):
+SCORING RUBRIC (total = 100 points):
+1. Interest & Category Alignment (25 pts): Match between opportunity category/description and user's stated interests
+2. Investment Range Fit (25 pts): Does the investment requirement fit the user's stated investment range?
+3. Partnership Goals Alignment (20 pts): Does this opportunity type serve the user's stated partnership goals?
+4. Location Relevance (15 pts): Is the opportunity in the same city/region/country as the user?
+5. Profile & Bio Context (15 pts): Does it align with the user's professional title, bio, and background?
+
+AVAILABLE OPPORTUNITIES:
 ${JSON.stringify(allOpportunities.slice(0, 80).map((o, idx) => ({
   index: idx,
   id: o.id,
   title: o.title,
-  description: (o.description || '').substring(0, 200),
+  description: o.description,
   category: o.category,
   investment: o.investment,
+  location: o.location,
   related_interests: o.related_interests,
   source: o.source,
 })), null, 2)}
 
-For each recommended opportunity, provide:
-1. The opportunity index (from the list above)
-2. A match score (0-100) based on alignment with user's interests, profession, skills, location, and intent
-3. A brief explanation (1-2 sentences) of WHY this is a good match
-
-Return ONLY valid JSON in this exact format:
+Return TOP 6 matches. Return ONLY valid JSON:
 {
   "recommendations": [
     {
       "opportunity_index": number,
       "match_score": number,
-      "match_reason": "string"
+      "match_reason": "1-2 sentence explanation of the primary match reasons"
     }
   ]
 }`;
@@ -119,19 +130,18 @@ Return ONLY valid JSON in this exact format:
         { role: "user", content: aiPrompt }
       ],
       response_format: { type: "json_object" },
-      temperature: 0.7
+      temperature: 0.6
     });
 
     const aiResult = JSON.parse(response.choices[0].message.content);
 
-    // Enrich recommendations with full opportunity data
     const enrichedRecommendations = (aiResult.recommendations || [])
       .map(rec => {
         const opportunity = allOpportunities[rec.opportunity_index];
         if (!opportunity) return null;
         return {
           ...opportunity,
-          match_score: rec.match_score,
+          match_score: Math.min(100, Math.max(0, Math.round(rec.match_score))),
           match_reason: rec.match_reason,
           ai_recommended: true
         };
@@ -147,9 +157,9 @@ Return ONLY valid JSON in this exact format:
 
   } catch (error) {
     console.error('Error generating AI recommendations:', error);
-    return Response.json({ 
+    return Response.json({
       error: error.message,
-      success: false 
+      success: false
     }, { status: 500 });
   }
 });
