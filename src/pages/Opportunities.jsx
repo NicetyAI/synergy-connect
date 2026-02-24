@@ -51,23 +51,31 @@ export default function Opportunities() {
     enabled: !!currentUser,
   });
 
-  const { data: realEstateData, isLoading: isLoadingRealEstate } = useQuery({
-    queryKey: ['realEstateOpportunities'],
-    queryFn: async () => {
-      const response = await base44.functions.invoke('fetchRealEstateOpportunities', {});
-      return response.data;
-    },
+  const { data: realEstateCache } = useQuery({
+    queryKey: ['realEstateCache'],
+    queryFn: () => base44.entities.RealEstateCache.list('-created_date', 1),
     enabled: !!currentUser,
+    staleTime: 10 * 60 * 1000, // 10 minutes
   });
 
-  const { data: franchiseData } = useQuery({
-    queryKey: ['franchiseOpportunities'],
-    queryFn: async () => {
-      const response = await base44.functions.invoke('fetchFranchiseOpportunities', {});
-      return response.data;
-    },
+  const { data: franchiseCache } = useQuery({
+    queryKey: ['franchiseCache'],
+    queryFn: () => base44.entities.FranchiseCache.list('-created_date', 1),
     enabled: !!currentUser,
+    staleTime: 10 * 60 * 1000, // 10 minutes
   });
+
+  const realEstateData = useMemo(() => {
+    const cache = realEstateCache?.[0];
+    if (!cache) return null;
+    return { success: true, opportunities: cache.opportunities || [] };
+  }, [realEstateCache]);
+
+  const franchiseData = useMemo(() => {
+    const cache = franchiseCache?.[0];
+    if (!cache) return null;
+    return { success: true, opportunities: cache.opportunities || [] };
+  }, [franchiseCache]);
 
   // Combine all opportunity sources
   const allOpportunities = useMemo(() => {
