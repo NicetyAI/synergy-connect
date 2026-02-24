@@ -45,32 +45,66 @@ export default function Recommendations() {
     setLoadingAiOpportunities(false);
   };
 
-  // Fetch opportunities matched to user interests with real match scores
+  // Fetch real estate and franchise cache
+  const { data: realEstateCacheData } = useQuery({
+    queryKey: ['realEstateCacheRec'],
+    queryFn: () => base44.entities.RealEstateCache.list('-created_date', 1),
+    enabled: !!currentUser,
+    staleTime: 10 * 60 * 1000,
+  });
+
+  const { data: franchiseCacheData } = useQuery({
+    queryKey: ['franchiseCacheRec'],
+    queryFn: () => base44.entities.FranchiseCache.list('-created_date', 1),
+    enabled: !!currentUser,
+    staleTime: 10 * 60 * 1000,
+  });
+
+  // Fetch opportunities matched to user interests with real match scores (all sources)
   const { data: matchedOpportunities = [], isLoading: loadingOpportunities } = useQuery({
-    queryKey: ['matchedOpportunities', currentUser?.email, userInterests.length],
+    queryKey: ['matchedOpportunities', currentUser?.email, userInterests.length, realEstateCacheData?.[0]?.id, franchiseCacheData?.[0]?.id],
     queryFn: async () => {
-      const allOpportunities = await base44.entities.Opportunity.list();
+      const dbOpps = await base44.entities.Opportunity.list();
       
+      const realEstateOpps = (realEstateCacheData?.[0]?.opportunities || []).map(opp => ({
+        id: opp.id || `re_${opp.title?.substring(0,10)}`,
+        title: opp.title,
+        description: opp.description,
+        category: opp.type || 'Real Estate',
+        image_url: opp.image,
+        created_by: 'Real Estate Listing',
+        related_interests: ['real estate', 'investment', 'property'],
+      }));
+
+      const franchiseOpps = (franchiseCacheData?.[0]?.opportunities || []).map(opp => ({
+        id: opp.id || `fr_${opp.title?.substring(0,10)}`,
+        title: opp.title,
+        description: opp.description,
+        category: 'Franchise',
+        image_url: opp.image,
+        created_by: 'Franchise Listing',
+        related_interests: ['franchise', 'business', 'entrepreneurship'],
+      }));
+
+      const allOpportunities = [...dbOpps, ...realEstateOpps, ...franchiseOpps];
+
       if (userInterests.length === 0) {
-        // No interests — return all with 0% match
         return allOpportunities.map(opp => ({ ...opp, matchPercentage: 0 }));
       }
       
       const interestNames = userInterests.map(i => i.interest_name.toLowerCase());
       
-      // Score each opportunity by how many of its related_interests match user interests
       const scored = allOpportunities.map(opp => {
         const oppInterests = (opp.related_interests || []).map(i => i.toLowerCase());
-        const matchCount = oppInterests.filter(interest => interestNames.includes(interest)).length;
-        const totalRelevant = Math.max(oppInterests.length, interestNames.length);
-        const matchPercentage = totalRelevant > 0 ? Math.round((matchCount / totalRelevant) * 100) : 0;
+        const matchCount = oppInterests.filter(interest => interestNames.some(ui => ui.includes(interest) || interest.includes(ui))).length;
+        const totalRelevant = Math.max(oppInterests.length, interestNames.length, 1);
+        const matchPercentage = Math.round((matchCount / totalRelevant) * 100);
         return { ...opp, matchPercentage, matchCount };
       });
       
-      // Sort by match score descending, show matched ones first
       return scored.sort((a, b) => b.matchPercentage - a.matchPercentage);
     },
-    enabled: !!currentUser && userInterests !== undefined,
+    enabled: !!currentUser && userInterests !== undefined && realEstateCacheData !== undefined && franchiseCacheData !== undefined,
   });
 
   // Fetch users matched to current user's interests
