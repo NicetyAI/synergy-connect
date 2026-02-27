@@ -61,7 +61,7 @@ Deno.serve(async (req) => {
         const details = listing?.description || {};
         const beds = details.beds || '';
         const baths = details.baths || '';
-        const buildingType = details.type || listing?.list_price_min ? 'Condo' : 'Property';
+        const buildingType = details.type || 'Property';
         const sqft = details.sqft || '';
 
         const priceRaw = listing?.list_price || listing?.price || 0;
