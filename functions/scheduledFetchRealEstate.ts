@@ -76,9 +76,10 @@ Deno.serve(async (req) => {
         if (city) descParts.push(city);
         if (state) descParts.push(state);
 
-        // Photos
-        const photos = (listing?.photos || []).map(p => p?.href || p?.url).filter(Boolean);
-        const primaryPhoto = listing?.primary_photo?.href || listing?.thumbnail || photos[0] || null;
+        // Photos - replace small thumbnail suffix with larger size
+        const upgradePhotoUrl = (url) => url ? url.replace(/s\.jpg$/, 'od-w800_h600_x2.jpg') : null;
+        const photos = (listing?.photos || []).map(p => upgradePhotoUrl(p?.href || p?.url)).filter(Boolean);
+        const primaryPhoto = upgradePhotoUrl(listing?.primary_photo?.href || listing?.thumbnail || photos[0] || null);
 
         // Date
         let postedDate = 'Recently listed';
