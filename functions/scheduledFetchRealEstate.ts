@@ -11,24 +11,26 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'API key not configured' }, { status: 500 });
     }
 
-    // Fetch property listings across all of Canada using a wide bounding box
-    const url = 'https://realtor-search.p.rapidapi.com/properties/search-by-coordinates';
+    // Fetch property listings across Canada using Realty in CA (apidojo)
+    const url = 'https://realty-in-ca1.p.rapidapi.com/properties/list-for-sale';
     const params = new URLSearchParams({
       LatitudeMax: '83.0',
       LongitudeMax: '-52.0',
       LatitudeMin: '41.6',
       LongitudeMin: '-141.0',
       CurrentPage: '1',
-      RecordsPerPage: '200',
+      RecordsPerPage: '50',
       SortBy: '6',
       SortOrder: 'D',
       PropertyTypeGroupID: '1',
+      CultureId: '1',
+      ApplicationId: '1',
     });
 
     const response = await fetch(`${url}?${params}`, {
       method: 'GET',
       headers: {
-        'x-rapidapi-host': 'realtor-search.p.rapidapi.com',
+        'x-rapidapi-host': 'realty-in-ca1.p.rapidapi.com',
         'x-rapidapi-key': apiKey,
       },
     });
