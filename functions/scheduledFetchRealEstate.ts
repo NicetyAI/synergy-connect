@@ -30,6 +30,7 @@ Deno.serve(async (req) => {
 
     // Fetch from multiple Canadian cities
     for (const location of CANADIAN_LOCATIONS) {
+      console.log('Fetching:', location);
       const url = `https://realtor16.p.rapidapi.com/search/forsale?location=${encodeURIComponent(location)}&limit=10`;
 
       const response = await fetch(url, {
