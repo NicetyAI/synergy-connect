@@ -1,20 +1,60 @@
 /**
- * fetchNews — Cache-first news fetcher.
+ * fetchNews — Cache-first news fetcher using SerpAPI Google News.
  *
  * Strategy:
- *  1. Check NewsCache in the database. If a valid (non-expired) cache exists, return it immediately.
- *  2. If cache is missing or expired, call SerpAPI for all 3 regions, deduplicate, store in DB, then return.
+ *  1. Check NewsCache in the database. If valid (non-expired) cache exists, return immediately.
+ *  2. If missing or expired, call SerpAPI, deduplicate, sort newest-first, store in DB, return.
  *
- * Cache TTL: 6 hours (articles don't change every minute — no need to hit SerpAPI on every page load).
+ * Cache TTL: 3 hours (reduced so news stays fresh).
  */
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
-const CACHE_TTL_HOURS = 6;
+const CACHE_TTL_HOURS = 3;
+
+/**
+ * Parse SerpAPI's relative date strings like "3 hours ago", "2 days ago", "1 week ago"
+ * into real Date objects. Falls back to now if unparseable.
+ */
+function parseRelativeDate(dateStr) {
+  if (!dateStr) return new Date();
+
+  // Already an ISO string?
+  const direct = new Date(dateStr);
+  if (!isNaN(direct.getTime())) return direct;
+
+  const now = new Date();
+  const str = dateStr.toLowerCase().trim();
+
+  const match = str.match(/(\d+)\s+(second|minute|hour|day|week|month|year)s?\s+ago/);
+  if (match) {
+    const value = parseInt(match[1]);
+    const unit = match[2];
+    const ms = {
+      second: 1000,
+      minute: 60 * 1000,
+      hour: 60 * 60 * 1000,
+      day: 24 * 60 * 60 * 1000,
+      week: 7 * 24 * 60 * 60 * 1000,
+      month: 30 * 24 * 60 * 60 * 1000,
+      year: 365 * 24 * 60 * 60 * 1000,
+    }[unit];
+    return new Date(now.getTime() - value * ms);
+  }
+
+  // "Yesterday"
+  if (str.includes('yesterday')) {
+    return new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  }
+
+  return now; // fallback
+}
 
 function calculateSimilarity(str1, str2) {
   const longer = str1.length > str2.length ? str1 : str2;
   const shorter = str1.length > str2.length ? str2 : str1;
   if (longer.length === 0) return 1.0;
+  // Quick check: if lengths differ by more than 30%, skip expensive edit distance
+  if (shorter.length / longer.length < 0.7) return 0;
   const editDistance = getEditDistance(longer, shorter);
   return (longer.length - editDistance) / longer.length;
 }
@@ -40,56 +80,92 @@ function getEditDistance(str1, str2) {
   return costs[str2.length];
 }
 
+/**
+ * Map query topic to a display category
+ */
+function getCategory(topic) {
+  const map = {
+    'business news': 'Business',
+    'finance markets': 'Finance',
+    'technology startups': 'Technology',
+    'real estate investment': 'Real Estate',
+    'stock market': 'Markets',
+    'franchise business': 'Business',
+    'entrepreneurship': 'Business',
+    'canadian economy': 'Business',
+  };
+  return map[topic] || 'Business';
+}
+
 async function fetchFreshArticles(SERP_API_KEY) {
+  // Diverse, targeted queries — tbs=qdr:w means "past week" for recency
   const queries = [
-    { q: 'business finance', gl: 'ca', hl: 'en', region: 'Canada' },
-    { q: 'business finance', gl: 'us', hl: 'en', region: 'United States' },
-    { q: 'business finance', gl: 'cn', hl: 'en', region: 'China' },
+    { q: 'business news Canada', gl: 'ca', hl: 'en', region: 'Canada', tbs: 'qdr:w' },
+    { q: 'finance markets Canada', gl: 'ca', hl: 'en', region: 'Canada', tbs: 'qdr:w' },
+    { q: 'real estate investment Canada', gl: 'ca', hl: 'en', region: 'Canada', tbs: 'qdr:w' },
+    { q: 'business news', gl: 'us', hl: 'en', region: 'United States', tbs: 'qdr:w' },
+    { q: 'finance markets', gl: 'us', hl: 'en', region: 'United States', tbs: 'qdr:w' },
+    { q: 'stock market today', gl: 'us', hl: 'en', region: 'United States', tbs: 'qdr:w' },
+    { q: 'business finance China', gl: 'cn', hl: 'en', region: 'China', tbs: 'qdr:w' },
+    { q: 'technology startups', gl: 'ca', hl: 'en', region: 'Canada', tbs: 'qdr:w' },
+    { q: 'franchise business opportunities Canada', gl: 'ca', hl: 'en', region: 'Canada', tbs: 'qdr:w' },
+    { q: 'entrepreneurship small business', gl: 'ca', hl: 'en', region: 'Canada', tbs: 'qdr:w' },
   ];
 
   const allArticles = [];
-  const fourWeeksAgo = new Date();
-  fourWeeksAgo.setDate(fourWeeksAgo.getDate() - 28);
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-  for (const query of queries) {
-    try {
-      const response = await fetch(
-        `https://serpapi.com/search.json?engine=google_news&q=${encodeURIComponent(query.q)}&gl=${query.gl}&hl=${query.hl}&api_key=${SERP_API_KEY}`
-      );
-      if (!response.ok) continue;
-
+  // Fetch all queries in parallel for speed
+  const results = await Promise.allSettled(
+    queries.map(async (query) => {
+      const url = `https://serpapi.com/search.json?engine=google_news&q=${encodeURIComponent(query.q)}&gl=${query.gl}&hl=${query.hl}&tbs=${query.tbs}&api_key=${SERP_API_KEY}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
-      if (data.news_results) {
-        const articles = data.news_results.map((article, index) => {
-          const publishedDate = article.date ? new Date(article.date) : new Date();
-          return {
-            id: `${query.region}-${index}-${Date.now()}`,
-            title: article.title,
-            description: article.snippet || article.title,
-            content: article.snippet,
-            url: article.link,
-            image: article.thumbnail,
-            source: article.source?.name || query.region,
-            author: article.source?.name,
-            publishedAt: publishedDate.toISOString(),
-            category: 'Business',
-            region: query.region,
-            timestamp: publishedDate.getTime(),
-          };
-        }).filter(article => new Date(article.publishedAt) >= fourWeeksAgo);
+      return { data, query };
+    })
+  );
 
-        allArticles.push(...articles);
-      }
-    } catch (err) {
-      console.error(`Error fetching news for ${query.region}:`, err.message);
+  for (const result of results) {
+    if (result.status === 'rejected') {
+      console.error('Query failed:', result.reason?.message);
+      continue;
+    }
+
+    const { data, query } = result.value;
+    const newsResults = data.news_results || [];
+
+    for (let index = 0; index < newsResults.length; index++) {
+      const article = newsResults[index];
+      const publishedDate = parseRelativeDate(article.date);
+
+      allArticles.push({
+        id: `${query.region}-${index}-${Date.now()}-${Math.random()}`,
+        title: article.title,
+        description: article.snippet || article.title,
+        content: article.snippet,
+        url: article.link,
+        image: article.thumbnail,
+        source: article.source?.name || query.region,
+        author: article.source?.name,
+        publishedAt: publishedDate.toISOString(),
+        category: getCategory(query.q),
+        region: query.region,
+        timestamp: publishedDate.getTime(),
+      });
     }
   }
 
-  // Deduplicate by title similarity
+  console.log(`Total raw articles before dedup: ${allArticles.length}`);
+
+  // Deduplicate by title similarity (only compare normalized titles)
   const uniqueArticles = [];
-  const seenTitles = new Set();
+  const seenTitles = [];
 
   for (const article of allArticles) {
+    if (!article.title) continue;
+
     const normalizedTitle = article.title
       .toLowerCase()
       .replace(/[^\w\s]/g, '')
@@ -105,13 +181,16 @@ async function fetchFreshArticles(SERP_API_KEY) {
     }
 
     if (!isDuplicate) {
-      seenTitles.add(normalizedTitle);
+      seenTitles.push(normalizedTitle);
       uniqueArticles.push(article);
     }
   }
 
+  // Always sort newest first
   uniqueArticles.sort((a, b) => b.timestamp - a.timestamp);
-  return uniqueArticles.slice(0, 100);
+
+  console.log(`Unique articles after dedup: ${uniqueArticles.length}`);
+  return uniqueArticles.slice(0, 120);
 }
 
 Deno.serve(async (req) => {
@@ -137,7 +216,7 @@ Deno.serve(async (req) => {
       const expiresAt = new Date(cached.expires_at);
 
       if (expiresAt > now && cached.articles?.length > 0) {
-        console.log(`Serving ${cached.articles.length} articles from cache (expires ${expiresAt.toISOString()})`);
+        console.log(`Cache hit: ${cached.articles.length} articles (expires ${expiresAt.toISOString()})`);
         return Response.json({
           articles: cached.articles,
           totalResults: cached.articles.length,
@@ -145,7 +224,6 @@ Deno.serve(async (req) => {
           cachedAt: cached.fetched_at,
         });
       }
-
       console.log('Cache expired, fetching fresh articles...');
     } else {
       console.log('No cache found, fetching fresh articles...');
@@ -155,7 +233,6 @@ Deno.serve(async (req) => {
     const freshArticles = await fetchFreshArticles(SERP_API_KEY);
 
     if (freshArticles.length === 0) {
-      // If SerpAPI returned nothing, serve stale cache rather than empty results
       if (caches.length > 0 && caches[0].articles?.length > 0) {
         console.log('SerpAPI returned 0 results, serving stale cache as fallback.');
         return Response.json({
@@ -168,11 +245,10 @@ Deno.serve(async (req) => {
       return Response.json({ articles: [], totalResults: 0 });
     }
 
-    // --- 3. Store in cache (delete old entries first) ---
+    // --- 3. Store in cache ---
     const fetchedAt = now.toISOString();
     const expiresAt = new Date(now.getTime() + CACHE_TTL_HOURS * 60 * 60 * 1000).toISOString();
 
-    // Delete all old caches
     for (const old of caches) {
       await base44.asServiceRole.entities.NewsCache.delete(old.id);
     }
@@ -183,7 +259,7 @@ Deno.serve(async (req) => {
       expires_at: expiresAt,
     });
 
-    console.log(`Fetched and cached ${freshArticles.length} articles until ${expiresAt}`);
+    console.log(`Cached ${freshArticles.length} articles until ${expiresAt}`);
 
     return Response.json({
       articles: freshArticles,
