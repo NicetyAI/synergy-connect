@@ -12,7 +12,7 @@ export default function News() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [sortBy, setSortBy] = useState("date");
+  const [sortBy, setSortBy] = useState("date"); // default: always latest first
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
