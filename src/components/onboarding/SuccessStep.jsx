@@ -35,15 +35,18 @@ export default function SuccessStep({ userData, currentUser }) {
     setError(null);
 
     try {
-      // Update user profile — NOTE: full_name is read-only, skip it
-      await base44.auth.updateMe({
-        title: userData.title,
-        bio: userData.bio,
-        location: userData.location,
-        investment_range: userData.investment_range,
-        partnership_goals: userData.partnership_goals,
+      // Update user profile — full_name is a read-only built-in, only update editable fields
+      const profileUpdate = {
+        title: userData.title || undefined,
+        bio: userData.bio || undefined,
+        location: userData.location || undefined,
+        investment_range: userData.investment_range || undefined,
+        partnership_goals: userData.partnership_goals || undefined,
         onboarding_complete: true,
-      });
+      };
+      // Remove undefined keys so we don't overwrite existing data with nothing
+      Object.keys(profileUpdate).forEach(k => profileUpdate[k] === undefined && delete profileUpdate[k]);
+      await base44.auth.updateMe(profileUpdate);
 
       // Save interests — deduplicate against existing
       if (userData.interests?.length > 0) {
