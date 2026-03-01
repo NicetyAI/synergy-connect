@@ -45,46 +45,76 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'SERP API key not configured' }, { status: 500 });
     }
 
+    // Mirror the same diverse queries used in fetchNews for consistency
     const queries = [
-      { q: 'business finance', gl: 'ca', hl: 'en', region: 'Canada' },
-      { q: 'business finance', gl: 'us', hl: 'en', region: 'United States' },
-      { q: 'business finance', gl: 'cn', hl: 'en', region: 'China' },
+      { q: 'business news Canada', gl: 'ca', hl: 'en', region: 'Canada', tbs: 'qdr:w' },
+      { q: 'finance markets Canada', gl: 'ca', hl: 'en', region: 'Canada', tbs: 'qdr:w' },
+      { q: 'real estate investment Canada', gl: 'ca', hl: 'en', region: 'Canada', tbs: 'qdr:w' },
+      { q: 'business news', gl: 'us', hl: 'en', region: 'United States', tbs: 'qdr:w' },
+      { q: 'finance markets', gl: 'us', hl: 'en', region: 'United States', tbs: 'qdr:w' },
+      { q: 'stock market today', gl: 'us', hl: 'en', region: 'United States', tbs: 'qdr:w' },
+      { q: 'business finance China', gl: 'cn', hl: 'en', region: 'China', tbs: 'qdr:w' },
+      { q: 'technology startups', gl: 'ca', hl: 'en', region: 'Canada', tbs: 'qdr:w' },
+      { q: 'franchise business opportunities Canada', gl: 'ca', hl: 'en', region: 'Canada', tbs: 'qdr:w' },
+      { q: 'entrepreneurship small business', gl: 'ca', hl: 'en', region: 'Canada', tbs: 'qdr:w' },
     ];
 
+    function parseRelativeDate(dateStr) {
+      if (!dateStr) return new Date();
+      const direct = new Date(dateStr);
+      if (!isNaN(direct.getTime())) return direct;
+      const now = new Date();
+      const str = dateStr.toLowerCase().trim();
+      const match = str.match(/(\d+)\s+(second|minute|hour|day|week|month|year)s?\s+ago/);
+      if (match) {
+        const value = parseInt(match[1]);
+        const unit = match[2];
+        const ms = { second: 1000, minute: 60000, hour: 3600000, day: 86400000, week: 604800000, month: 2592000000, year: 31536000000 }[unit];
+        return new Date(now.getTime() - value * ms);
+      }
+      if (str.includes('yesterday')) return new Date(now.getTime() - 86400000);
+      return now;
+    }
+
+    function getCategory(q) {
+      if (q.includes('technology') || q.includes('startup')) return 'Technology';
+      if (q.includes('finance') || q.includes('stock')) return 'Finance';
+      if (q.includes('real estate')) return 'Real Estate';
+      return 'Business';
+    }
+
     const allArticles = [];
-    const fourWeeksAgo = new Date();
-    fourWeeksAgo.setDate(fourWeeksAgo.getDate() - 28);
-
-    for (const query of queries) {
-      try {
-        const response = await fetch(
-          `https://serpapi.com/search.json?engine=google_news&q=${encodeURIComponent(query.q)}&gl=${query.gl}&hl=${query.hl}&api_key=${SERP_API_KEY}`
-        );
-        if (!response.ok) continue;
-
+    const results = await Promise.allSettled(
+      queries.map(async (query) => {
+        const url = `https://serpapi.com/search.json?engine=google_news&q=${encodeURIComponent(query.q)}&gl=${query.gl}&hl=${query.hl}&tbs=${query.tbs}&api_key=${SERP_API_KEY}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
-        if (data.news_results) {
-          const articles = data.news_results.map((article, index) => {
-            const publishedDate = article.date ? new Date(article.date) : new Date();
-            return {
-              id: `${query.region}-${index}-${Date.now()}`,
-              title: article.title,
-              description: article.snippet || article.title,
-              content: article.snippet,
-              url: article.link,
-              image: article.thumbnail,
-              source: article.source?.name || query.region,
-              author: article.source?.name,
-              publishedAt: publishedDate.toISOString(),
-              category: 'Business',
-              region: query.region,
-              timestamp: publishedDate.getTime(),
-            };
-          }).filter(article => new Date(article.publishedAt) >= fourWeeksAgo);
-          allArticles.push(...articles);
-        }
-      } catch (err) {
-        console.error(`Error fetching news for ${query.region}:`, err.message);
+        return { data, query };
+      })
+    );
+
+    for (const result of results) {
+      if (result.status === 'rejected') { console.error('Query failed:', result.reason?.message); continue; }
+      const { data, query } = result.value;
+      const newsResults = data.news_results || [];
+      for (let index = 0; index < newsResults.length; index++) {
+        const article = newsResults[index];
+        const publishedDate = parseRelativeDate(article.date);
+        allArticles.push({
+          id: `${query.region}-${index}-${Date.now()}-${Math.random()}`,
+          title: article.title,
+          description: article.snippet || article.title,
+          content: article.snippet,
+          url: article.link,
+          image: article.thumbnail,
+          source: article.source?.name || query.region,
+          author: article.source?.name,
+          publishedAt: publishedDate.toISOString(),
+          category: getCategory(query.q),
+          region: query.region,
+          timestamp: publishedDate.getTime(),
+        });
       }
     }
 
