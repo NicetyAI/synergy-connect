@@ -5,7 +5,7 @@
  */
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
-const CACHE_TTL_HOURS = 6;
+const CACHE_TTL_HOURS = 3;
 
 function calculateSimilarity(str1, str2) {
   const longer = str1.length > str2.length ? str1 : str2;
