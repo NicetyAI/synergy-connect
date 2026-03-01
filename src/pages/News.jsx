@@ -80,11 +80,10 @@ export default function News() {
 
     return true;
   }).sort((a, b) => {
-    if (sortBy === "date") {
-      return new Date(b.publishedAt) - new Date(a.publishedAt);
-    }
-    // Relevance sorting (by source prominence or other factors)
-    return 0;
+    // Always default to latest first
+    const dateSort = new Date(b.publishedAt) - new Date(a.publishedAt);
+    if (sortBy === "relevance") return dateSort; // no special relevance logic, still newest first
+    return dateSort; // "date" — newest first
   });
 
   const getCategoryColor = (category) => {
