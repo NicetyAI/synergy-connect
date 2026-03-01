@@ -83,7 +83,8 @@ export default function SuccessStep({ userData, currentUser }) {
 
   useEffect(() => {
     saveProfile();
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [saveProfile]);
 
   return (
     <motion.div
