@@ -1,54 +1,40 @@
 import React from "react";
-import Navbar from "@/components/landing/Navbar";
-import HeroSection from "@/components/landing/HeroSection";
-import FeaturesSection from "@/components/landing/FeaturesSection";
-import VendorAdsSection from "@/components/landing/VendorAdsSection";
-import AboutSection from "@/components/landing/AboutSection";
-import JourneySection from "@/components/landing/JourneySection";
-import PricingSection from "@/components/landing/PricingSection";
-import ContactSection from "@/components/landing/ContactSection";
-import Footer from "@/components/landing/Footer";
-import SectionDivider from "@/components/landing/SectionDivider";
+import LandingNavbar from "@/components/landing/LandingNavbar";
+import LandingHero from "@/components/landing/LandingHero";
+import LogoStrip from "@/components/landing/LogoStrip";
+import LandingFeatures from "@/components/landing/LandingFeatures";
+import LandingStory from "@/components/landing/LandingStory";
+import LandingVendors from "@/components/landing/LandingVendors";
+import LandingPricing from "@/components/landing/LandingPricing";
+import LandingCTA from "@/components/landing/LandingCTA";
+import LandingContact from "@/components/landing/LandingContact";
+import LandingFooter from "@/components/landing/LandingFooter";
 import SEO from "@/components/seo/SEO";
 import { pageMetadata } from "@/components/seo/seoMetadata";
 
 export default function Home() {
   const metadata = pageMetadata.Home;
-  
+
   return (
-    <div className="min-h-screen overflow-x-hidden" style={{ background: '#0A1628' }}>
-      <SEO 
+    <div className="bg-white min-h-screen">
+      <SEO
         title={metadata.title}
         description={metadata.description}
         keywords={metadata.keywords}
         canonicalUrl={typeof window !== 'undefined' ? window.location.origin : ''}
       />
-
-      <Navbar />
-      
+      <LandingNavbar />
       <main>
-        <HeroSection />
-        <SectionDivider from="#192234" to="#EEEDF2" />
-        <div id="features">
-          <FeaturesSection />
-        </div>
-        <VendorAdsSection />
-        <SectionDivider from="#EEEDF2" to="#192234" />
-        <div id="about">
-          <AboutSection />
-        </div>
-        <SectionDivider from="#192234" to="#EEEDF2" />
-        <JourneySection />
-        <div id="pricing">
-          <PricingSection />
-        </div>
-        <SectionDivider from="#EEEDF2" to="#192234" />
-        <div id="contact">
-          <ContactSection />
-        </div>
+        <LandingHero />
+        <LogoStrip />
+        <div id="features"><LandingFeatures /></div>
+        <div id="about"><LandingStory /></div>
+        <LandingVendors />
+        <div id="pricing"><LandingPricing /></div>
+        <LandingCTA />
+        <div id="contact"><LandingContact /></div>
       </main>
-      
-      <Footer />
+      <LandingFooter />
     </div>
   );
 }
