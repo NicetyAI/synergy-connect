@@ -24,9 +24,9 @@ const features = [
 ];
 
 const smallFeatures = [
-  { icon: BarChart3, title: "Deal Analytics", desc: "Track connections, conversations, and deal progress with detailed insights." },
-  { icon: Globe, title: "Global Reach", desc: "Connect with partners across continents and expand internationally." },
-  { icon: Users, title: "Community", desc: "Access an exclusive network of dealmakers, investors, and entrepreneurs." },
+  { icon: BarChart3, title: "Deal Analytics", desc: "Track connections, conversations, and deal progress with detailed insights.", bg: "bg-amber-50/80", iconBg: "bg-amber-100", iconColor: "text-amber-700" },
+  { icon: Globe, title: "Global Reach", desc: "Connect with partners across continents and expand internationally.", bg: "bg-blue-50/80", iconBg: "bg-blue-100", iconColor: "text-blue-700" },
+  { icon: Users, title: "Community", desc: "Access an exclusive network of dealmakers, investors, and entrepreneurs.", bg: "bg-emerald-50/80", iconBg: "bg-emerald-100", iconColor: "text-emerald-700" },
 ];
 
 export default function LandingFeatures() {
@@ -91,9 +91,9 @@ export default function LandingFeatures() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.5 }}
             >
-              <div className="p-6 rounded-2xl bg-white/50 backdrop-blur-sm border border-white/70 shadow-sm hover:shadow-md hover:bg-white/70 transition-all duration-300">
-                <div className="w-12 h-12 rounded-xl bg-white/80 backdrop-blur-sm border border-white/90 shadow-sm flex items-center justify-center mb-4">
-                  <f.icon className="w-6 h-6 text-gray-900" />
+              <div className={`p-6 rounded-2xl ${f.bg} backdrop-blur-sm border border-white/70 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300`}>
+                <div className={`w-12 h-12 rounded-xl ${f.iconBg} flex items-center justify-center mb-4`}>
+                  <f.icon className={`w-6 h-6 ${f.iconColor}`} />
                 </div>
                 <h4 className="text-xl font-bold text-gray-900 mb-2">{f.title}</h4>
                 <p className="text-gray-500 leading-relaxed">{f.desc}</p>
