@@ -6,8 +6,9 @@ import { base44 } from "@/api/base44Client";
 
 export default function LandingCTA() {
   return (
-    <section className="py-28 md:py-36 px-6 md:px-10 bg-gray-900">
-      <div className="max-w-4xl mx-auto text-center">
+    <section className="py-28 md:py-36 px-6 md:px-10 bg-gray-900 relative overflow-hidden">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-amber-500/5 blur-[150px]" />
+      <div className="max-w-4xl mx-auto text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

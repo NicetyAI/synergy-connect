@@ -64,7 +64,9 @@ export default function LandingStory() {
                   transition={{ delay: i * 0.1, duration: 0.4 }}
                   className="flex items-center gap-3"
                 >
-                  <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
+                  <div className="w-8 h-8 rounded-lg bg-green-50/80 backdrop-blur-sm border border-green-100 flex items-center justify-center flex-shrink-0">
+                    <CheckCircle2 className="w-4 h-4 text-green-500" />
+                  </div>
                   <span className="text-gray-700 font-medium">{item}</span>
                 </motion.div>
               ))}
@@ -87,11 +89,13 @@ export default function LandingStory() {
                   className="relative pl-16"
                 >
                   {/* Step number */}
-                  <div className="absolute left-0 top-0 w-12 h-12 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center">
+                  <div className="absolute left-0 top-0 w-12 h-12 rounded-full bg-white/70 backdrop-blur-sm border border-white/90 shadow-sm flex items-center justify-center">
                     <span className="text-sm font-bold text-gray-900">{item.step}</span>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
-                  <p className="text-gray-500 leading-relaxed">{item.description}</p>
+                  <div className="p-5 rounded-2xl bg-white/50 backdrop-blur-sm border border-white/70 shadow-sm hover:shadow-md hover:bg-white/70 transition-all duration-300">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
+                    <p className="text-gray-500 leading-relaxed">{item.description}</p>
+                  </div>
                 </motion.div>
               ))}
             </div>

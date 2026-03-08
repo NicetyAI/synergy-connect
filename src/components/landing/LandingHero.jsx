@@ -98,11 +98,11 @@ export default function LandingHero() {
           </div>
 
           {/* Social proof */}
-          <div className="mt-16 flex items-center justify-center gap-8 text-sm text-gray-500">
+          <div className="mt-16 inline-flex items-center justify-center gap-8 text-sm text-gray-500 px-8 py-5 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
             <span><strong className="text-white text-2xl font-bold">10K+</strong><br />Active Members</span>
-            <div className="w-px h-10 bg-gray-700" />
+            <div className="w-px h-10 bg-white/10" />
             <span><strong className="text-white text-2xl font-bold">$500M+</strong><br />Deal Volume</span>
-            <div className="w-px h-10 bg-gray-700" />
+            <div className="w-px h-10 bg-white/10" />
             <span><strong className="text-white text-2xl font-bold">95%</strong><br />Match Rate</span>
           </div>
         </motion.div>

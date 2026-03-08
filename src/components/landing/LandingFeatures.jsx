@@ -60,7 +60,7 @@ export default function LandingFeatures() {
             >
               {/* Text */}
               <div className="flex-1 max-w-lg">
-                <div className="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center mb-6">
+                <div className="w-14 h-14 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/80 shadow-sm flex items-center justify-center mb-6">
                   <feature.icon className="w-7 h-7 text-gray-900" />
                 </div>
                 <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{feature.title}</h3>
@@ -68,11 +68,11 @@ export default function LandingFeatures() {
               </div>
               {/* Image */}
               <div className="flex-1 w-full">
-                <div className="relative rounded-3xl overflow-hidden aspect-[4/3] bg-gray-100">
+                <div className="relative rounded-3xl overflow-hidden aspect-[4/3] bg-gray-100 shadow-lg shadow-gray-200/50 transition-shadow duration-500 hover:shadow-xl hover:shadow-gray-300/40">
                   <img
                     src={feature.image}
                     alt={feature.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.03]"
                     loading="lazy"
                   />
                 </div>
@@ -91,11 +91,13 @@ export default function LandingFeatures() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.5 }}
             >
-              <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mb-4">
-                <f.icon className="w-6 h-6 text-gray-900" />
+              <div className="p-6 rounded-2xl bg-white/50 backdrop-blur-sm border border-white/70 shadow-sm hover:shadow-md hover:bg-white/70 transition-all duration-300">
+                <div className="w-12 h-12 rounded-xl bg-white/80 backdrop-blur-sm border border-white/90 shadow-sm flex items-center justify-center mb-4">
+                  <f.icon className="w-6 h-6 text-gray-900" />
+                </div>
+                <h4 className="text-xl font-bold text-gray-900 mb-2">{f.title}</h4>
+                <p className="text-gray-500 leading-relaxed">{f.desc}</p>
               </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-2">{f.title}</h4>
-              <p className="text-gray-500 leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
         </div>

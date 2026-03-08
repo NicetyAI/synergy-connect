@@ -54,7 +54,7 @@ export default function LandingContact() {
                 { icon: MapPin, label: "Address", value: "123 Business Ave, San Francisco, CA" },
               ].map(item => (
                 <div key={item.label} className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-white/60 backdrop-blur-sm border border-white/80 shadow-sm flex items-center justify-center flex-shrink-0">
                     <item.icon className="w-5 h-5 text-gray-600" />
                   </div>
                   <div>
@@ -73,7 +73,7 @@ export default function LandingContact() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <div className="bg-gray-50 rounded-3xl p-8 lg:p-10">
+            <div className="bg-white/50 backdrop-blur-sm border border-white/70 shadow-lg shadow-gray-100/50 rounded-3xl p-8 lg:p-10">
               <form onSubmit={handleSubmit} className="space-y-5">
                 {submitted && (
                   <div className="rounded-xl p-4 bg-green-50 border border-green-200 text-green-700 text-sm font-medium">

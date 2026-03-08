@@ -59,10 +59,10 @@ export default function LandingPricing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.5 }}
-              className={`rounded-3xl p-8 lg:p-10 ${
+              className={`rounded-3xl p-8 lg:p-10 transition-all duration-300 ${
                 plan.highlighted
-                  ? 'bg-gray-900 text-white ring-2 ring-gray-900 shadow-2xl shadow-gray-900/10 md:-mt-4 md:mb-4'
-                  : 'bg-white border border-gray-200'
+                  ? 'bg-gray-900 text-white ring-2 ring-gray-900 shadow-2xl shadow-gray-900/10 md:-mt-4 md:mb-4 hover:shadow-3xl hover:shadow-gray-900/20'
+                  : 'bg-white/60 backdrop-blur-sm border border-white/80 shadow-sm hover:shadow-lg hover:bg-white/80 hover:-translate-y-1'
               }`}
             >
               {plan.highlighted && (

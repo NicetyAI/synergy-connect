@@ -56,7 +56,7 @@ export default function LandingVendors() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.5 }}
-              className="group relative rounded-2xl overflow-hidden bg-gray-100 aspect-[4/3] cursor-pointer"
+              className="group relative rounded-2xl overflow-hidden bg-gray-100 aspect-[4/3] cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-300"
             >
               {ad.flyer_url && (
                 <img src={ad.flyer_url} alt={ad.business_name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
