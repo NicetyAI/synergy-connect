@@ -67,7 +67,9 @@ export default function LandingNavbar() {
               {authReady && (
                 user ? (
                   <Link to={createPageUrl("Partnerships")}>
-                    <Button className="rounded-full px-6 h-10 text-sm font-semibold bg-gray-900 text-white hover:bg-gray-800">
+                    <Button className={`rounded-full px-6 h-10 text-sm font-semibold ${
+                      scrolled ? "bg-gray-900 text-white hover:bg-gray-800" : "bg-white text-gray-900 hover:bg-gray-100"
+                    }`}>
                       Dashboard
                     </Button>
                   </Link>
@@ -83,7 +85,9 @@ export default function LandingNavbar() {
                     </button>
                     <Button
                       onClick={() => base44.auth.redirectToLogin(window.location.origin + '/Onboarding')}
-                      className="rounded-full px-6 h-10 text-sm font-semibold bg-gray-900 text-white hover:bg-gray-800"
+                      className={`rounded-full px-6 h-10 text-sm font-semibold ${
+                        scrolled ? "bg-gray-900 text-white hover:bg-gray-800" : "bg-white text-gray-900 hover:bg-gray-100"
+                      }`}
                     >
                       Get Started
                     </Button>
