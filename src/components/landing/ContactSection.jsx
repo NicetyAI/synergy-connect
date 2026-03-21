@@ -86,10 +86,10 @@ export default function ContactSection() {
                     style={{ 
                       backgroundColor: '#dcfce7', 
                       border: '1px solid #4ade80', 
-                      color: '#000000' 
+                      color: '#15803d' 
                     }}
                   >
-                    <span style={{ color: '#000000' }}>✓ Thank you! Your message has been sent successfully.</span>
+                    <span style={{ color: '#15803d, fontweight: 600' }}>✓ Thank you! Your message has been sent successfully.</span>
                   </div>
                 )}
                 <div>
