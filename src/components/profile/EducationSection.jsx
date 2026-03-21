@@ -21,6 +21,7 @@ export default function EducationSection({ user, isOwnProfile }) {
   const updateEducationMutation = useMutation({
     mutationFn: (education) => base44.auth.updateMe({ education }),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       queryClient.invalidateQueries({ queryKey: ['users'] });
       setShowDialog(false);
       setFormData({ institution: "", degree: "", field: "", graduation_year: "" });

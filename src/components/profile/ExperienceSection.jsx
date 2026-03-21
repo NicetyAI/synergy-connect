@@ -23,6 +23,7 @@ export default function ExperienceSection({ user, isOwnProfile }) {
   const updateExperienceMutation = useMutation({
     mutationFn: (experience) => base44.auth.updateMe({ experience }),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       queryClient.invalidateQueries({ queryKey: ['users'] });
       setShowDialog(false);
       setFormData({ title: "", company: "", start_date: "", end_date: "", description: "" });

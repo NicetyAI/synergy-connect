@@ -16,6 +16,7 @@ export default function SkillsSection({ user, isOwnProfile }) {
   const updateSkillsMutation = useMutation({
     mutationFn: (skills) => base44.auth.updateMe({ skills }),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       queryClient.invalidateQueries({ queryKey: ['users'] });
       setShowDialog(false);
       setNewSkill("");

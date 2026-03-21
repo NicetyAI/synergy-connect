@@ -21,6 +21,7 @@ export default function CertificationsSection({ user, isOwnProfile }) {
   const updateCertificationsMutation = useMutation({
     mutationFn: (certifications) => base44.auth.updateMe({ certifications }),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       queryClient.invalidateQueries({ queryKey: ['users'] });
       setShowDialog(false);
       setFormData({ name: "", issuer: "", date: "", credential_url: "" });

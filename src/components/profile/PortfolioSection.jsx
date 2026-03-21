@@ -21,6 +21,7 @@ export default function PortfolioSection({ user, isOwnProfile }) {
   const updatePortfolioMutation = useMutation({
     mutationFn: (portfolio_links) => base44.auth.updateMe({ portfolio_links }),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       queryClient.invalidateQueries({ queryKey: ['users'] });
       setShowDialog(false);
       setFormData({ title: "", url: "", description: "" });
