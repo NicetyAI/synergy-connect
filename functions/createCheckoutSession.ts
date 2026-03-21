@@ -33,8 +33,8 @@ Deno.serve(async (req) => {
           quantity: 1,
         },
       ],
-      success_url: successUrl || `${req.headers.get("origin")}/Partnerships?checkout=success`,
-      cancel_url: cancelUrl || `${req.headers.get("origin")}/#pricing`,
+      success_url: successUrl || `${req.headers.get("origin") || "https://app.base44.com"}/Partnerships?checkout=success`,
+      cancel_url: cancelUrl || `${req.headers.get("origin") || "https://app.base44.com"}/#pricing`,
       metadata: {
         base44_app_id: Deno.env.get("BASE44_APP_ID"),
         user_email: user.email,
