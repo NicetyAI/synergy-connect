@@ -95,23 +95,13 @@ export default function VendorAdsSection() {
   useEffect(() => {
     const fetchApprovedAds = async () => {
       try {
-        // Fetch approved ads that haven't expired
-        const allAds = await base44.entities.AdvertiseApplication.filter({
-          status: "approved"
-        });
-        
-        // Filter by expiry date (not expired)
-        const now = new Date();
-        const activeAds = allAds.filter(ad => {
-          if (!ad.expiry_date) return true;
-          return new Date(ad.expiry_date) > now;
-        });
-
-        console.log("Active ads:", activeAds);
+        // Use backend function so unauthenticated users on public landing page can see ads
+        const response = await base44.functions.invoke("getPublicAds", {});
+        const activeAds = response.data?.ads || [];
         setAds(activeAds);
       } catch (error) {
         console.error("Error fetching ads:", error);
-        setAds([]); // Set empty array on error
+        setAds([]);
       } finally {
         setLoading(false);
       }
