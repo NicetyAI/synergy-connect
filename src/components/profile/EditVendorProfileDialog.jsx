@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { X, Plus } from "lucide-react";
+import { toast } from "sonner";
 
 export default function EditVendorProfileDialog({ vendor, open, onOpenChange }) {
   const [formData, setFormData] = useState({
@@ -29,13 +30,24 @@ export default function EditVendorProfileDialog({ vendor, open, onOpenChange }) 
       queryClient.invalidateQueries({ queryKey: ['vendorProfile'] });
       queryClient.invalidateQueries({ queryKey: ['approvedVendors'] });
       queryClient.invalidateQueries({ queryKey: ['vendor-apps'] });
+      toast.success("Vendor profile updated successfully");
       onOpenChange(false);
+    },
+    onError: (error) => {
+      toast.error(error?.message || "Failed to save changes. Please try again.");
     },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateMutation.mutate(formData);
+    const dataToSave = { ...formData };
+    // Ensure years_experience is a number or removed if empty
+    if (dataToSave.years_experience === "" || dataToSave.years_experience === null || dataToSave.years_experience === undefined) {
+      dataToSave.years_experience = 0;
+    } else {
+      dataToSave.years_experience = Number(dataToSave.years_experience);
+    }
+    updateMutation.mutate(dataToSave);
   };
 
   const addItem = (field, value, setter) => {
