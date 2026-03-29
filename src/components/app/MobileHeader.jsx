@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Menu, Building2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import MobileSidebar from "@/components/partnerships/MobileSidebar";
@@ -29,13 +30,13 @@ export default function MobileHeader() {
           <Menu className="w-6 h-6" />
         </button>
 
-        <div className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <img 
             src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/693d02907efe4593497f9496/10dad5458_ChatGPTImageJan11202606_15_53PM.png" 
             alt="BuyersAlike"
             className="h-8 w-auto"
           />
-        </div>
+        </Link>
 
         {currentUser && <NotificationBell currentUser={currentUser} />}
       </header>

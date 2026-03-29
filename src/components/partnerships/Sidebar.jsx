@@ -70,13 +70,13 @@ export default function Sidebar() {
       <div className="flex-1">
         {/* Logo */}
         <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
             <img 
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/693d02907efe4593497f9496/10dad5458_ChatGPTImageJan11202606_15_53PM.png" 
               alt="BuyersAlike"
               className="h-10 w-auto"
             />
-          </div>
+          </Link>
           {currentUser && <NotificationBell currentUser={currentUser} />}
         </div>
 
