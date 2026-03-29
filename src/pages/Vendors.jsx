@@ -26,14 +26,19 @@ const categories = [
 
 const provinces = [
   "All Provinces",
-  "Ontario",
-  "British Columbia",
   "Alberta",
-  "Quebec",
+  "British Columbia",
   "Manitoba",
-  "Saskatchewan",
-  "Nova Scotia",
   "New Brunswick",
+  "Newfoundland and Labrador",
+  "Northwest Territories",
+  "Nova Scotia",
+  "Nunavut",
+  "Ontario",
+  "Prince Edward Island",
+  "Quebec",
+  "Saskatchewan",
+  "Yukon",
 ];
 
 export default function Vendors() {
