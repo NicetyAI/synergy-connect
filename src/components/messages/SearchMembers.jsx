@@ -14,8 +14,8 @@ export default function SearchMembers({ connections, onSelectMember, onClose, cu
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const users = await base44.entities.User.list();
-        setAllUsers(users.filter(u => u.email !== currentUserEmail));
+        const response = await base44.functions.invoke('searchMembers', {});
+        setAllUsers(response.data?.members || []);
       } catch (error) {
         console.error("Error fetching users:", error);
       } finally {
