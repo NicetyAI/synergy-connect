@@ -7,6 +7,7 @@ import ChatArea from "@/components/messages/ChatArea";
 import GroupChatArea from "@/components/messages/GroupChatArea";
 import SearchMembers from "@/components/messages/SearchMembers";
 import CreateGroupDialog from "@/components/messages/CreateGroupDialog";
+import PaidFeatureGate from "@/components/messages/PaidFeatureGate";
 
 export default function Messages() {
   const [user, setUser] = useState(null);
@@ -16,6 +17,10 @@ export default function Messages() {
   const [showCreateGroup, setShowCreateGroup] = useState(false);
   const [chatType, setChatType] = useState('direct'); // 'direct' or 'group'
   const queryClient = useQueryClient();
+
+  const isPaidUser = user?.role === 'admin' || 
+    user?.subscription_plan === 'professional' || 
+    user?.subscription_plan === 'enterprise';
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -203,6 +208,7 @@ export default function Messages() {
           onShowCreateGroup={() => setShowCreateGroup(true)}
           currentUserEmail={user.email}
           groupMessages={groupMessages}
+          isPaidUser={isPaidUser}
         />
         
         {showSearch ? (
@@ -215,7 +221,10 @@ export default function Messages() {
             }}
             onClose={() => setShowSearch(false)}
             currentUserEmail={user.email}
+            isPaidUser={isPaidUser}
           />
+        ) : !isPaidUser && (selectedConversation || selectedGroup) ? (
+          <PaidFeatureGate />
         ) : chatType === 'group' && selectedGroup ? (
           <GroupChatArea
             group={groups.find(g => g.id === selectedGroup)}

@@ -3,9 +3,10 @@ import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, X, User, MessageSquare } from "lucide-react";
+import { Search, X, User, MessageSquare, Lock, Crown } from "lucide-react";
+import { Link } from "react-router-dom";
 
-export default function SearchMembers({ connections, onSelectMember, onClose, currentUserEmail }) {
+export default function SearchMembers({ connections, onSelectMember, onClose, currentUserEmail, isPaidUser }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,25 +31,25 @@ export default function SearchMembers({ connections, onSelectMember, onClose, cu
     )
   );
 
-  const connectedUsers = allUsers.filter(user => connectedEmails.has(user.email));
-
-  const filteredUsers = connectedUsers.filter(user =>
+  const filteredUsers = allUsers.filter(user =>
     user.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     user.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleSelectMember = (email) => {
+    if (!isPaidUser) return;
+    onSelectMember(email);
+  };
 
   return (
     <div className="flex-1 flex flex-col">
       {/* Header */}
       <div 
         className="p-4 border-b"
-        style={{ 
-          background: '#fff',
-          borderColor: '#000'
-        }}
+        style={{ background: '#fff', borderColor: '#000' }}
       >
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold" style={{ color: '#000' }}>Search Connected Members</h2>
+          <h2 className="text-xl font-bold" style={{ color: '#000' }}>Search Members</h2>
           <Button
             onClick={onClose}
             className="rounded-lg p-2"
@@ -70,6 +71,26 @@ export default function SearchMembers({ connections, onSelectMember, onClose, cu
             autoFocus
           />
         </div>
+
+        {!isPaidUser && (
+          <div className="mt-3 p-3 rounded-xl flex items-start gap-3" style={{ background: '#FEF3C7', border: '1px solid #D8A11F' }}>
+            <Lock className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#D8A11F' }} />
+            <div>
+              <p className="text-sm font-medium" style={{ color: '#92400E' }}>
+                Messaging is a paid feature
+              </p>
+              <p className="text-xs mt-1" style={{ color: '#A16207' }}>
+                Upgrade to Professional or Enterprise to connect and message members.
+              </p>
+              <Link to="/#pricing">
+                <Button size="sm" className="mt-2 gap-1 rounded-lg text-xs" style={{ background: '#D8A11F', color: '#fff' }}>
+                  <Crown className="w-3 h-3" />
+                  Upgrade Now
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Members List */}
@@ -80,46 +101,63 @@ export default function SearchMembers({ connections, onSelectMember, onClose, cu
           </div>
         ) : filteredUsers.length > 0 ? (
           <div className="space-y-2">
-            {filteredUsers.map((user) => (
-              <motion.div
-                key={user.id}
-                whileHover={{ x: 4 }}
-                onClick={() => onSelectMember(user.email)}
-                className="p-4 rounded-xl cursor-pointer transition-all"
-                style={{ background: '#fff', border: '1px solid #000' }}
-              >
-                <div className="flex items-center gap-3">
-                  <div 
-                    className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
-                    style={{ background: '#D8A11F' }}
-                  >
-                    <User className="w-6 h-6" style={{ color: '#fff' }} />
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium" style={{ color: '#000' }}>
-                      {user.full_name || 'User'}
-                    </p>
-                    <p className="text-sm truncate" style={{ color: '#666' }}>
-                      {user.email}
-                    </p>
-                  </div>
+            {filteredUsers.map((member) => {
+              const isConnected = connectedEmails.has(member.email);
+              return (
+                <motion.div
+                  key={member.id}
+                  whileHover={{ x: isPaidUser ? 4 : 0 }}
+                  onClick={() => handleSelectMember(member.email)}
+                  className={`p-4 rounded-xl transition-all ${isPaidUser ? 'cursor-pointer' : 'cursor-default'}`}
+                  style={{ background: '#fff', border: '1px solid #000' }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                      {member.avatar_url ? (
+                        <img src={member.avatar_url} alt={member.full_name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center" style={{ background: '#D8A11F' }}>
+                          <User className="w-6 h-6" style={{ color: '#fff' }} />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium" style={{ color: '#000' }}>
+                          {member.full_name || 'User'}
+                        </p>
+                        {isConnected && (
+                          <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: '#DCFCE7', color: '#166534' }}>
+                            Connected
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm truncate" style={{ color: '#666' }}>
+                        {member.title || member.occupation || member.email}
+                      </p>
+                    </div>
 
-                  <MessageSquare className="w-5 h-5" style={{ color: '#D8A11F' }} />
-                </div>
-              </motion.div>
-            ))}
+                    {isPaidUser ? (
+                      <MessageSquare className="w-5 h-5" style={{ color: '#D8A11F' }} />
+                    ) : (
+                      <Lock className="w-5 h-5" style={{ color: '#9CA3AF' }} />
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         ) : (
           <div className="text-center py-8">
             <MessageSquare className="w-12 h-12 mx-auto mb-3" style={{ color: '#666' }} />
             <p className="text-lg mb-2" style={{ color: '#000' }}>
-              {searchQuery ? 'No members found' : 'No connected members'}
+              {searchQuery ? 'No members found' : 'No members available'}
             </p>
             <p className="text-sm" style={{ color: '#666' }}>
               {searchQuery 
                 ? 'Try searching with a different name or email'
-                : 'Connect with members to start messaging'
+                : 'Check back later for new members'
               }
             </p>
           </div>
