@@ -8,7 +8,41 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Trash2, X, CheckCircle, XCircle, Clock, Sparkles, Upload, FileImage, File } from "lucide-react";
+import { Plus, Trash2, X, CheckCircle, XCircle, Clock, Sparkles, Upload, FileImage, File, ChevronDown } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+const PREDEFINED_INTERESTS = [
+  "Business Development",
+  "Technology",
+  "Finance",
+  "Real Estate",
+  "Marketing",
+  "Sales",
+  "Operations",
+  "Investments",
+  "Partnerships",
+  "Acquisitions",
+  "Franchising",
+  "Consulting",
+  "Strategy",
+  "Innovation",
+  "Leadership",
+  "Growth",
+  "E-Commerce",
+  "Supply Chain",
+  "Healthcare",
+  "Energy & Sustainability",
+  "Manufacturing",
+  "Import / Export",
+  "Hospitality & Tourism",
+  "Education & Training",
+  "Legal Services",
+  "Agriculture",
+  "Construction",
+  "Media & Entertainment",
+  "Artificial Intelligence",
+  "Cryptocurrency & Blockchain",
+];
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function InterestTab({ user, isOwnProfile }) {
@@ -354,24 +388,19 @@ export default function InterestTab({ user, isOwnProfile }) {
           <div className="space-y-4 py-4">
             <div>
               <Label style={{ color: '#B6C4E0' }}>Interest Name *</Label>
-              <Input
+              <Select
                 value={newInterest.interest_name}
-                onChange={(e) => setNewInterest({ ...newInterest, interest_name: e.target.value })}
-                placeholder="e.g., Business Development"
-                className="glass-input mt-2"
-                style={{ color: '#E5EDFF' }}
-              />
-            </div>
-            <div>
-              <Label style={{ color: '#B6C4E0' }}>Description (Optional)</Label>
-              <Textarea
-                value={newInterest.description}
-                onChange={(e) => setNewInterest({ ...newInterest, description: e.target.value })}
-                placeholder="Why are you interested in this?"
-                className="glass-input mt-2"
-                style={{ color: '#E5EDFF' }}
-                rows={3}
-              />
+                onValueChange={(val) => setNewInterest({ ...newInterest, interest_name: val })}
+              >
+                <SelectTrigger className="glass-input mt-2" style={{ color: '#E5EDFF' }}>
+                  <SelectValue placeholder="Select an interest..." />
+                </SelectTrigger>
+                <SelectContent className="max-h-60">
+                  {PREDEFINED_INTERESTS.map((interest) => (
+                    <SelectItem key={interest} value={interest}>{interest}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <Label style={{ color: '#B6C4E0' }}>Attachments (Optional)</Label>
