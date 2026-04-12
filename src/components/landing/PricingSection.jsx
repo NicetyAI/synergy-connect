@@ -96,12 +96,24 @@ export default function PricingSection() {
 
   // Auto-checkout if user was redirected back from login with a plan
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const checkoutPlan = params.get('checkout_plan');
-    if (checkoutPlan && (checkoutPlan === 'professional' || checkoutPlan === 'enterprise')) {
-      window.history.replaceState({}, '', window.location.pathname + '#pricing');
-      handleCheckout(checkoutPlan);
-    }
+    const runAutoCheckout = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const checkoutPlan = params.get('checkout_plan');
+      if (checkoutPlan && (checkoutPlan === 'professional' || checkoutPlan === 'enterprise')) {
+        // Wait for auth to be ready
+        const isAuthed = await base44.auth.isAuthenticated();
+        if (isAuthed) {
+          window.history.replaceState({}, '', window.location.pathname + '#pricing');
+          setLoadingPlan(checkoutPlan);
+          const response = await base44.functions.invoke("createCheckoutSession", { plan: checkoutPlan });
+          if (response.data?.url) {
+            window.location.href = response.data.url;
+          }
+          setLoadingPlan(null);
+        }
+      }
+    };
+    runAutoCheckout();
   }, []);
 
   return (
