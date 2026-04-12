@@ -6,8 +6,8 @@ import { User, Settings, LogOut, Shield, ChevronDown, Crown, Zap, Sparkles } fro
 import { canAccessAdmin } from "@/components/utils/permissions";
 
 const PLAN_CONFIG = {
-  free: { label: "Free Plan", color: "#6B7280", bg: "rgba(107,114,128,0.15)", icon: Zap },
-  professional: { label: "Pro Plan", color: "#D8A11F", bg: "rgba(216,161,31,0.15)", icon: Sparkles },
+  free: { label: "Starter", color: "#6B7280", bg: "rgba(107,114,128,0.15)", icon: Zap },
+  professional: { label: "Pro", color: "#D8A11F", bg: "rgba(216,161,31,0.15)", icon: Sparkles },
   enterprise: { label: "Enterprise", color: "#7C3AED", bg: "rgba(124,58,237,0.15)", icon: Crown },
 };
 
