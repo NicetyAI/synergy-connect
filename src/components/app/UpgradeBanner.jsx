@@ -8,10 +8,7 @@ export default function UpgradeBanner({ user }) {
   if (!user || isPaid || user.role === "admin") return null;
 
   const goToPricing = () => {
-    navigate("/");
-    setTimeout(() => {
-      document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
-    }, 300);
+    navigate("/?scrollTo=pricing");
   };
 
   return (

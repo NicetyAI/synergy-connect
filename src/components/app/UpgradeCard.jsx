@@ -18,10 +18,7 @@ export default function UpgradeCard({ user }) {
   if (!user || isPaid || user.role === "admin" || dismissed) return null;
 
   const goToPricing = () => {
-    navigate("/");
-    setTimeout(() => {
-      document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
-    }, 300);
+    navigate("/?scrollTo=pricing");
   };
 
   return (

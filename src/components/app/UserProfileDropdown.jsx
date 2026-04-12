@@ -104,8 +104,7 @@ export default function UserProfileDropdown({ user, compact = false }) {
                 <button
                   onClick={() => {
                     setOpen(false);
-                    navigate("/");
-                    setTimeout(() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" }), 300);
+                    navigate("/?scrollTo=pricing");
                   }}
                   className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full"
                   style={{ background: '#D8A11F', color: '#fff' }}
