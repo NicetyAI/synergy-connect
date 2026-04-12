@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import MobileSidebar from "@/components/partnerships/MobileSidebar";
+import UserProfileDropdown from "@/components/app/UserProfileDropdown";
 
 export default function MobileHeader() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -38,7 +39,10 @@ export default function MobileHeader() {
           />
         </Link>
 
-        {currentUser && <NotificationBell currentUser={currentUser} />}
+        <div className="flex items-center gap-2">
+          {currentUser && <NotificationBell currentUser={currentUser} />}
+          <UserProfileDropdown user={currentUser} compact />
+        </div>
       </header>
 
       <MobileSidebar 

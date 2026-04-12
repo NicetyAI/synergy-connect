@@ -24,6 +24,7 @@ import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import { canAccessAdmin, hasPermission } from "@/components/utils/permissions";
+import UserProfileDropdown from "@/components/app/UserProfileDropdown";
 
 const mainMenuItems = [
   { icon: Handshake, label: "Partnerships", href: "Partnerships" },
@@ -77,7 +78,10 @@ export default function Sidebar() {
               className="h-10 w-auto"
             />
           </Link>
-          {currentUser && <NotificationBell currentUser={currentUser} />}
+          <div className="flex items-center gap-2">
+            {currentUser && <NotificationBell currentUser={currentUser} />}
+            <UserProfileDropdown user={currentUser} compact />
+          </div>
         </div>
 
         {/* Search */}
