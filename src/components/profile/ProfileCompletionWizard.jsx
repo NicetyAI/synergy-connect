@@ -5,10 +5,12 @@ import { CheckCircle, Circle, ChevronRight, X, Sparkles, User, Heart, Users, Tar
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { motion, AnimatePresence } from "framer-motion";
+import OnboardingDialog from "@/components/profile/OnboardingDialog";
 
 export default function ProfileCompletionWizard({ user, onNavigateToTab }) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isDismissed, setIsDismissed] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   const { data: interests = [] } = useQuery({
     queryKey: ['userInterests', user.email],
@@ -199,10 +201,7 @@ export default function ProfileCompletionWizard({ user, onNavigateToTab }) {
                 <div className="px-6 pb-6">
                   <button
                     type="button"
-                    onClick={() => {
-                      const nextIncomplete = completionChecks.find(c => !c.completed);
-                      if (nextIncomplete) onNavigateToTab(nextIncomplete.tab);
-                    }}
+                    onClick={() => setShowOnboarding(true)}
                     className="w-full rounded-xl py-4 text-lg font-bold flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all"
                     style={{ background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', color: '#fff', border: 'none' }}
                   >
@@ -211,6 +210,12 @@ export default function ProfileCompletionWizard({ user, onNavigateToTab }) {
                   </button>
                 </div>
               )}
+
+              <OnboardingDialog
+                open={showOnboarding}
+                onOpenChange={setShowOnboarding}
+                user={user}
+              />
             </motion.div>
           )}
         </AnimatePresence>
