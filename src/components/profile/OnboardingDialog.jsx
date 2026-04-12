@@ -25,7 +25,7 @@ const STEPS = [
     title: "What's your phone number?",
     subtitle: "So potential partners can reach you",
     icon: User,
-    field: "phone",
+    field: "phone_number",
     type: "input",
     placeholder: "e.g., +1 (416) 555-1234",
     emoji: "📱",

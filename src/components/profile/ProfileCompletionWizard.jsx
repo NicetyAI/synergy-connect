@@ -37,7 +37,7 @@ export default function ProfileCompletionWizard({ user, onNavigateToTab }) {
       suggestions: [
         !user.full_name && 'Add your full name',
         !user.occupation && 'Add your occupation',
-        !user.phone && 'Add your phone number',
+        !user.phone_number && 'Add your phone number',
         !user.location && 'Add your location',
       ].filter(Boolean),
     },
@@ -211,11 +211,6 @@ export default function ProfileCompletionWizard({ user, onNavigateToTab }) {
                 </div>
               )}
 
-              <OnboardingDialog
-                open={showOnboarding}
-                onOpenChange={setShowOnboarding}
-                user={user}
-              />
             </motion.div>
           )}
         </AnimatePresence>
@@ -235,6 +230,12 @@ export default function ProfileCompletionWizard({ user, onNavigateToTab }) {
           />
         </button>
       </motion.div>
+
+      <OnboardingDialog
+        open={showOnboarding}
+        onOpenChange={setShowOnboarding}
+        user={user}
+      />
     </AnimatePresence>
   );
 }
