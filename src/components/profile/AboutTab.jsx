@@ -89,7 +89,7 @@ export default function AboutTab({ user, isOwnProfile }) {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-3xl font-bold mb-2" style={{ color: '#000' }}>Overview</h2>
-            <p className="text-sm" style={{ color: '#666' }}>Personal and professional information</p>
+            <p className="text-sm" style={{ color: '#000' }}>Personal and professional information</p>
           </div>
           {isOwnProfile && (
             <Button
@@ -136,7 +136,7 @@ export default function AboutTab({ user, isOwnProfile }) {
                       <Briefcase className="w-6 h-6" style={{ color: '#fff' }} />
                     </div>
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#667EEA' }}>Title</p>
+                      <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#000' }}>Title</p>
                       <p className="text-lg font-semibold" style={{ color: '#000' }}>{user.title}</p>
                     </div>
                   </div>
@@ -157,7 +157,7 @@ export default function AboutTab({ user, isOwnProfile }) {
                       <UserIcon className="w-6 h-6" style={{ color: '#fff' }} />
                     </div>
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#43E97B' }}>Occupation</p>
+                      <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#000' }}>Occupation</p>
                       <p className="text-lg font-semibold" style={{ color: '#000' }}>{user.occupation}</p>
                     </div>
                   </div>
@@ -178,7 +178,7 @@ export default function AboutTab({ user, isOwnProfile }) {
                       <Building2 className="w-6 h-6" style={{ color: '#fff' }} />
                     </div>
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#2BD2FF' }}>Business</p>
+                      <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#000' }}>Business</p>
                       <p className="text-lg font-semibold" style={{ color: '#000' }}>{user.business_name}</p>
                     </div>
                   </div>
@@ -210,7 +210,7 @@ export default function AboutTab({ user, isOwnProfile }) {
                       <Calendar className="w-6 h-6" style={{ color: '#E5EDFF' }} />
                     </div>
                     <div>
-                     <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#F093FB' }}>Birth Date</p>
+                     <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#000' }}>Birth Date</p>
                      <p className="text-lg font-semibold" style={{ color: '#000' }}>{new Date(user.birth_date).toLocaleDateString()}</p>
                     </div>
                   </div>
@@ -231,7 +231,7 @@ export default function AboutTab({ user, isOwnProfile }) {
                       <Heart className="w-6 h-6" style={{ color: '#E5EDFF' }} />
                     </div>
                     <div>
-                     <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#FA709A' }}>Status</p>
+                     <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#000' }}>Status</p>
                      <p className="text-lg font-semibold" style={{ color: '#000' }}>{user.status}</p>
                     </div>
                   </div>
@@ -252,7 +252,7 @@ export default function AboutTab({ user, isOwnProfile }) {
                       <Heart className="w-6 h-6" style={{ color: '#0A1628' }} />
                     </div>
                     <div>
-                     <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#FFA8A8' }}>Marital Status</p>
+                     <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#000' }}>Marital Status</p>
                      <p className="text-lg font-semibold" style={{ color: '#000' }}>{user.marital_status}</p>
                     </div>
                   </div>
@@ -283,7 +283,7 @@ export default function AboutTab({ user, isOwnProfile }) {
                     <MapPin className="w-6 h-6" style={{ color: '#E5EDFF' }} />
                   </div>
                   <div>
-                   <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#4FACFE' }}>Location</p>
+                   <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#000' }}>Location</p>
                    <p className="text-lg font-semibold" style={{ color: '#000' }}>{user.location}</p>
                   </div>
                 </div>
@@ -304,7 +304,7 @@ export default function AboutTab({ user, isOwnProfile }) {
                     <Phone className="w-6 h-6" style={{ color: '#0A1628' }} />
                   </div>
                   <div>
-                   <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#A8EDEA' }}>Phone</p>
+                   <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#000' }}>Phone</p>
                    <p className="text-lg font-semibold" style={{ color: '#000' }}>{user.phone_number}</p>
                   </div>
                 </div>
@@ -324,7 +324,7 @@ export default function AboutTab({ user, isOwnProfile }) {
                   <Mail className="w-6 h-6" style={{ color: '#E5EDFF' }} />
                 </div>
                 <div>
-                 <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#667EEA' }}>Email</p>
+                 <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#000' }}>Email</p>
                  <p className="text-lg font-semibold break-all" style={{ color: '#000' }}>{user.email}</p>
                 </div>
               </div>
@@ -352,7 +352,7 @@ export default function AboutTab({ user, isOwnProfile }) {
                   <Calendar className="w-6 h-6" style={{ color: '#E5EDFF' }} />
                 </div>
                 <div>
-                 <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#FCCB90' }}>Member Since</p>
+                 <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#000' }}>Member Since</p>
                  <p className="text-lg font-semibold" style={{ color: '#000' }}>{new Date(user.created_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
                 </div>
               </div>

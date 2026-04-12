@@ -77,7 +77,8 @@ export default function EducationSection({ user, isOwnProfile }) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="glass-card p-6 rounded-2xl group"
+                  className="p-6 rounded-2xl group"
+                  style={{ background: '#F2F1F5', border: '1px solid #000' }}
                 >
                   <div className="flex gap-4">
                     <div 
@@ -89,13 +90,13 @@ export default function EducationSection({ user, isOwnProfile }) {
                     <div className="flex-1">
                       <div className="flex items-start justify-between">
                         <div>
-                          <h4 className="font-bold text-lg" style={{ color: '#E5EDFF' }}>{edu.institution}</h4>
-                          <p className="text-sm font-semibold" style={{ color: '#2BD2FF' }}>{edu.degree}</p>
+                          <h4 className="font-bold text-lg" style={{ color: '#000' }}>{edu.institution}</h4>
+                          <p className="text-sm font-semibold" style={{ color: '#000' }}>{edu.degree}</p>
                           {edu.field && (
-                            <p className="text-sm mb-2" style={{ color: '#B6C4E0' }}>{edu.field}</p>
+                            <p className="text-sm mb-2" style={{ color: '#000' }}>{edu.field}</p>
                           )}
                           {edu.graduation_year && (
-                            <p className="text-xs" style={{ color: '#7A8BA6' }}>Graduated: {edu.graduation_year}</p>
+                            <p className="text-xs" style={{ color: '#000' }}>Graduated: {edu.graduation_year}</p>
                           )}
                         </div>
                         {isOwnProfile && (

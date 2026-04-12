@@ -77,7 +77,8 @@ export default function PortfolioSection({ user, isOwnProfile }) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="glass-card p-6 rounded-2xl group hover:scale-[1.02] transition-all"
+                  className="p-6 rounded-2xl group hover:scale-[1.02] transition-all"
+                  style={{ background: '#F2F1F5', border: '1px solid #000' }}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div 
@@ -98,9 +99,9 @@ export default function PortfolioSection({ user, isOwnProfile }) {
                       </Button>
                     )}
                   </div>
-                  <h4 className="font-bold text-lg mb-2" style={{ color: '#E5EDFF' }}>{link.title}</h4>
+                  <h4 className="font-bold text-lg mb-2" style={{ color: '#000' }}>{link.title}</h4>
                   {link.description && (
-                    <p className="text-sm mb-3" style={{ color: '#B6C4E0' }}>{link.description}</p>
+                    <p className="text-sm mb-3" style={{ color: '#000' }}>{link.description}</p>
                   )}
                   <a 
                     href={link.url}

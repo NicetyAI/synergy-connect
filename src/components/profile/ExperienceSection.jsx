@@ -79,7 +79,8 @@ export default function ExperienceSection({ user, isOwnProfile }) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="glass-card p-6 rounded-2xl group"
+                  className="p-6 rounded-2xl group"
+                  style={{ background: '#F2F1F5', border: '1px solid #000' }}
                 >
                   <div className="flex gap-4">
                     <div 
@@ -91,9 +92,9 @@ export default function ExperienceSection({ user, isOwnProfile }) {
                     <div className="flex-1">
                       <div className="flex items-start justify-between">
                         <div>
-                          <h4 className="font-bold text-lg" style={{ color: '#E5EDFF' }}>{exp.title}</h4>
-                          <p className="text-sm font-semibold mb-2" style={{ color: '#43E97B' }}>{exp.company}</p>
-                          <p className="text-xs mb-3" style={{ color: '#7A8BA6' }}>
+                          <h4 className="font-bold text-lg" style={{ color: '#000' }}>{exp.title}</h4>
+                          <p className="text-sm font-semibold mb-2" style={{ color: '#000' }}>{exp.company}</p>
+                          <p className="text-xs mb-3" style={{ color: '#000' }}>
                             {exp.start_date} - {exp.end_date || 'Present'}
                           </p>
                         </div>
@@ -110,7 +111,7 @@ export default function ExperienceSection({ user, isOwnProfile }) {
                         )}
                       </div>
                       {exp.description && (
-                        <p className="text-sm" style={{ color: '#B6C4E0' }}>{exp.description}</p>
+                        <p className="text-sm" style={{ color: '#000' }}>{exp.description}</p>
                       )}
                     </div>
                   </div>

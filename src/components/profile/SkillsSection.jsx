@@ -75,7 +75,7 @@ export default function SkillsSection({ user, isOwnProfile }) {
                 >
                   <Badge 
                     className="px-4 py-2 text-sm font-semibold rounded-xl flex items-center gap-2 group"
-                    style={{ background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%)', color: '#E5EDFF', border: '1px solid rgba(102, 126, 234, 0.3)' }}
+                    style={{ background: '#F2F1F5', color: '#000', border: '1px solid #000' }}
                   >
                     {skill}
                     {isOwnProfile && (

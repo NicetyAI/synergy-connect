@@ -77,7 +77,8 @@ export default function CertificationsSection({ user, isOwnProfile }) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="glass-card p-6 rounded-2xl group"
+                  className="p-6 rounded-2xl group"
+                  style={{ background: '#F2F1F5', border: '1px solid #000' }}
                 >
                   <div className="flex gap-4">
                     <div 
@@ -89,10 +90,10 @@ export default function CertificationsSection({ user, isOwnProfile }) {
                     <div className="flex-1">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h4 className="font-bold text-lg mb-1" style={{ color: '#E5EDFF' }}>{cert.name}</h4>
-                          <p className="text-sm font-semibold mb-2" style={{ color: '#F093FB' }}>{cert.issuer}</p>
+                          <h4 className="font-bold text-lg mb-1" style={{ color: '#000' }}>{cert.name}</h4>
+                          <p className="text-sm font-semibold mb-2" style={{ color: '#000' }}>{cert.issuer}</p>
                           {cert.date && (
-                            <p className="text-xs mb-2" style={{ color: '#7A8BA6' }}>Issued: {cert.date}</p>
+                            <p className="text-xs mb-2" style={{ color: '#000' }}>Issued: {cert.date}</p>
                           )}
                           {cert.credential_url && (
                             <a 

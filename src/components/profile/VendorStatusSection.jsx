@@ -66,27 +66,27 @@ export default function VendorStatusSection({ vendorApp, isOwnProfile }) {
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <span style={{ color: '#666' }}>Business Name</span>
+          <span style={{ color: '#000' }}>Business Name</span>
           <span className="font-semibold" style={{ color: '#3B82F6' }}>{vendorApp.business_name}</span>
         </div>
 
         {vendorApp.vendor_id && (
           <div className="flex items-center justify-between">
-            <span style={{ color: '#666' }}>Vendor ID</span>
+            <span style={{ color: '#000' }}>Vendor ID</span>
             <span className="font-mono font-bold" style={{ color: config.color }}>{vendorApp.vendor_id}</span>
           </div>
         )}
 
         {vendorApp.category && (
           <div className="flex items-center justify-between">
-            <span style={{ color: '#666' }}>Category</span>
+            <span style={{ color: '#000' }}>Category</span>
             <span className="font-semibold" style={{ color: '#000' }}>{vendorApp.category}</span>
           </div>
         )}
 
         {vendorApp.province && (
           <div className="flex items-center justify-between">
-            <span style={{ color: '#666' }}>Province</span>
+            <span style={{ color: '#000' }}>Province</span>
             <span className="font-semibold" style={{ color: '#000' }}>{vendorApp.province}</span>
           </div>
         )}

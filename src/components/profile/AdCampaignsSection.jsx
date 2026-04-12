@@ -33,7 +33,7 @@ export default function AdCampaignsSection({ campaigns, pendingAdApps, isOwnProf
             <BarChart3 className="w-6 h-6" style={{ color: '#fff' }} />
           </div>
           <div>
-            <p className="text-sm" style={{ color: '#666' }}>
+            <p className="text-sm" style={{ color: '#000' }}>
               {activeCampaigns.length} active, {expiredCampaigns.length} expired
             </p>
           </div>
@@ -56,7 +56,7 @@ export default function AdCampaignsSection({ campaigns, pendingAdApps, isOwnProf
             <p className="font-semibold" style={{ color: '#F59E0B' }}>
               {pendingAdApps} Pending Application{pendingAdApps > 1 ? 's' : ''}
             </p>
-            <p className="text-sm" style={{ color: '#FCD34D' }}>
+            <p className="text-sm" style={{ color: '#000' }}>
               Your ad application{pendingAdApps > 1 ? 's are' : ' is'} awaiting approval
             </p>
           </div>
@@ -98,7 +98,7 @@ export default function AdCampaignsSection({ campaigns, pendingAdApps, isOwnProf
             })}
           </div>
           {activeCampaigns.length > 3 && (
-            <p className="text-xs mt-2" style={{ color: '#666' }}>
+            <p className="text-xs mt-2" style={{ color: '#000' }}>
               +{activeCampaigns.length - 3} more active campaign{activeCampaigns.length - 3 > 1 ? 's' : ''}
             </p>
           )}
@@ -108,8 +108,8 @@ export default function AdCampaignsSection({ campaigns, pendingAdApps, isOwnProf
       {/* Expired Campaigns */}
       {expiredCampaigns.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: '#B6C4E0' }}>
-            <Clock className="w-4 h-4" style={{ color: '#7A8BA6' }} />
+          <h4 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: '#000' }}>
+            <Clock className="w-4 h-4" style={{ color: '#666' }} />
             Recently Expired
           </h4>
           <div className="space-y-2">
@@ -117,13 +117,13 @@ export default function AdCampaignsSection({ campaigns, pendingAdApps, isOwnProf
               <div 
                 key={campaign.id}
                 className="p-3 rounded-xl flex items-center justify-between" 
-                style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)' }}
+                style={{ background: '#F2F1F5', border: '1px solid #ddd' }}
               >
                 <div className="flex-1">
-                  <p className="font-semibold mb-1" style={{ color: '#B6C4E0' }}>
+                  <p className="font-semibold mb-1" style={{ color: '#000' }}>
                     {campaign.business_name}
                   </p>
-                  <p className="text-xs" style={{ color: '#7A8BA6' }}>
+                  <p className="text-xs" style={{ color: '#000' }}>
                     Expired {moment(campaign.expiry_date).fromNow()}
                   </p>
                 </div>
@@ -134,7 +134,7 @@ export default function AdCampaignsSection({ campaigns, pendingAdApps, isOwnProf
             ))}
           </div>
           {expiredCampaigns.length > 2 && (
-            <p className="text-xs mt-2" style={{ color: '#7A8BA6' }}>
+            <p className="text-xs mt-2" style={{ color: '#000' }}>
               +{expiredCampaigns.length - 2} more expired campaign{expiredCampaigns.length - 2 > 1 ? 's' : ''}
             </p>
           )}
@@ -145,7 +145,7 @@ export default function AdCampaignsSection({ campaigns, pendingAdApps, isOwnProf
       {activeCampaigns.length === 0 && expiredCampaigns.length === 0 && pendingAdApps === 0 && (
         <div className="text-center py-8">
           <TrendingUp className="w-12 h-12 mx-auto mb-3" style={{ color: '#7A8BA6' }} />
-          <p style={{ color: '#B6C4E0' }}>No campaigns yet</p>
+          <p style={{ color: '#000' }}>No campaigns yet</p>
         </div>
       )}
     </motion.div>
