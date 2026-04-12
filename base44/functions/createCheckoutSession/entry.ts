@@ -1,11 +1,11 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.21';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 import Stripe from 'npm:stripe@17.7.0';
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY"));
 
 const PRICE_MAP = {
-  professional: "price_1TDVHoEGLwZMIElTLEKllChI",
-  enterprise: "price_1TDVHoEGLwZMIElTm2u5bpXM",
+  professional: "price_1TLCKJEGLwZMIElT4ImkOMPk",
+  enterprise: "price_1TLCKJEGLwZMIElTsOGm7umh",
 };
 
 Deno.serve(async (req) => {
