@@ -197,17 +197,18 @@ export default function ProfileCompletionWizard({ user, onNavigateToTab }) {
               {/* Action Button */}
               {completedCount < totalCount && (
                 <div className="px-6 pb-6">
-                  <Button
+                  <button
+                    type="button"
                     onClick={() => {
                       const nextIncomplete = completionChecks.find(c => !c.completed);
                       if (nextIncomplete) onNavigateToTab(nextIncomplete.tab);
                     }}
-                    className="w-full rounded-xl py-6 text-lg font-bold gap-2"
-                    style={{ background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', color: '#fff' }}
+                    className="w-full rounded-xl py-4 text-lg font-bold flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all"
+                    style={{ background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', color: '#fff', border: 'none' }}
                   >
                     Continue Setup
                     <ChevronRight className="w-5 h-5" />
-                  </Button>
+                  </button>
                 </div>
               )}
             </motion.div>
