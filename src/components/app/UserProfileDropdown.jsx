@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import { User, Settings, LogOut, Shield, ChevronDown, Crown, Zap, Sparkles } from "lucide-react";
@@ -14,6 +14,7 @@ const PLAN_CONFIG = {
 export default function UserProfileDropdown({ user, compact = false }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handler = (e) => {
@@ -27,6 +28,7 @@ export default function UserProfileDropdown({ user, compact = false }) {
 
   const plan = PLAN_CONFIG[user.subscription_plan] || PLAN_CONFIG.free;
   const isAdmin = user.role === "admin";
+  const isPaid = user.subscription_plan === "professional" || user.subscription_plan === "enterprise";
   const PlanIcon = plan.icon;
 
   return (
@@ -98,15 +100,18 @@ export default function UserProfileDropdown({ user, compact = false }) {
               <span className="text-xs font-semibold" style={{ color: plan.color }}>
                 {isAdmin ? "Administrator" : plan.label}
               </span>
-              {user.subscription_plan === "free" && !isAdmin && (
-                <Link
-                  to="/#pricing"
-                  onClick={() => setOpen(false)}
+              {!isPaid && !isAdmin && (
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    navigate("/");
+                    setTimeout(() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" }), 300);
+                  }}
                   className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full"
                   style={{ background: '#D8A11F', color: '#fff' }}
                 >
                   Upgrade
-                </Link>
+                </button>
               )}
             </div>
           </div>

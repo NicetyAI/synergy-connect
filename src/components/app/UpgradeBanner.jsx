@@ -1,10 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Sparkles, ArrowRight } from "lucide-react";
 
 export default function UpgradeBanner({ user }) {
+  const navigate = useNavigate();
   const isPaid = user?.subscription_plan === "professional" || user?.subscription_plan === "enterprise";
   if (!user || isPaid || user.role === "admin") return null;
+
+  const goToPricing = () => {
+    navigate("/");
+    setTimeout(() => {
+      document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
+    }, 300);
+  };
 
   return (
     <div
@@ -28,13 +36,13 @@ export default function UpgradeBanner({ user }) {
           <p className="text-[11px] leading-tight" style={{ color: "#B6C4E0" }}>
             Unlimited connections, verified badge & more
           </p>
-          <Link
-            to="/#pricing"
+          <button
+            onClick={goToPricing}
             className="inline-flex items-center gap-1 mt-2 text-[11px] font-bold px-3 py-1.5 rounded-lg transition-all hover:opacity-90"
             style={{ background: "#D8A11F", color: "#fff" }}
           >
             View Plans <ArrowRight className="w-3 h-3" />
-          </Link>
+          </button>
         </div>
       </div>
     </div>

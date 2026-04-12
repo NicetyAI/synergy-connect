@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Sparkles, X, Check, ArrowRight, Crown } from "lucide-react";
 
 const FEATURES = [
@@ -12,9 +12,17 @@ const FEATURES = [
 
 export default function UpgradeCard({ user }) {
   const [dismissed, setDismissed] = useState(false);
+  const navigate = useNavigate();
 
   const isPaid = user?.subscription_plan === "professional" || user?.subscription_plan === "enterprise";
   if (!user || isPaid || user.role === "admin" || dismissed) return null;
+
+  const goToPricing = () => {
+    navigate("/");
+    setTimeout(() => {
+      document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
+    }, 300);
+  };
 
   return (
     <div
@@ -65,13 +73,13 @@ export default function UpgradeCard({ user }) {
             </div>
 
             <div className="flex items-center gap-3">
-              <Link
-                to="/#pricing"
+              <button
+                onClick={goToPricing}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all hover:opacity-90"
                 style={{ background: "linear-gradient(135deg, #D8A11F 0%, #F59E0B 100%)", color: "#fff" }}
               >
                 <Sparkles className="w-4 h-4" /> Upgrade Now <ArrowRight className="w-4 h-4" />
-              </Link>
+              </button>
               <button
                 onClick={() => setDismissed(true)}
                 className="text-xs font-medium px-3 py-2"
