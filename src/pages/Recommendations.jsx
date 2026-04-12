@@ -227,8 +227,8 @@ export default function Recommendations() {
               }
             >
               <Users className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              <span className="hidden sm:inline">Potential Connections ({matchedUsers.length})</span>
-              <span className="sm:hidden">Connections ({matchedUsers.length})</span>
+              <span className="hidden sm:inline">Potential Connections ({aiMatches?.matches?.length || matchedUsers.length})</span>
+              <span className="sm:hidden">Connections ({aiMatches?.matches?.length || matchedUsers.length})</span>
             </Button>
             <Button
               onClick={() => setActiveTab("opportunities")}
