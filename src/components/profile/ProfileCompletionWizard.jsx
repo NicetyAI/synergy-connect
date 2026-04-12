@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { CheckCircle, Circle, ChevronRight, X, Sparkles, User, Heart, Users, Target } from "lucide-react";
+import { CheckCircle, Circle, ChevronRight, X, Sparkles, User, Heart, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,14 +17,7 @@ export default function ProfileCompletionWizard({ user, onNavigateToTab }) {
     queryFn: () => base44.entities.Interest.filter({ user_email: user.email, status: 'approved' }),
   });
 
-  const { data: connections = [] } = useQuery({
-    queryKey: ['userConnections', user.email],
-    queryFn: async () => {
-      const conn1 = await base44.entities.Connection.filter({ user1_email: user.email, status: 'connected' });
-      const conn2 = await base44.entities.Connection.filter({ user2_email: user.email, status: 'connected' });
-      return [...conn1, ...conn2];
-    },
-  });
+
 
   // Calculate completion status
   const completionChecks = [
@@ -65,18 +58,7 @@ export default function ProfileCompletionWizard({ user, onNavigateToTab }) {
         ? [`Add ${3 - interests.length} more interest${3 - interests.length !== 1 ? 's' : ''} to unlock full matching`]
         : [],
     },
-    {
-      id: 'connections',
-      label: 'Network',
-      icon: Users,
-      tab: 'connection',
-      completed: connections.length >= 5,
-      suggestions: connections.length === 0
-        ? ['Start connecting with people to expand your network']
-        : connections.length < 5
-        ? [`Connect with ${5 - connections.length} more people to grow your network`]
-        : [],
-    },
+
   ];
 
   const completedCount = completionChecks.filter(c => c.completed).length;
