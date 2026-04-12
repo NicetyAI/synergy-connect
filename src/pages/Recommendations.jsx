@@ -14,10 +14,16 @@ export default function Recommendations() {
   const [activeTab, setActiveTab] = useState("connections");
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingAiMatches, setLoadingAiMatches] = useState(false);
+  const [savedMatches, setSavedMatches] = useState([]);
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    base44.auth.me().then(user => setCurrentUser(user)).catch(() => setCurrentUser(null));
+    base44.auth.me().then(user => {
+      setCurrentUser(user);
+      if (user.ai_matches && user.ai_matches.length > 0) {
+        setSavedMatches(user.ai_matches);
+      }
+    }).catch(() => setCurrentUser(null));
   }, []);
 
   // Fetch user interests
@@ -107,58 +113,8 @@ export default function Recommendations() {
     enabled: !!currentUser && userInterests !== undefined && realEstateCacheData !== undefined && franchiseCacheData !== undefined,
   });
 
-  // Fetch users matched to current user's interests
-  const { data: matchedUsers = [], isLoading: loadingUsers } = useQuery({
-    queryKey: ['matchedUsers', currentUser?.email, userInterests.map(i => i.id).join(',')],
-    queryFn: async () => {
-      const allUsers = await base44.entities.User.list();
-      
-      // Exclude current user
-      const otherUsers = allUsers.filter(u => u.email !== currentUser.email);
-      
-      // Fetch all approved interests
-      const allInterests = await base44.entities.Interest.filter({ status: 'approved' });
-      
-      // Group interests by user
-      const userInterestsMap = {};
-      allInterests.forEach(interest => {
-        if (!userInterestsMap[interest.user_email]) {
-          userInterestsMap[interest.user_email] = [];
-        }
-        userInterestsMap[interest.user_email].push(interest.interest_name.toLowerCase());
-      });
-      
-      const currentUserInterestNames = (userInterestsMap[currentUser.email] || []);
-      
-      if (currentUserInterestNames.length === 0) {
-        // No interests yet — return all users with 0% match
-        return otherUsers.slice(0, 20).map(u => ({ ...u, matchPercentage: 0, matchCount: 0 }));
-      }
-      
-      // Calculate match scores for each user
-      const usersWithScores = otherUsers.map(user => {
-        const theirInterests = userInterestsMap[user.email] || [];
-        const matchCount = theirInterests.filter(interest => 
-          currentUserInterestNames.includes(interest)
-        ).length;
-        
-        const matchPercentage = Math.round((matchCount / currentUserInterestNames.length) * 100);
-        
-        return {
-          ...user,
-          matchPercentage,
-          matchCount,
-          sharedInterests: theirInterests.filter(i => currentUserInterestNames.includes(i))
-        };
-      });
-      
-      // Sort by match score, filter to those with at least 1 shared interest first, then others
-      return usersWithScores
-        .sort((a, b) => b.matchPercentage - a.matchPercentage)
-        .slice(0, 30);
-    },
-    enabled: !!currentUser?.email && userInterests !== undefined,
-  });
+  // Use saved matches from user record (persisted across refreshes)
+  // Non-admin users can't list other users, so we rely on AI matches from backend
 
   // Fetch AI-matched connections
   const { data: aiMatches, isLoading: loadingAiMatchesQuery, refetch: refetchAiMatches } = useQuery({
@@ -172,7 +128,19 @@ export default function Recommendations() {
 
   const handleGenerateAiMatches = async () => {
     setLoadingAiMatches(true);
-    await refetchAiMatches();
+    try {
+      const result = await refetchAiMatches();
+      const data = result?.data;
+      if (data?.success && data.matches?.length > 0) {
+        setSavedMatches(data.matches);
+        await base44.auth.updateMe({
+          ai_matches: data.matches,
+          ai_matches_date: new Date().toISOString()
+        });
+      }
+    } catch (e) {
+      console.error('Failed to generate matches:', e);
+    }
     setLoadingAiMatches(false);
   };
 
@@ -227,8 +195,8 @@ export default function Recommendations() {
               }
             >
               <Users className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              <span className="hidden sm:inline">Potential Connections ({aiMatches?.matches?.length || matchedUsers.length})</span>
-              <span className="sm:hidden">Connections ({aiMatches?.matches?.length || matchedUsers.length})</span>
+              <span className="hidden sm:inline">Potential Connections ({savedMatches.length})</span>
+              <span className="sm:hidden">Connections ({savedMatches.length})</span>
             </Button>
             <Button
               onClick={() => setActiveTab("opportunities")}
@@ -286,11 +254,9 @@ export default function Recommendations() {
                   </Button>
                 </div>
 
-                {aiMatches?.success && aiMatches.matches?.length > 0 ? (
+                {savedMatches.length > 0 ? (
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                    {aiMatches.matches.map((match, idx) => {
-                      const matchUser = matchedUsers.find(u => u.email === match.email);
-                      return (
+                    {savedMatches.map((match, idx) => (
                         <div
                           key={idx}
                           className="rounded-2xl p-6 flex flex-col items-center"
@@ -298,7 +264,7 @@ export default function Recommendations() {
                         >
                           <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-4" style={{ borderColor: '#334155' }}>
                             <img
-                              src={matchUser?.avatar_url || match.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(match.name)}&size=200&background=random`}
+                              src={match.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(match.name)}&size=200&background=random`}
                               alt={match.name}
                               className="w-full h-full object-cover"
                             />
@@ -313,7 +279,7 @@ export default function Recommendations() {
                           </Badge>
                           
                           <p className="text-sm text-center mb-4 min-h-[40px]" style={{ color: '#CBD5E1' }}>
-                            {matchUser?.bio || match.bio || match.overview || 'No bio available.'}
+                            {match.overview || 'No bio available.'}
                           </p>
                           
                           <div className="flex items-center gap-2 mb-4">
@@ -334,7 +300,7 @@ export default function Recommendations() {
                                 await base44.functions.invoke('sendNotification', {
                                   recipientEmail: match.email,
                                   type: 'connection_request',
-                                  title: '👋 New Connection Request',
+                                  title: '\ud83d\udc4b New Connection Request',
                                   message: `${currentUser.full_name} wants to connect with you`,
                                   link: `/Profile?email=${currentUser.email}`,
                                   sendEmail: true
@@ -352,14 +318,13 @@ export default function Recommendations() {
                             Connect
                           </Button>
                         </div>
-                      );
-                    })}
+                      ))}
                   </div>
                 ) : aiMatches && !aiMatches.success ? (
                   <div className="text-center py-8 rounded-xl" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
                     <p style={{ color: '#EF4444' }}>{aiMatches.error || 'Failed to generate AI matches'}</p>
                   </div>
-                ) : !aiMatches ? (
+                ) : !aiMatches && savedMatches.length === 0 ? (
                   <div className="text-center py-12 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
                     <Sparkles className="w-12 h-12 mx-auto mb-4" style={{ color: '#D8A11F' }} />
                     <p className="text-lg font-semibold mb-2" style={{ color: '#000' }}>
@@ -372,47 +337,8 @@ export default function Recommendations() {
                 ) : null}
               </div>
 
-              {/* Potential Connections Section */}
-              <div>
-                <h2 className="text-xl font-bold mb-6" style={{ color: '#000' }}>
-                  All Potential Connections
-                </h2>
-                {loadingUsers ? (
-                  <div className="text-center py-12">
-                    <Loader2 className="w-8 h-8 mx-auto animate-spin mb-4" style={{ color: '#D8A11F' }} />
-                    <p className="text-sm" style={{ color: '#000' }}>Finding matched connections...</p>
-                  </div>
-                ) : matchedUsers.length > 0 ? (
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                    {matchedUsers.map((user, index) => (
-                      <ConnectionCard 
-                        key={user.id} 
-                        connection={{
-                          id: user.id,
-                          name: user.full_name,
-                          email: user.email,
-                          role: user.role || "General User",
-                          bio: user.bio || "No bio available.",
-                          avatar: user.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&size=200&background=random`,
-                          matchPercentage: user.matchPercentage,
-                        }} 
-                        index={index}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-12 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                    <Users className="w-12 h-12 mx-auto mb-4" style={{ color: '#D8A11F' }} />
-                    <p className="text-lg font-semibold mb-2" style={{ color: '#000' }}>
-                      No matched connections found
-                    </p>
-                    <p className="text-sm" style={{ color: '#666' }}>
-                      Add more interests to find users with similar goals
-                    </p>
-                  </div>
-                )}
-              </div>
-            </>
+              </>
+
           ) : (
             <div>
               {/* AI Recommended Opportunities */}
