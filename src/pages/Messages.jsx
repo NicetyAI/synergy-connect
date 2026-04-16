@@ -140,21 +140,44 @@ export default function Messages() {
       });
     });
 
+    // Also create entries from messages that may not have a matching connection
     messages.forEach(msg => {
       const conversationId = msg.conversation_id;
-      if (conversationMap.has(conversationId)) {
-        const conv = conversationMap.get(conversationId);
-        conv.messages.push(msg);
-        if (!msg.read && msg.recipient_email === user?.email) {
-          conv.unreadCount++;
-        }
+      if (!conversationMap.has(conversationId)) {
+        const otherEmail = msg.sender_email === user?.email ? msg.recipient_email : msg.sender_email;
+        conversationMap.set(conversationId, {
+          id: conversationId,
+          otherUserEmail: otherEmail,
+          messages: [],
+          unreadCount: 0,
+        });
+      }
+      const conv = conversationMap.get(conversationId);
+      conv.messages.push(msg);
+      if (!msg.read && msg.recipient_email === user?.email) {
+        conv.unreadCount++;
       }
     });
+
+    // If a conversation is selected but doesn't exist yet (new chat from search), create a placeholder
+    if (selectedConversation && !conversationMap.has(selectedConversation)) {
+      const emails = selectedConversation.split('_');
+      const otherEmail = emails.find(e => e !== user?.email) || emails[1];
+      if (otherEmail) {
+        conversationMap.set(selectedConversation, {
+          id: selectedConversation,
+          otherUserEmail: otherEmail,
+          messages: [],
+          unreadCount: 0,
+        });
+      }
+    }
 
     return Array.from(conversationMap.values());
   };
 
-  const handleSendMessage = (content, recipientEmail) => {
+  const handleSendMessage = async (content, recipientEmail) => {
+    if (!recipientEmail || !content) return;
     const conversationId = [user.email, recipientEmail].sort().join('_');
     sendMessageMutation.mutate({
       conversation_id: conversationId,

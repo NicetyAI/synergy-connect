@@ -26,7 +26,7 @@ export default function ChatArea({ conversation, onSendMessage, onMarkAsRead, cu
   }, [conversation?.messages.length]);
 
   const handleSend = () => {
-    if (messageText.trim()) {
+    if (messageText.trim() && conversation?.otherUserEmail) {
       onSendMessage(messageText, conversation.otherUserEmail);
       setMessageText("");
     }
@@ -138,7 +138,7 @@ export default function ChatArea({ conversation, onSendMessage, onMarkAsRead, cu
           />
           <Button
             onClick={handleSend}
-            disabled={!messageText.trim()}
+            disabled={!messageText.trim() || !conversation?.otherUserEmail}
             className="rounded-xl px-4"
             style={{ background: '#D8A11F', color: '#fff' }}
           >
