@@ -52,15 +52,27 @@ export default function ConnectionTab({ userEmail, isOwnProfile }) {
     c => (c.user1_email === userEmail || c.user2_email === userEmail) && c.status === 'connected'
   );
 
-  // Connection Requests (incoming - pending, where I'm user2)
-  const incomingRequests = connections.filter(
+  // Connection Requests (incoming - pending, where I'm user2) — deduplicate by sender
+  const incomingRequestsRaw = connections.filter(
     c => c.user2_email === userEmail && c.status === 'pending'
   );
+  const seenIncoming = new Set();
+  const incomingRequests = incomingRequestsRaw.filter(c => {
+    if (seenIncoming.has(c.user1_email)) return false;
+    seenIncoming.add(c.user1_email);
+    return true;
+  });
 
-  // Requested Connections (outgoing - pending, where I'm user1)
-  const outgoingRequests = connections.filter(
+  // Requested Connections (outgoing - pending, where I'm user1) — deduplicate by recipient
+  const outgoingRequestsRaw = connections.filter(
     c => c.user1_email === userEmail && c.status === 'pending'
   );
+  const seenOutgoing = new Set();
+  const outgoingRequests = outgoingRequestsRaw.filter(c => {
+    if (seenOutgoing.has(c.user2_email)) return false;
+    seenOutgoing.add(c.user2_email);
+    return true;
+  });
 
   const connectedUsers = myConnections.map(c => {
     const connectedEmail = c.user1_email === userEmail ? c.user2_email : c.user1_email;
@@ -154,6 +166,13 @@ export default function ConnectionTab({ userEmail, isOwnProfile }) {
 
   const sendRequestMutation = useMutation({
     mutationFn: async ({ targetEmail, targetName, message }) => {
+      // Check for existing connection/request to prevent duplicates
+      const existing = connections.find(c =>
+        (c.user1_email === currentUser.email && c.user2_email === targetEmail) ||
+        (c.user1_email === targetEmail && c.user2_email === currentUser.email)
+      );
+      if (existing) throw new Error('A connection or request already exists with this user.');
+
       await base44.entities.Connection.create({
         user1_email: currentUser.email,
         user2_email: targetEmail,
@@ -286,6 +305,7 @@ export default function ConnectionTab({ userEmail, isOwnProfile }) {
       {actionType === 'connect' && isOwnProfile && currentUser && (
         <Button
           onClick={() => setSelectedUser(user)}
+          disabled={sendRequestMutation.isPending}
           className="w-full rounded-xl font-semibold"
           style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1F3A8A 100%)', color: '#fff' }}
         >
