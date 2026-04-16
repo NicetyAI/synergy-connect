@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "@/components/partnerships/Sidebar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Users, Briefcase, Store, Heart, UserPlus, Loader2, Check } from "lucide-react";
+import { Sparkles, Users, Briefcase, Heart, UserPlus, Loader2 } from "lucide-react";
 import ConnectionCard from "@/components/recommendations/ConnectionCard";
 import OpportunityRecommendationCard from "@/components/recommendations/OpportunityRecommendationCard";
 import { base44 } from "@/api/base44Client";
@@ -16,7 +16,6 @@ export default function Recommendations() {
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingAiMatches, setLoadingAiMatches] = useState(false);
   const [savedMatches, setSavedMatches] = useState([]);
-  const [sentRequests, setSentRequests] = useState(new Set());
   const [sendingRequest, setSendingRequest] = useState(null);
   const queryClient = useQueryClient();
 
@@ -36,6 +35,29 @@ export default function Recommendations() {
       }
     }).catch(() => setCurrentUser(null));
   }, []);
+
+  // Fetch existing connections to filter out already-connected users
+  const { data: existingConnections = [] } = useQuery({
+    queryKey: ['connections', currentUser?.email],
+    queryFn: () => base44.entities.Connection.list(),
+    enabled: !!currentUser,
+  });
+
+  // Build a set of emails we already have connections with (pending or connected)
+  const connectedEmails = React.useMemo(() => {
+    if (!currentUser) return new Set();
+    const emails = new Set();
+    existingConnections.forEach(c => {
+      if (c.user1_email === currentUser.email) emails.add(c.user2_email);
+      if (c.user2_email === currentUser.email) emails.add(c.user1_email);
+    });
+    return emails;
+  }, [existingConnections, currentUser]);
+
+  // Filtered matches: remove anyone we already have a connection with
+  const filteredMatches = React.useMemo(() => {
+    return savedMatches.filter(m => !connectedEmails.has(m.email));
+  }, [savedMatches, connectedEmails]);
 
   // Fetch user interests
   const { data: userInterests = [] } = useQuery({
@@ -207,8 +229,8 @@ export default function Recommendations() {
               }
             >
               <Users className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              <span className="hidden sm:inline">Potential Connections ({savedMatches.filter(m => !sentRequests.has(m.email)).length})</span>
-              <span className="sm:hidden">Connections ({savedMatches.filter(m => !sentRequests.has(m.email)).length})</span>
+              <span className="hidden sm:inline">Potential Connections ({filteredMatches.length})</span>
+              <span className="sm:hidden">Connections ({filteredMatches.length})</span>
             </Button>
             <Button
               onClick={() => setActiveTab("opportunities")}
@@ -266,9 +288,9 @@ export default function Recommendations() {
                   </Button>
                 </div>
 
-                {savedMatches.length > 0 ? (
+                {filteredMatches.length > 0 ? (
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                    {savedMatches.filter(match => !sentRequests.has(match.email)).map((match, idx) => (
+                    {filteredMatches.map((match, idx) => (
                         <div
                           key={idx}
                           className="rounded-2xl p-6 flex flex-col items-center"
@@ -303,7 +325,7 @@ export default function Recommendations() {
                           
                           <Button
                             onClick={async () => {
-                              if (sentRequests.has(match.email) || sendingRequest === match.email) return;
+                              if (sendingRequest === match.email) return;
                               setSendingRequest(match.email);
                               try {
                                 await base44.entities.Connection.create({
@@ -319,8 +341,14 @@ export default function Recommendations() {
                                   link: `/Profile?email=${currentUser.email}`,
                                   sendEmail: true
                                 });
+                                // Invalidate connections so filteredMatches updates immediately
                                 queryClient.invalidateQueries({ queryKey: ['connections'] });
-                                setSentRequests(prev => new Set(prev).add(match.email));
+                                // Also persist the removal from saved matches so it stays gone on refresh
+                                const updatedMatches = savedMatches.filter(m => m.email !== match.email);
+                                setSavedMatches(updatedMatches);
+                                await base44.auth.updateMe({
+                                  ai_matches_json: JSON.stringify(updatedMatches)
+                                });
                                 toast.success(`Connection request sent to ${match.name}!`);
                               } catch (error) {
                                 console.error('Failed to send connection request:', error);
@@ -329,17 +357,12 @@ export default function Recommendations() {
                                 setSendingRequest(null);
                               }
                             }}
-                            disabled={sentRequests.has(match.email) || sendingRequest === match.email}
+                            disabled={sendingRequest === match.email}
                             className="w-full rounded-xl gap-2 font-semibold"
-                            style={sentRequests.has(match.email)
-                              ? { background: '#22C55E', color: '#fff' }
-                              : { background: '#D8A11F', color: '#1E293B' }
-                            }
+                            style={{ background: '#D8A11F', color: '#1E293B' }}
                           >
                             {sendingRequest === match.email ? (
                               <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</>
-                            ) : sentRequests.has(match.email) ? (
-                              <><Check className="w-4 h-4" /> Request Sent</>
                             ) : (
                               <><UserPlus className="w-4 h-4" /> Connect</>
                             )}
@@ -351,7 +374,7 @@ export default function Recommendations() {
                   <div className="text-center py-8 rounded-xl" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
                     <p style={{ color: '#EF4444' }}>{aiMatches.error || 'Failed to generate AI matches'}</p>
                   </div>
-                ) : !aiMatches && savedMatches.length === 0 ? (
+                ) : filteredMatches.length === 0 && savedMatches.length === 0 && !aiMatches ? (
                   <div className="text-center py-12 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
                     <Sparkles className="w-12 h-12 mx-auto mb-4" style={{ color: '#D8A11F' }} />
                     <p className="text-lg font-semibold mb-2" style={{ color: '#000' }}>
