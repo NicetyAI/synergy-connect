@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Users, Building2, Handshake, ArrowRight, Sparkles, TrendingUp, Award } from "lucide-react";
@@ -38,103 +37,52 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 pt-20 pb-10" style={{ background: '#192234' }}>
-      {/* Enhanced animated background with depth layers */}
+      {/* Animated background with CSS animations */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Large gradient orbs */}
-        <motion.div
-          animate={{
-            x: [0, 100, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-20 left-10 w-96 h-96 bg-[#7C3AED]/30 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            x: [0, -80, 0],
-            y: [0, 60, 0],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-40 right-20 w-[500px] h-[500px] bg-[#3B82F6]/25 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            x: [0, 50, 0],
-            y: [0, -30, 0],
-            scale: [1, 1.15, 1],
-          }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-20 left-1/3 w-80 h-80 bg-[#1F3A8A]/20 rounded-full blur-3xl"
-        />
+        <div className="absolute top-20 left-10 w-96 h-96 bg-[#7C3AED]/30 rounded-full blur-3xl animate-float-slow" />
+        <div className="absolute top-40 right-20 w-[500px] h-[500px] bg-[#3B82F6]/25 rounded-full blur-3xl animate-float-medium" />
+        <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-[#1F3A8A]/20 rounded-full blur-3xl animate-float-fast" />
         
-        {/* Additional floating particles */}
         {[...Array(8)].map((_, i) => (
-          <motion.div
+          <div
             key={i}
-            animate={{
-              y: [0, -30, 0],
-              opacity: [0.2, 0.5, 0.2],
-            }}
-            transition={{
-              duration: 3 + i,
-              repeat: Infinity,
-              delay: i * 0.5,
-            }}
-            className="absolute w-2 h-2 bg-cyan-400/40 rounded-full blur-sm"
+            className="absolute w-2 h-2 bg-cyan-400/40 rounded-full blur-sm animate-pulse-float"
             style={{
               left: `${10 + i * 12}%`,
               top: `${20 + i * 8}%`,
+              animationDelay: `${i * 0.5}s`,
+              animationDuration: `${3 + i}s`,
             }}
           />
         ))}
       </div>
 
       {/* Floating trust badges */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1 }}
-        className="absolute top-32 left-10 hidden xl:block"
-      >
+      <div className="absolute top-32 left-10 hidden xl:block animate-fade-in-down" style={{ animationDelay: '1s' }}>
         <div className="glass-card px-4 py-2 flex items-center gap-2 rounded-full">
           <Award className="w-4 h-4" style={{ color: '#FACC15' }} />
           <span className="text-sm font-medium" style={{ color: '#E5EDFF' }}>Trusted by 500+ Companies</span>
         </div>
-      </motion.div>
+      </div>
 
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 1.2 }}
-        className="absolute top-40 right-12 hidden xl:block"
-      >
+      <div className="absolute top-40 right-12 hidden xl:block animate-fade-in-left" style={{ animationDelay: '1.2s' }}>
         <div className="glass-card px-4 py-2 flex items-center gap-2 rounded-full">
           <TrendingUp className="w-4 h-4" style={{ color: '#22C55E' }} />
           <span className="text-sm font-medium" style={{ color: '#E5EDFF' }}>{dealsToday} deals closed today</span>
         </div>
-      </motion.div>
+      </div>
 
       <div className="relative z-10 max-w-[1600px] mx-auto w-full px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
+          <div className="animate-fade-in-right">
             {/* Animated badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 glass-card px-4 py-2 rounded-full mb-6"
-            >
+            <div className="inline-flex items-center gap-2 glass-card px-4 py-2 rounded-full mb-6 animate-fade-in-up">
               <Sparkles className="w-4 h-4" style={{ color: '#FACC15' }} />
               <span className="text-sm font-medium" style={{ color: '#E5EDFF' }}>
                 {activeUsers.toLocaleString()}+ active users right now
               </span>
-            </motion.div>
+            </div>
 
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-6" style={{ color: '#E5EDFF' }}>
               Connect with{" "}
@@ -151,13 +99,9 @@ export default function HeroSection() {
               Find verified partners for acquisitions, investments, JVs, and strategic partnerships.
             </p>
 
-            {/* Enhanced search input with multi-layer glass effect */}
+            {/* Search input */}
             <div className="relative mb-10">
-              <motion.div
-                whileHover={{ scale: 1.01 }}
-                className="relative"
-              >
-                {/* Glow effect on hover */}
+              <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#DBA11F]/20 via-[#F59E0B]/20 to-[#DBA11F]/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                 
                 <div className="relative glass-card glass-card-hover p-2 flex flex-col sm:flex-row gap-3 rounded-2xl" style={{
@@ -176,41 +120,31 @@ export default function HeroSection() {
                   {!isAuthChecking && (
                     currentUser ? (
                       <Link to={createPageUrl("Partnerships")}>
-                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-                          <Button className="w-full sm:w-auto px-8 py-6 rounded-xl font-bold text-lg shadow-2xl" style={{ background: '#D8A11F', color: '#fff' }}>
-                            <span className="flex items-center">
-                              Go to Dashboard
-                              <ArrowRight className="ml-2 w-5 h-5" />
-                            </span>
-                          </Button>
-                        </motion.div>
-                      </Link>
-                    ) : (
-                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-                        <Button 
-                          onClick={() => base44.auth.redirectToLogin(window.location.origin + '/Onboarding')}
-                          className="w-full sm:w-auto px-8 py-6 rounded-xl font-bold text-lg shadow-2xl relative overflow-hidden group" 
-                          style={{ background: '#D8A11F', color: '#fff' }}
-                        >
-                          <motion.div
-                            animate={{
-                              x: ['-100%', '100%'],
-                            }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                          />
-                          <span className="relative z-10 flex items-center">
-                            Get Started Free
+                        <Button className="w-full sm:w-auto px-8 py-6 rounded-xl font-bold text-lg shadow-2xl hover:scale-105 transition-transform" style={{ background: '#D8A11F', color: '#fff' }}>
+                          <span className="flex items-center">
+                            Go to Dashboard
                             <ArrowRight className="ml-2 w-5 h-5" />
                           </span>
                         </Button>
-                      </motion.div>
+                      </Link>
+                    ) : (
+                      <Button 
+                        onClick={() => base44.auth.redirectToLogin(window.location.origin + '/Onboarding')}
+                        className="w-full sm:w-auto px-8 py-6 rounded-xl font-bold text-lg shadow-2xl relative overflow-hidden group hover:scale-105 transition-transform" 
+                        style={{ background: '#D8A11F', color: '#fff' }}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
+                        <span className="relative z-10 flex items-center">
+                          Get Started Free
+                          <ArrowRight className="ml-2 w-5 h-5" />
+                        </span>
+                      </Button>
                     )
                   )}
                 </div>
-              </motion.div>
+              </div>
               
-              {/* Trust indicators below search */}
+              {/* Trust indicators */}
               <div className="flex items-center gap-4 mt-4 flex-wrap">
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
@@ -227,72 +161,43 @@ export default function HeroSection() {
               </div>
             </div>
 
-            {/* Enhanced animated stats */}
+            {/* Stats */}
             <div className="flex flex-wrap gap-6">
               {[
                 { icon: Users, value: "10K+", label: "Active Members", gradient: "from-[#DBA11F] to-[#F59E0B]" },
                 { icon: Building2, value: "5K+", label: "Partners", gradient: "from-[#F59E0B] to-[#DBA11F]" },
                 { icon: Handshake, value: "2K+", label: "Deals Closed", gradient: "from-[#DBA11F] to-[#F59E0B]" },
               ].map((stat, index) => (
-                <motion.div
+                <div
                   key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 + index * 0.1 }}
-                  whileHover={{ y: -5, scale: 1.05 }}
-                  className="flex items-center gap-4 glass-card glass-card-hover px-5 py-4 rounded-2xl"
+                  className="flex items-center gap-4 glass-card glass-card-hover px-5 py-4 rounded-2xl animate-fade-in-up"
+                  style={{ animationDelay: `${0.6 + index * 0.1}s` }}
                 >
                   <div className={`w-14 h-14 rounded-xl flex items-center justify-center bg-gradient-to-br ${stat.gradient} shadow-lg`}>
                     <stat.icon className="w-7 h-7" style={{ color: '#fff' }} />
                   </div>
                   <div>
-                    <motion.p 
-                      className="text-3xl font-bold"
-                      style={{ color: '#E5EDFF' }}
-                      animate={{ scale: [1, 1.05, 1] }}
-                      transition={{ duration: 2, repeat: Infinity, delay: index * 0.3 }}
-                    >
+                    <p className="text-3xl font-bold" style={{ color: '#E5EDFF' }}>
                       {stat.value}
-                    </motion.p>
+                    </p>
                     <p className="text-sm font-medium" style={{ color: '#B6C4E0' }}>{stat.label}</p>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* Right side - Convergence Animation */}
-          <motion.div
-            initial={{ opacity: 0, x: 50, scale: 0.9 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="hidden lg:block"
-          >
+          <div className="hidden lg:block animate-fade-in-left">
             <div className="relative glass-card p-8 rounded-3xl" style={{
               background: 'rgba(255, 255, 255, 0.08)',
               backdropFilter: 'blur(20px) saturate(180%)',
               boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
               border: '1px solid rgba(255, 255, 255, 0.18)',
             }}>
-              {/* Animated gradient border */}
-              <motion.div
-                animate={{
-                  rotate: [0, 360],
-                }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 rounded-3xl pointer-events-none"
-                style={{
-                  background: 'linear-gradient(135deg, #DBA11F 0%, #F59E0B 50%, #DBA11F 100%)',
-                  padding: '2px',
-                  mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                  maskComposite: 'exclude',
-                  opacity: 0.3,
-                }}
-              />
-
               <ConvergenceAnimation />
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
