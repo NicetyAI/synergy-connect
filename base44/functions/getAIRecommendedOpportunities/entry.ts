@@ -15,7 +15,7 @@ Deno.serve(async (req) => {
     }
 
     const [userProfile, interests, partnershipIntents, dbOpportunities, realEstateCaches, franchiseCaches] = await Promise.all([
-      base44.entities.User.filter({ email: user.email }),
+      base44.asServiceRole.entities.User.filter({ email: user.email }),
       base44.entities.Interest.filter({ user_email: user.email, status: 'approved' }),
       base44.entities.PartnershipIntent.filter({ user_email: user.email }),
       base44.entities.Opportunity.list(),
