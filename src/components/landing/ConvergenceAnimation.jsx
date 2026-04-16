@@ -278,8 +278,8 @@ export default function ConvergenceAnimation() {
                     <motion.line
                       x1="50%"
                       y1="50%"
-                      x2={`calc(50% + ${position.x}px)`}
-                      y2={`calc(50% + ${position.y}px)`}
+                      x2={`${50 + (position.x / 5)}%`}
+                      y2={`${50 + (position.y / 5)}%`}
                       stroke={stakeholder.color}
                       strokeWidth="2"
                       strokeDasharray="8 4"

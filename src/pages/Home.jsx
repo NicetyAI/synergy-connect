@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
+import HeroErrorBoundary from "@/components/landing/HeroErrorBoundary";
 import FeaturesSection from "@/components/landing/FeaturesSection";
 import VendorAdsSection from "@/components/landing/VendorAdsSection";
 import AboutSection from "@/components/landing/AboutSection";
@@ -57,7 +58,16 @@ export default function Home() {
       <Navbar />
       
       <main>
-        <HeroSection />
+        <HeroErrorBoundary fallback={
+          <section className="relative min-h-screen flex items-center justify-center px-4 pt-20 pb-10" style={{ background: '#192234' }}>
+            <div className="text-center">
+              <h1 className="text-5xl font-bold mb-6" style={{ color: '#E5EDFF' }}>Connect with Like-Minded Business Partners</h1>
+              <p className="text-xl mb-8" style={{ color: '#B6C4E0' }}>Join the #1 exclusive platform for professionals, founders, and dealmakers.</p>
+            </div>
+          </section>
+        }>
+          <HeroSection />
+        </HeroErrorBoundary>
         <div id="features">
           <FeaturesSection />
         </div>
