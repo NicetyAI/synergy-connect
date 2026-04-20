@@ -2,14 +2,29 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Users, User, ChevronDown, ChevronUp } from "lucide-react";
+import { Send, Users, User, ChevronDown, ChevronUp, X } from "lucide-react";
 import { format } from "date-fns";
+import { base44 } from "@/api/base44Client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function GroupChatArea({ group, messages, onSendMessage, currentUser }) {
   const [messageText, setMessageText] = React.useState("");
   const [showMembers, setShowMembers] = useState(false);
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
+  const queryClient = useQueryClient();
+
+  const isAdmin = currentUser.role === 'admin' || currentUser.email === group.creator_email;
+
+  const removeMemberMutation = useMutation({
+    mutationFn: async (emailToRemove) => {
+      const updatedMembers = group.members.filter(m => m !== emailToRemove);
+      await base44.entities.GroupChat.update(group.id, { members: updatedMembers });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['group-chats'] });
+    },
+  });
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -87,12 +102,22 @@ export default function GroupChatArea({ group, messages, onSendMessage, currentU
                     <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#D8A11F' }}>
                       <User className="w-3.5 h-3.5" style={{ color: '#fff' }} />
                     </div>
-                    <span className="text-sm" style={{ color: '#000' }}>{email}</span>
+                    <span className="text-sm flex-1" style={{ color: '#000' }}>{email}</span>
                     {email === group.creator_email && (
                       <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: '#FEF3C7', color: '#92400E' }}>Admin</span>
                     )}
                     {email === currentUser.email && (
                       <span className="text-xs" style={{ color: '#666' }}>(You)</span>
+                    )}
+                    {isAdmin && email !== currentUser.email && email !== group.creator_email && (
+                      <button
+                        onClick={() => removeMemberMutation.mutate(email)}
+                        disabled={removeMemberMutation.isPending}
+                        className="p-1 rounded-full hover:bg-red-100 transition-colors"
+                        title="Remove member"
+                      >
+                        <X className="w-4 h-4" style={{ color: '#EF4444' }} />
+                      </button>
                     )}
                   </div>
                 ))}
