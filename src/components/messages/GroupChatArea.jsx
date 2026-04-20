@@ -2,14 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Users, User, ChevronDown, ChevronUp, X } from "lucide-react";
+import { Send, Users, User, ChevronDown, ChevronUp, X, UserPlus } from "lucide-react";
 import { format } from "date-fns";
 import { base44 } from "@/api/base44Client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import AddMemberDialog from "./AddMemberDialog";
 
 export default function GroupChatArea({ group, messages, onSendMessage, currentUser }) {
   const [messageText, setMessageText] = React.useState("");
   const [showMembers, setShowMembers] = useState(false);
+  const [showAddMember, setShowAddMember] = useState(false);
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
   const queryClient = useQueryClient();
@@ -97,6 +99,18 @@ export default function GroupChatArea({ group, messages, onSendMessage, currentU
               className="overflow-hidden"
             >
               <div className="mt-3 pt-3 space-y-2" style={{ borderTop: '1px solid #E5E7EB' }}>
+                {isAdmin && (
+                  <button
+                    onClick={() => setShowAddMember(true)}
+                    className="flex items-center gap-2 w-full px-2 py-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+                    style={{ border: '1px dashed #D8A11F' }}
+                  >
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#D8A11F' }}>
+                      <UserPlus className="w-3.5 h-3.5" style={{ color: '#fff' }} />
+                    </div>
+                    <span className="text-sm font-medium" style={{ color: '#D8A11F' }}>Add Member</span>
+                  </button>
+                )}
                 {group.members.map((email) => (
                   <div key={email} className="flex items-center gap-2 px-2 py-1.5 rounded-lg" style={{ background: '#F9FAFB' }}>
                     <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#D8A11F' }}>
@@ -125,6 +139,7 @@ export default function GroupChatArea({ group, messages, onSendMessage, currentU
             </motion.div>
           )}
         </AnimatePresence>
+        {isAdmin && <AddMemberDialog open={showAddMember} onOpenChange={setShowAddMember} group={group} />}
       </div>
 
       {/* Messages */}
