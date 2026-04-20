@@ -20,8 +20,11 @@ export default function CreateGroupDialog({ open, onOpenChange, currentUser }) {
   const queryClient = useQueryClient();
 
   const { data: users = [] } = useQuery({
-    queryKey: ['users'],
-    queryFn: () => base44.entities.User.list(),
+    queryKey: ['searchMembers'],
+    queryFn: async () => {
+      const response = await base44.functions.invoke('searchMembers', {});
+      return response.data?.members || [];
+    },
   });
 
   const createGroupMutation = useMutation({
