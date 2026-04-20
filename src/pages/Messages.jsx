@@ -80,13 +80,14 @@ export default function Messages() {
   });
 
   const sendGroupMessageMutation = useMutation({
-    mutationFn: async ({ groupId, content }) => {
+    mutationFn: async ({ groupId, content, fileUrls = [] }) => {
       const group = groups.find(g => g.id === groupId);
       await base44.entities.GroupMessage.create({
         group_id: groupId,
         sender_email: user.email,
         sender_name: user.full_name,
         content,
+        file_urls: fileUrls,
       });
       // Create notifications for all group members except sender
       const otherMembers = group.members.filter(m => m !== user.email);
@@ -169,19 +170,20 @@ export default function Messages() {
     return Array.from(conversationMap.values());
   };
 
-  const handleSendMessage = async (content, recipientEmail) => {
-    if (!recipientEmail || !content) return;
+  const handleSendMessage = async (content, recipientEmail, fileUrls = []) => {
+    if (!recipientEmail || (!content && fileUrls.length === 0)) return;
     const conversationId = [user.email, recipientEmail].sort().join('_');
     sendMessageMutation.mutate({
       conversation_id: conversationId,
       sender_email: user.email,
       recipient_email: recipientEmail,
-      content,
+      content: content || '',
+      file_urls: fileUrls,
     });
   };
 
-  const handleSendGroupMessage = (content, groupId) => {
-    sendGroupMessageMutation.mutate({ groupId, content });
+  const handleSendGroupMessage = (content, groupId, fileUrls = []) => {
+    sendGroupMessageMutation.mutate({ groupId, content, fileUrls });
   };
 
   const handleSelectConversation = (conversationId) => {

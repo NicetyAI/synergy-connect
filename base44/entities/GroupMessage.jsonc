@@ -35,6 +35,14 @@
       "type": "boolean",
       "default": false,
       "description": "Whether the message was edited"
+    },
+    "file_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "URLs of attached images or videos"
     }
   },
   "required": [

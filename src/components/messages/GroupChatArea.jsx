@@ -2,17 +2,21 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Users, User, ChevronDown, ChevronUp, X, UserPlus } from "lucide-react";
+import { Send, Users, User, ChevronDown, ChevronUp, X, UserPlus, ImagePlus, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { base44 } from "@/api/base44Client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import AddMemberDialog from "./AddMemberDialog";
 import MessageActions from "./MessageActions";
+import { MediaPreview, FilePreviewBar } from "./MediaAttachment";
 
 export default function GroupChatArea({ group, messages, onSendMessage, currentUser }) {
   const [messageText, setMessageText] = React.useState("");
+  const [pendingFiles, setPendingFiles] = useState([]);
+  const [uploading, setUploading] = useState(false);
   const [showMembers, setShowMembers] = useState(false);
   const [showAddMember, setShowAddMember] = useState(false);
+  const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
   const queryClient = useQueryClient();
@@ -51,11 +55,28 @@ export default function GroupChatArea({ group, messages, onSendMessage, currentU
     scrollToBottom();
   }, [messages.length]);
 
-  const handleSend = () => {
-    if (messageText.trim()) {
-      onSendMessage(messageText, group.id);
-      setMessageText("");
+  const handleSend = async () => {
+    if (!messageText.trim() && pendingFiles.length === 0) return;
+    
+    let fileUrls = [];
+    if (pendingFiles.length > 0) {
+      setUploading(true);
+      for (const file of pendingFiles) {
+        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        fileUrls.push(file_url);
+      }
+      setUploading(false);
     }
+    
+    onSendMessage(messageText || '', group.id, fileUrls);
+    setMessageText("");
+    setPendingFiles([]);
+  };
+
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files);
+    setPendingFiles(prev => [...prev, ...files]);
+    e.target.value = '';
   };
 
   const handleKeyPress = (e) => {
@@ -211,7 +232,8 @@ export default function GroupChatArea({ group, messages, onSendMessage, currentU
                         borderBottomLeftRadius: '4px'
                       }}
                     >
-                      <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
+                      {msg.content && <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>}
+                      <MediaPreview urls={msg.file_urls} />
                       {msg.edited && !msg.deleted && (
                         <p className="text-xs mt-0.5 opacity-60">edited</p>
                       )}
@@ -241,24 +263,44 @@ export default function GroupChatArea({ group, messages, onSendMessage, currentU
           borderColor: '#000'
         }}
       >
-        <div className="flex gap-2">
-          <Textarea
-            value={messageText}
-            onChange={(e) => setMessageText(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Type a message..."
-            className="resize-none"
-            style={{ color: '#000', background: '#F9FAFB', border: '1px solid #000' }}
-            rows={1}
-          />
-          <Button
-            onClick={handleSend}
-            disabled={!messageText.trim()}
-            className="rounded-xl px-4"
-            style={{ background: '#D8A11F', color: '#fff' }}
-          >
-            <Send className="w-5 h-5" />
-          </Button>
+        <div>
+          <FilePreviewBar files={pendingFiles} onRemove={(i) => setPendingFiles(prev => prev.filter((_, idx) => idx !== i))} />
+          <div className="flex gap-2 items-end">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*,video/*"
+              multiple
+              className="hidden"
+              onChange={handleFileSelect}
+            />
+            <Button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="rounded-xl px-3 flex-shrink-0"
+              style={{ background: '#F3F4F6', color: '#666', border: '1px solid #000' }}
+              title="Attach image or video"
+            >
+              <ImagePlus className="w-5 h-5" />
+            </Button>
+            <Textarea
+              value={messageText}
+              onChange={(e) => setMessageText(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Type a message..."
+              className="resize-none"
+              style={{ color: '#000', background: '#F9FAFB', border: '1px solid #000' }}
+              rows={1}
+            />
+            <Button
+              onClick={handleSend}
+              disabled={(!messageText.trim() && pendingFiles.length === 0) || uploading}
+              className="rounded-xl px-4 flex-shrink-0"
+              style={{ background: '#D8A11F', color: '#fff' }}
+            >
+              {uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

@@ -40,6 +40,14 @@
       },
       "default": [],
       "description": "List of emails who have hidden this conversation"
+    },
+    "file_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "URLs of attached images or videos"
     }
   },
   "required": [
