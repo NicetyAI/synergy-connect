@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Users, User } from "lucide-react";
+import { Send, Users, User, ChevronDown, ChevronUp } from "lucide-react";
 import { format } from "date-fns";
 
 export default function GroupChatArea({ group, messages, onSendMessage, currentUser }) {
   const [messageText, setMessageText] = React.useState("");
+  const [showMembers, setShowMembers] = useState(false);
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
 
@@ -57,14 +58,48 @@ export default function GroupChatArea({ group, messages, onSendMessage, currentU
             <p className="font-bold text-lg" style={{ color: '#000' }}>
               {group.name}
             </p>
-            <p className="text-xs" style={{ color: '#666' }}>
+            <button 
+              onClick={() => setShowMembers(!showMembers)}
+              className="flex items-center gap-1 text-xs hover:underline"
+              style={{ color: '#D8A11F' }}
+            >
               {group.members.length} members
-            </p>
+              {showMembers ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+            </button>
           </div>
         </div>
         {group.description && (
           <p className="text-sm mt-2" style={{ color: '#666' }}>{group.description}</p>
         )}
+
+        <AnimatePresence>
+          {showMembers && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden"
+            >
+              <div className="mt-3 pt-3 space-y-2" style={{ borderTop: '1px solid #E5E7EB' }}>
+                {group.members.map((email) => (
+                  <div key={email} className="flex items-center gap-2 px-2 py-1.5 rounded-lg" style={{ background: '#F9FAFB' }}>
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#D8A11F' }}>
+                      <User className="w-3.5 h-3.5" style={{ color: '#fff' }} />
+                    </div>
+                    <span className="text-sm" style={{ color: '#000' }}>{email}</span>
+                    {email === group.creator_email && (
+                      <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: '#FEF3C7', color: '#92400E' }}>Admin</span>
+                    )}
+                    {email === currentUser.email && (
+                      <span className="text-xs" style={{ color: '#666' }}>(You)</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Messages */}
