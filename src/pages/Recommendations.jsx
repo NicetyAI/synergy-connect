@@ -134,14 +134,22 @@ export default function Recommendations() {
       const interestNames = userInterests.map(i => i.interest_name.toLowerCase());
       
       const scored = allOpportunities.map(opp => {
-        const oppInterests = (opp.related_interests || []).map(i => i.toLowerCase());
-        const matchCount = oppInterests.filter(interest => interestNames.some(ui => ui.includes(interest) || interest.includes(ui))).length;
-        const totalRelevant = Math.max(oppInterests.length, interestNames.length, 1);
-        const matchPercentage = Math.round((matchCount / totalRelevant) * 100);
-        return { ...opp, matchPercentage, matchCount };
+        const oppText = `${opp.title || ''} ${opp.description || ''} ${opp.category || ''} ${(opp.related_interests || []).join(' ')}`.toLowerCase();
+        
+        // Count how many user interests match this opportunity
+        const matchingInterests = interestNames.filter(interest => {
+          const words = interest.split(/\s+/);
+          return words.some(w => w.length > 2 && oppText.includes(w)) || oppText.includes(interest);
+        });
+        
+        // Score: percentage of user interests that match this opportunity
+        const matchPercentage = Math.round((matchingInterests.length / interestNames.length) * 100);
+        return { ...opp, matchPercentage, matchCount: matchingInterests.length };
       });
       
-      return scored.sort((a, b) => b.matchPercentage - a.matchPercentage);
+      return scored
+        .filter(opp => opp.matchPercentage >= 80)
+        .sort((a, b) => b.matchPercentage - a.matchPercentage);
     },
     enabled: !!currentUser && userInterests !== undefined && realEstateCacheData !== undefined && franchiseCacheData !== undefined,
   });

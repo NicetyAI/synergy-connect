@@ -83,7 +83,8 @@ Return a JSON object with a "matches" array. Each match must have:
 - "match_score": number 0-100
 - "overview": 1-2 sentence explanation of why they match
 
-Sort by match_score descending. Include up to 10 matches with score >= 30.`
+IMPORTANT: Only include matches with score >= 80. Be strict — a match below 80 should not be returned.
+Sort by match_score descending. Include up to 10 matches.`
       }],
       response_format: { type: 'json_object' },
       temperature: 0.7
@@ -98,7 +99,7 @@ Sort by match_score descending. Include up to 10 matches with score >= 30.`
       name: m.name || m.partner_name || '',
       match_score: m.match_score || m.confidence_score || m.score || 0,
       overview: m.overview || m.explanation || m.reason || ''
-    })).filter(m => m.email);
+    })).filter(m => m.email && m.match_score >= 80);
 
     return Response.json({
       success: true,

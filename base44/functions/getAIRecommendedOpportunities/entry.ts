@@ -112,7 +112,9 @@ ${JSON.stringify(allOpportunities.slice(0, 80).map((o, idx) => ({
   source: o.source,
 })), null, 2)}
 
-Return TOP 6 matches. Return ONLY valid JSON:
+IMPORTANT: Only include opportunities with a match_score of 80 or higher. Be strict — do not return low-quality matches below 80. If fewer than 6 meet the threshold, return fewer.
+
+Return ONLY valid JSON:
 {
   "recommendations": [
     {
@@ -139,9 +141,11 @@ Return TOP 6 matches. Return ONLY valid JSON:
       .map(rec => {
         const opportunity = allOpportunities[rec.opportunity_index];
         if (!opportunity) return null;
+        const score = Math.min(100, Math.max(0, Math.round(rec.match_score)));
+        if (score < 80) return null;
         return {
           ...opportunity,
-          match_score: Math.min(100, Math.max(0, Math.round(rec.match_score))),
+          match_score: score,
           match_reason: rec.match_reason,
           ai_recommended: true
         };
